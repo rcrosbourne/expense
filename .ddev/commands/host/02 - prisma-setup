@@ -1,0 +1,49 @@
+#!/bin/bash
+
+## #ddev-generated
+## Description: Setup a Next.js 13 project with Prisma this assumes the project has already been setup with next-setup 
+## Usage: prisma-setup
+## Example: ddev prisma-setup
+
+## Clean up files from previous runs
+echo "Removing files from previous runs"
+# remove the file if they exist
+rm -rf .env lib prisma
+
+mkdir lib && touch lib/prisma.ts
+mkdir prisma && touch prisma/schema.prisma
+echo "Create lib/prisma.ts file"
+echo -e 'import { PrismaClient } from "@prisma/client";\n\nlet prisma: PrismaClient;\n\nif (process.env.NODE_ENV === "production") {\n  prisma = new PrismaClient();\n} else {\n  if (!global.prisma) {\n    global.prisma = new PrismaClient();\n  }\n  prisma = global.prisma;\n}\n\nexport default prisma;' > lib/prisma.ts
+echo "Overwriting prisma/schema.prisma file"
+echo -e "datasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\ngenerator client {\n provider = \"prisma-client-js\" \n}\n\n model User {\n id        String     @default(cuid()) @id\n name  String? \npassword String? @db.Text\nemail String? @unique\n}" > prisma/schema.prisma
+echo "Creating .env file"
+echo -e "DATABASE_URL=postgresql://db:db@db:5432/db" > .env
+# Add .env to gitignore
+echo "Adding .env to .gitignore"
+echo -e ".env" >> .gitignore
+echo "Installing primsa orm"
+ddev exec -s web -d /var/www/html pnpm install prisma --save-dev
+
+
+echo "Running prisma init"
+ddev exec -s web -d /var/www/html pnpx prisma init
+
+
+
+# do db push
+ddev exec -s web -d /var/www/html pnpx prisma migrate dev --name init --skip-generate
+
+
+echo "Installing prisma client"
+ddev exec -s web -d /var/www/html pnpm install @prisma/client
+
+echo "Formatting schema.prisma file"
+ddev exec -s web -d /var/www/html pnpx prisma format
+
+# echo "Running prisma migrate"
+# ddev exec -s web -d /var/www/html pnpx prisma migrate dev --name init
+echo "Running prisma generate"
+ddev exec -s web -d /var/www/html pnpx prisma generate
+
+
+echo "Primsa client setup complete"

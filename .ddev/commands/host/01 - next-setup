@@ -1,0 +1,38 @@
+#!/bin/bash
+
+## #ddev-generated
+## Description: Setup a Next.js 13 project with Prisma TailwindCSS, ESLint, and TypeScript using PNPM
+## Usage: next-setup
+## Example: ddev next-setup
+
+## Clean up files from previous runs
+echo "Removing files from previous runs"
+# remove the file if they exist
+rm -rf .env .next lib prisma .vscode app node_modules public .eslintrc.js .gitignore next-env.d.ts package.json pnpm-lock.yaml postcss.config.js README.md tsconfig.json
+# Create tailwind.globals.css file
+echo "Creating tailwind.globals.css file"
+echo -e "@tailwind base;\n@tailwind components;\n@tailwind utilities;" > tailwind.globals.css
+# stop execution here
+
+# Create a starter directory
+echo "Creating starter directory"
+ddev exec -s web pnpx create-next-app@latest --experimental-app --typescript --use-pnpm --eslint starter
+echo "Copying files from starter directory"
+# copy the contents of starter into the current directory using globbing
+ddev exec -s web -d /var/www/html cp -r /var/www/html/starter/. /var/www/html/
+# write to the console that the files have been copied
+echo "Files copied from starter directory"
+# remove the starter directory
+echo "Removing starter directory"
+ddev exec -s web -d /var/www/html rm -rf /var/www/html/starter
+echo "starter directory removed"
+# install tailwindcss
+ddev exec -s web -d /var/www/html pnpm install -D tailwindcss postcss autoprefixer
+# create tailwind.config.js and postcss.config.js
+ddev exec -s web -d /var/www/html pnpx tailwindcss init -p
+# move tailwind.globals.css to app/global.css
+echo "moving tailwind.globals.css to app/globals.css"
+ddev exec -s web -d /var/www/html mv tailwind.globals.css app/globals.css
+# Disable telemetry
+echo "Disabling telemetry"
+ddev exec -s web -d /var/www/html pnpx next telemetry disable

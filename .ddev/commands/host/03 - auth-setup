@@ -1,0 +1,45 @@
+#!/bin/bash
+
+## #ddev-generated
+## Description: Setup a Next.js 13 project with Auth.js
+## Usage: auth-setup
+## Example: ddev auth-setup
+
+## Clean up files from previous runs
+echo "Removing files from previous runs"
+# remove the file if they exist
+rm -rf pages/api/auth
+# Remove env variables from .env file
+echo "Removing env variables from .env file"
+ddev exec -s web -d /var/www/html sed -i '/NEXTAUTH_URL/d' .env
+ddev exec -s web -d /var/www/html sed -i '/NEXTAUTH_SECRET/d' .env
+ddev exec -s web -d /var/www/html sed -i '/EMAIL_SERVER/d' .env
+ddev exec -s web -d /var/www/html sed -i '/EMAIL_FROM/d' .env
+
+# Install next-auth
+echo "Installing next-auth"
+ddev exec -s web -d /var/www/html pnpm add next-auth
+# Add API route
+echo "Adding API route"
+mkdir -p pages/api/auth
+# ddev exec -s web -d /var/www/html touch pages/api/auth/\[...nextauth\].js
+# Add auth options to nextauth
+echo "Adding auth options to nextauth"
+echo -e "import NextAuth from \"next-auth\";\nimport Email from \"next-auth/providers/email\";\nimport { PrismaAdapter } from \"@next-auth/prisma-adapter\";\nimport prisma from \"@/lib/prisma\";\nexport const authOptions = {\n  adapter: PrismaAdapter(prisma),\n  providers: [\n    Email({\n      server: process.env.EMAIL_SERVER,\n      from: process.env.EMAIL_FROM,\n    }),\n  ],\n};\nexport default NextAuth(authOptions);\n" > pages/api/auth/\[...nextauth\].js
+# Add next-auth config 
+echo "Adding next-auth config for email provider"
+ddev exec -s web -d /var/www/html pnpm add nodemailer
+echo "Append env variables to .env file"
+echo -e "\nNEXTAUTH_URL=$(ddev exec -s web -d /var/www/html echo \$DDEV_PRIMARY_URL)\nNEXTAUTH_SECRET=$(ddev exec -s web -d /var/www/html openssl rand -base64 32)\nEMAIL_SERVER=smtp://username:password@localhost:1025\nEMAIL_FROM=noreply@$(ddev exec -s web -d /var/www/html echo \$DDEV_HOSTNAME)\n" >> .env
+echo "Set up prisma adapter"
+ddev exec -s web -d /var/www/html pnpm add @next-auth/prisma-adapter
+# Need to update the schema.prisma file
+echo "Updating schema.prisma file"
+echo -e "\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\ngenerator client {\n  provider = \"prisma-client-js\"\n}\n\nmodel Account {\n  id                String  @id @default(cuid())\n  userId            String  @map(\"user_id\")\n  type              String\n  provider          String\n  providerAccountId String  @map(\"provider_account_id\")\n  refresh_token     String? @db.Text\n  access_token      String? @db.Text\n  expires_at        Int?\n  token_type        String?\n  scope             String?\n  id_token          String? @db.Text\n  session_state     String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n  @@map(\"accounts\")\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique @map(\"session_token\")\n  userId       String   @map(\"user_id\")\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"sessions\")\n}\n\nmodel User {\n  id            String    @id @default(cuid())\n  name          String?\n  email         String?   @unique\n  emailVerified DateTime? @map(\"email_verified\")\n  image         String?\n  accounts      Account[]\n  sessions      Session[]\n\n  @@map(\"users\")\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n  @@map(\"verification_tokens\")\n}\n" > prisma/schema.prisma
+
+# Create new migration
+echo "Creating new migration"
+ddev prisma migrate dev --name UpdatedSchemaForNextAuth
+echo "Generating prisma client"
+ddev prisma generate
+echo "Completed setup"
