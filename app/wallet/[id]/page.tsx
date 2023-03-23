@@ -3,6 +3,7 @@ import { WalletStats } from "@/app/types";
 import React from "react";
 import { Switch } from "@headlessui/react";
 import { classNames } from "@/app/utils";
+import { NumericFormat } from "react-number-format";
 const stat: WalletStats = {
   total: "$100,000.00",
   lastThirtyDays: "$300,000.00",
@@ -11,9 +12,15 @@ const stat: WalletStats = {
 const Wallet = () => {
   const [enabled, setEnabled] = React.useState(false);
   const [amount, setAmount] = React.useState("");
+  const ref = React.useRef();
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    // const newAmount = e.target.value + ".00";
-    setAmount(e.target.value);
+    // Remove the separator and convert to number
+    let inputElement = e.currentTarget as HTMLInputElement;
+    let value = inputElement.value.replace(",", "");
+    if(value !== amount) {
+      setAmount(value);
+      console.log(value)
+    }
   }
   return (
     <main className="-mt-24 pb-8">
@@ -123,14 +130,20 @@ const Wallet = () => {
                             <span className="text-white text-xl">$</span>
                           </div>
                         </div>
-                        <input
+                        <NumericFormat
+                          displayType="input"
                           type="text"
                           name="amount"
                           id="amount"
                           className="peer block w-full border-0 pl-12 bg-transparent text-white placeholder-white placeholder:text-2xl py-1.5 text-gray-900 focus:ring-0 sm:text-2xl sm:leading-6"
                           placeholder="0.00"
-                          value={amount}
+                          thousandSeparator=","
+                          allowNegative={false}
+                          value={123123}
+                          decimalScale={2}
+                          fixedDecimalScale
                           onChange={onChange}
+                           getInputRef={ref}
                         />
                         <div
                           className="absolute inset-x-0 bottom-0 border-t border-gray-300 peer-focus:border-t-2 peer-focus:border-white"
