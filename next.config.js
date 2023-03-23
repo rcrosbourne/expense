@@ -4,7 +4,8 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ['tailwindui.com'],
+     dangerouslyAllowSVG: true,
+    domains: ['tailwindui.com', "images.unsplash.com"],
   },
 }
 
