@@ -116,10 +116,10 @@ const Wallet = () => {
                   <form action="">
                     <div className="flex flex-col">
                       <label
-                        htmlFor="price"
+                        htmlFor="amount"
                         className="block text-sm font-medium leading-6 text-gray-900 sr-only"
                       >
-                        Price
+                        Amount
                       </label>
                       <div className="relative mt-2 rounded-md shadow-sm">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -157,6 +157,9 @@ const Wallet = () => {
                             JMD
                           </span>
                         </div>
+                      </div>
+                      <div>
+                        <input type="date"/>
                       </div>
                     </div>
                   </form>
