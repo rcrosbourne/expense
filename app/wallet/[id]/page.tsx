@@ -113,7 +113,7 @@ const Wallet = () => {
           </div>
           <div className="grid grid-cols-1 gap-4">
             {/* Add Income and Expenses */}
-            <section aria-labelledby="announcements-title">
+            <section aria-labelledby="" className="@container/section">
               <div
                 className={classNames(
                   enabled ? "bg-teal-700" : "bg-red-400",
@@ -131,14 +131,14 @@ const Wallet = () => {
                       <span
                         aria-hidden="true"
                         className={classNames(
-                          enabled ? "translate-x-[128px]" : "translate-x-0",
-                          "pointer-events-none inline-block h-[34px] w-[150px] transform rounded-full bg-gray-300 shadow-lg ring-0 transition duration-700 ease-in-out"
+                          enabled ? "translate-x-full" : "translate-x-0",
+                          "pointer-events-none inline-block h-[34px] w-1/2 transform rounded-full bg-gray-300 shadow-lg ring-0 transition duration-700 ease-in-out"
                         )}
                       />
-                      <Switch.Label className="absolute inset-y-0 left-0 top-1.5 text-sm pl-12">
+                      <Switch.Label className="absolute inset-y-0 left-0 top-1.5 text-sm pl-8 @2xl/section:pl-24">
                         Expense
                       </Switch.Label>
-                      <Switch.Label className="absolute inset-y-0 right-0 top-1.5 text-sm pr-12">
+                      <Switch.Label className="absolute inset-y-0 right-0 top-1.5 text-sm pr-4 pr-8 @2xl/section:pr-24">
                         Income
                       </Switch.Label>
                     </Switch>
