@@ -402,7 +402,11 @@ const Wallet = () => {
                       <div className="flex items-center justify-around gap-4">
                         <button
                           type="button"
-                          className="inline-flex items-center gap-x-2 rounded-md bg-teal-600 py-2.5 px-3.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
+                          className={
+                          classNames(
+                              isIncome ? "bg-teal-700 hover:bg-teal-900" : "bg-red-400 hover:bg-red-500",
+                              "inline-flex items-center gap-x-2 rounded-md py-2.5 px-3.5 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2" +
+                              " focus-visible:outline-teal-600 transition-colors duration-1000 ease-in-out")}
                         >
                           Create
                           <svg
@@ -1142,7 +1146,7 @@ const CategoriesDialog = ({
                             className={classNames(
                               category.backgroundColor,
                               category.foregroundColor,
-                              "flex w-12 h-12 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium p-1 group-hover:cursor-pointer"
+                              "flex w-12 h-12 p-2.5 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium p-1 group-hover:cursor-pointer"
                             )}
                           >
                             {category.icon}
