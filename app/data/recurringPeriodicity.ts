@@ -1,14 +1,14 @@
-import {Periodicity} from "@/app/types/periodicity";
+import { Periodicity } from "@/app/types/periodicity";
 
-export const recurringPeriodicity : Periodicity[]= [
-  { id: 1, name: "One-time payment" },
-  { id: 2, name: "Every Day" },
-  { id: 3, name: "Every Week" },
-  { id: 4, name: "Every 2 Weeks" },
-  { id: 5, name: "Every 4 weeks" },
-  { id: 6, name: "Every month" },
-  { id: 7, name: "Every 2 months" },
-  { id: 8, name: "Every 3 months" },
-  { id: 9, name: "Every 6 months" },
-  { id: 10, name: "Every year" },
+export const recurringPeriodicity: Periodicity[] = [
+  "One-time payment",
+  "Every Day",
+  "Every Week",
+  "Every 2 Weeks",
+  "Every 4 weeks",
+  "Every month",
+  "Every 2 months",
+  "Every 3 months",
+  "Every 6 months",
+  "Every year",
 ];

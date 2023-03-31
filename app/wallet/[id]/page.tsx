@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {LiHTMLAttributes} from "react";
 import { classNames } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -15,6 +15,7 @@ import Merchant from "@/app/wallet/[id]/components/merchant";
 import Switcher from "@/app/wallet/[id]/components/Switcher";
 import InputAmount from "@/app/wallet/[id]/components/InputAmount";
 import { incomeAndExpenses } from "@/app/data/incomeAndExpenses";
+import { FinancialTransaction } from "@/app/types/financialTransaction";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -27,9 +28,28 @@ const Wallet = () => {
     endDate: null,
   });
   const [selected, setSelected] = React.useState(recurringPeriodicity[0]);
-  let [isCategoriesOpen, setIsCategoriesOpen] = React.useState<boolean>(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] =
+    React.useState<boolean>(false);
+  const [isEditingExpense, setIsEditingExpense] =
+    React.useState<boolean>(false);
+  const [editExpense, setEditExpense] = React.useState<FinancialTransaction | null>(null);
   const inputRef = React.useRef();
+  const expenseRef =  React.useRef(null);
 
+  React.useEffect(() => {
+    if (isEditingExpense) {
+      if (!inputRef.current) return;
+      if (!editExpense) return;
+      let inputElement = inputRef.current as HTMLInputElement;
+      inputElement.value = Intl.NumberFormat().format(editExpense.amount);
+      inputElement.focus();
+    } else {
+      // Change focus from the input to the expense list item
+      if(!expenseRef.current) return;
+      let liElement = expenseRef.current as HTMLLIElement;
+      liElement.focus();
+    }
+  }, [isEditingExpense, editExpense]);
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     // Remove the separator and convert to number
     let inputElement = e.currentTarget as HTMLInputElement;
@@ -48,6 +68,22 @@ const Wallet = () => {
   };
   const closeCategories = () => {
     setIsCategoriesOpen(false);
+  };
+  const handleEdit = (expense: FinancialTransaction) => {
+    // show the edit form
+    if (!inputRef.current) return;
+    setEditExpense(expense);
+    setIsEditingExpense(true);
+    setIsIncome(expense.type === "income");
+  };
+  const handleCancel = (expense: FinancialTransaction) => {
+    // show the edit form
+    if (!inputRef.current) return;
+    setEditExpense(null);
+    setIsEditingExpense(false);
+  };
+  const handleDelete = (expense: FinancialTransaction) => {
+    // show confirm dialog
   };
   return (
     <main className="-mt-24 pb-8">
@@ -69,12 +105,19 @@ const Wallet = () => {
                   {incomeAndExpenses.map((expense) => {
                     return (
                       <li
-                        className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
+                        className={classNames(
+                          editExpense && editExpense.id === expense.id
+                            ? `ring-2 ring-inset ring-cyan-500`
+                            : `ring-none`,
+                          `group  col-span-1 divide-y divide-gray-200 rounded-lg shadow bg-white focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500`
+                        )}
+
+                        ref={expenseRef}
                         key={expense.id}
                       >
                         <div className="flex w-full items-center justify-between space-x-6 pr-6 py-6 relative">
                           <div className="absolute text-slate-950 top-0 left-0 flex items-center justify-center mt-2 ml-2">
-                            {expense.isRecurring && (
+                            {expense.periodicity !== "One-time payment" && (
                               <>
                                 <span className="sr-only">Recurring</span>
                                 <svg
@@ -130,37 +173,70 @@ const Wallet = () => {
                         <div>
                           <div className="-mt-px flex divide-x divide-gray-200">
                             <div className="flex w-0 flex-1">
-                              <a
-                                href=""
-                                className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  className="h-5 w-5 text-gray-400"
+                              {!editExpense || editExpense.id !== expense.id ? (
+                                <button
+                                  type="button"
+                                  onClick={() => handleEdit(expense)}
+                                  className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                                 >
-                                  <path
-                                    fill="#607d8b"
-                                    d="M17 24H3c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h8a1 1 0 1 1 0 2H3c-.552 0-1 .449-1 1v14c0 .551.448 1 1 1h14c.552 0 1-.449 1-1v-8a1 1 0 1 1 2 0v8c0 1.654-1.346 3-3 3z"
-                                  />
-                                  <path
-                                    fill="#42a5f5"
-                                    d="m17.288 3.177-7.912 7.912a.506.506 0 0 0-.137.255l-.707 3.536a.498.498 0 0 0 .491.598l.098-.01 3.535-.707a.494.494 0 0 0 .256-.137l7.912-7.912zM23.268.732a2.502 2.502 0 0 0-3.535 0l-1.384 1.384 3.535 3.535 1.384-1.384C23.74 3.796 24 3.168 24 2.5s-.26-1.296-.732-1.768z"
-                                  />
-                                  <path
-                                    fill="#546d79"
-                                    d="M19 12a1 1 0 0 0-1 1v8c0 .551-.448 1-1 1H3a.997.997 0 0 1-.707-.293L.88 23.12c.543.544 1.293.88 2.12.88h14c1.654 0 3-1.346 3-3v-8a1 1 0 0 0-1-1z"
-                                  />
-                                  <g fill="#3990d5">
-                                    <path d="M19.056 4.944 8.669 15.331a.5.5 0 0 0 .354.146l.098-.01 3.535-.707a.494.494 0 0 0 .256-.137l7.912-7.912zM23.268.732l-3.151 3.151 1.768 1.768 1.384-1.384C23.74 3.796 24 3.168 24 2.5s-.26-1.296-.732-1.768z" />
-                                  </g>
-                                </svg>
-                                Edit
-                              </a>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    className="h-5 w-5 text-gray-400"
+                                  >
+                                    <path
+                                      fill="#607d8b"
+                                      d="M17 24H3c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h8a1 1 0 1 1 0 2H3c-.552 0-1 .449-1 1v14c0 .551.448 1 1 1h14c.552 0 1-.449 1-1v-8a1 1 0 1 1 2 0v8c0 1.654-1.346 3-3 3z"
+                                    />
+                                    <path
+                                      fill="#42a5f5"
+                                      d="m17.288 3.177-7.912 7.912a.506.506 0 0 0-.137.255l-.707 3.536a.498.498 0 0 0 .491.598l.098-.01 3.535-.707a.494.494 0 0 0 .256-.137l7.912-7.912zM23.268.732a2.502 2.502 0 0 0-3.535 0l-1.384 1.384 3.535 3.535 1.384-1.384C23.74 3.796 24 3.168 24 2.5s-.26-1.296-.732-1.768z"
+                                    />
+                                    <path
+                                      fill="#546d79"
+                                      d="M19 12a1 1 0 0 0-1 1v8c0 .551-.448 1-1 1H3a.997.997 0 0 1-.707-.293L.88 23.12c.543.544 1.293.88 2.12.88h14c1.654 0 3-1.346 3-3v-8a1 1 0 0 0-1-1z"
+                                    />
+                                    <g fill="#3990d5">
+                                      <path d="M19.056 4.944 8.669 15.331a.5.5 0 0 0 .354.146l.098-.01 3.535-.707a.494.494 0 0 0 .256-.137l7.912-7.912zM23.268.732l-3.151 3.151 1.768 1.768 1.384-1.384C23.74 3.796 24 3.168 24 2.5s-.26-1.296-.732-1.768z" />
+                                    </g>
+                                  </svg>
+                                  Edit
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => handleCancel(expense)}
+                                  className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512"
+                                    className="h-5 w-5"
+                                  >
+                                    <linearGradient
+                                      id="a"
+                                      x1="79.385"
+                                      x2="432.659"
+                                      y1="432.808"
+                                      y2="79.534"
+                                      gradientUnits="userSpaceOnUse"
+                                    >
+                                      <stop offset=".006" stopColor="#3b8bf5" />
+                                      <stop offset="1" stopColor="#c7d5f3" />
+                                    </linearGradient>
+                                    <path
+                                      fill="url(#a)"
+                                      d="M79.331 432.754c-97.359-97.442-97.359-255.921 0-353.276 97.664-97.664 255.7-97.658 353.276.004 62.444 62.444 87.365 154.305 65.03 239.733-1.61 6.159-7.897 9.833-14.07 8.238-6.159-1.61-9.848-7.912-8.238-14.07C495.6 235.844 472.98 152.465 416.3 95.782c-88.616-88.686-232.051-88.607-320.665 0-88.371 88.37-88.367 232.223.004 320.673 106.537 106.537 286.044 80.879 358.459-50.16 3.089-5.57 10.096-7.593 15.669-4.515 5.573 3.081 7.593 10.096 4.515 15.669-79.833 144.412-277.563 172.702-394.951 55.305zm270.198-270.193c-4.504-4.504-11.8-4.504-16.303 0l-77.245 77.245-77.245-77.245c-4.504-4.504-11.8-4.504-16.303 0-4.504 4.5-4.504 11.804 0 16.303l77.245 77.245-77.245 77.245c-4.504 4.5-4.504 11.803 0 16.303 4.504 4.504 11.8 4.504 16.303 0l77.245-77.245 77.245 77.245c4.504 4.504 11.8 4.504 16.303 0 4.504-4.5 4.504-11.803 0-16.303l-77.245-77.245 77.245-77.245c4.503-4.5 4.503-11.803 0-16.303z"
+                                    />
+                                  </svg>
+                                  Cancel
+                                </button>
+                              )}
                             </div>
                             <div className="-ml-px flex w-0 flex-1">
-                              <a
-                                href="tel:+1-202-555-0170"
+                              <button
+                                type="button"
+                                onClick={() => handleDelete(expense)}
                                 className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                               >
                                 <svg
@@ -176,7 +252,7 @@ const Wallet = () => {
                                   />
                                 </svg>
                                 Delete
-                              </a>
+                              </button>
                             </div>
                           </div>
                         </div>

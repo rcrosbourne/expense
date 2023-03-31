@@ -7,7 +7,7 @@ import Footer from "@/app/components/footer";
 
 const inter = Inter({subsets: ['latin']})
 export const metadata = {
-    title: 'Expense Tracker',
+    title: 'FinancialTransaction Tracker',
     description: 'Simple free way to track your expenses',
 }
 const user = {
@@ -18,7 +18,7 @@ const user = {
         "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
 const navigation = [
-    {name: "Home", href: "#", current: true},
+    {name: "Home", href: "/", current: true},
     {name: "Profile", href: "#", current: false},
     {name: "Settings", href: "#", current: false},
 ];

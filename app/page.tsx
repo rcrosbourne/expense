@@ -261,8 +261,8 @@ export default function Home() {
                               gradientTransform="matrix(1 0 0 -1 0 -16402)"
                               gradientUnits="userSpaceOnUse"
                             >
-                              <stop offset="0" stop-color="#31d8ff" />
-                              <stop offset="1" stop-color="#808bff" />
+                              <stop offset="0" stopColor="#31d8ff" />
+                              <stop offset="1" stopColor="#808bff" />
                             </linearGradient>
                             <path
                               fill="url(#a)"
