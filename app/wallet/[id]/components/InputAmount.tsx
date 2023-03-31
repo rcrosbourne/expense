@@ -3,12 +3,12 @@ import React from "react";
 
 const InputAmount = ({
   onChange,
-  ref,
+  inputRef,
   isIncome,
   openCategories,
 }: {
   onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  ref: ((el: HTMLInputElement) => void) | React.Ref<any> | undefined;
+  inputRef: ((el: HTMLInputElement) => void) | React.Ref<any> | undefined;
   isIncome: boolean;
   openCategories: () => void;
 }) => {
@@ -43,7 +43,7 @@ const InputAmount = ({
             decimalScale={2}
             fixedDecimalScale
             onChange={onChange}
-            getInputRef={ref}
+            getInputRef={inputRef}
             autoComplete="off"
           />
           <div className="absolute inset-x-0 bottom-0 border-t border-gray-200 peer-focus:border-t-2 peer-focus:border-white"/>
