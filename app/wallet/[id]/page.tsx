@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, LiHTMLAttributes } from "react";
+import React from "react";
 import { classNames } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -18,11 +18,6 @@ import { incomeAndExpenses } from "@/app/data/incomeAndExpenses";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Category } from "@/app/types/category";
-import { Dialog, Transition } from "@headlessui/react";
-import {
-  ExclamationTriangleIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import ConfirmDialog from "@/app/components/confirmDialog";
 
 dayjs.extend(timezone);
