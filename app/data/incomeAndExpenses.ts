@@ -7,7 +7,8 @@ export const incomeAndExpenses: FinancialTransaction[] = [
     id: 1,
     amount: 10003.45,
     type: "expense",
-    date: dayjs().format("MMMM DD, YYYY"),
+    date: dayjs().subtract(2, 'days').format("MMMM DD, YYYY"),
+    notes: "Lorem ipsum",
     // select a random category from expenseCategories
     category: expenseCategories[0],
     merchant: "KFC",

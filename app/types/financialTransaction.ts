@@ -4,8 +4,9 @@ export type FinancialTransaction = {
     id: number;
     type: "income" | "expense";
     amount: number;
-    date: string;
-    merchant: string;
-    category:Category;
     periodicity: Periodicity;
+    date: string;
+    merchant?: string;
+    notes?: string;
+    category?:Category;
 }

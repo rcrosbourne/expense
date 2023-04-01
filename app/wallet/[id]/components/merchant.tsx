@@ -1,4 +1,11 @@
-const Merchant = () => {
+import React from "react";
+const Merchant = ({
+  merchant,
+  onMerchantChanged,
+}: {
+  merchant: string;
+  onMerchantChanged: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   return (
     <>
       <label
@@ -14,6 +21,8 @@ const Merchant = () => {
           id="merchant"
           className="block w-full rounded-md bg-slate-100 border-0 py-2.5 pr-10 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6"
           placeholder="Merchant"
+          value={merchant}
+          onChange={onMerchantChanged}
         />
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           <svg

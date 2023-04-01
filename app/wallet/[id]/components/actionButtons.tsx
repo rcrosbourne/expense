@@ -1,10 +1,10 @@
 import { classNames } from "@/app/utils";
 
-const ActionButtons = ({ isIncome }: { isIncome: boolean }) => {
+const ActionButtons = ({ isIncome, isEditing }: { isIncome: boolean, isEditing: boolean }) => {
   return (
     <div className="flex items-center justify-around gap-4">
       <button
-        type="button"
+        type="submit"
         className={classNames(
           isIncome
             ? "bg-teal-700 hover:bg-teal-900"
@@ -13,7 +13,7 @@ const ActionButtons = ({ isIncome }: { isIncome: boolean }) => {
             " focus-visible:outline-teal-600 transition-colors duration-1000 ease-in-out"
         )}
       >
-        Create
+          {isEditing ? "Save" : "Create"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 520 520"

@@ -1,5 +1,5 @@
 "use client";
-import React, {LiHTMLAttributes} from "react";
+import React, { LiHTMLAttributes } from "react";
 import { classNames } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -16,6 +16,7 @@ import Switcher from "@/app/wallet/[id]/components/Switcher";
 import InputAmount from "@/app/wallet/[id]/components/InputAmount";
 import { incomeAndExpenses } from "@/app/data/incomeAndExpenses";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
+import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -23,18 +24,21 @@ dayjs.extend(utc);
 const Wallet = () => {
   const [isIncome, setIsIncome] = React.useState(false);
   const [amount, setAmount] = React.useState("");
-  const [dueDate, setDueDate] = React.useState({
+  const [dueDate, setDueDate] = React.useState<DateValueType>({
     startDate: new Date(),
     endDate: null,
   });
-  const [selected, setSelected] = React.useState(recurringPeriodicity[0]);
+  const [periodicity, setPeriodicity] = React.useState(recurringPeriodicity[0]);
   const [isCategoriesOpen, setIsCategoriesOpen] =
     React.useState<boolean>(false);
   const [isEditingExpense, setIsEditingExpense] =
     React.useState<boolean>(false);
-  const [editExpense, setEditExpense] = React.useState<FinancialTransaction | null>(null);
+  const [editExpense, setEditExpense] =
+    React.useState<FinancialTransaction | null>(null);
+  const [merchant, setMerchant] = React.useState<string | undefined>("");
+  const [notes, setNotes] = React.useState<string | undefined>("");
   const inputRef = React.useRef();
-  const expenseRef =  React.useRef(null);
+  const expenseRef = React.useRef(null);
 
   React.useEffect(() => {
     if (isEditingExpense) {
@@ -45,22 +49,28 @@ const Wallet = () => {
       inputElement.focus();
     } else {
       // Change focus from the input to the expense list item
-      if(!expenseRef.current) return;
+      if (!expenseRef.current) return;
       let liElement = expenseRef.current as HTMLLIElement;
       liElement.focus();
     }
   }, [isEditingExpense, editExpense]);
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Remove the separator and convert to number
     let inputElement = e.currentTarget as HTMLInputElement;
     let value = inputElement.value.replace(",", "");
     if (value !== amount) {
       setAmount(value);
     }
-  }
+    console.log({ value, amount });
+  };
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
+  };
 
   // @ts-ignore
   const handleDateChanged = (newDueDate) => {
+    console.log(newDueDate);
     setDueDate(newDueDate);
   };
   const openCategories = () => {
@@ -75,12 +85,29 @@ const Wallet = () => {
     setEditExpense(expense);
     setIsEditingExpense(true);
     setIsIncome(expense.type === "income");
+    // set all the fields
+    setMerchant(expense?.merchant);
+    setAmount(Intl.NumberFormat().format(expense.amount));
+    setDueDate(() => {
+      if (!expense.date) {
+        return { startDate: dayjs().format("YYYY-MM-DD"), endDate: null };
+      }
+      return { startDate: expense.date, endDate: expense.date };
+    });
+    setNotes(expense.notes ?? "");
+    setPeriodicity(expense.periodicity);
   };
   const handleCancel = (expense: FinancialTransaction) => {
     // show the edit form
     if (!inputRef.current) return;
     setEditExpense(null);
     setIsEditingExpense(false);
+    //clear all the fields
+    setMerchant("");
+    setAmount("");
+    setDueDate({startDate: null, endDate: null});
+    setNotes("");
+    setPeriodicity(recurringPeriodicity[0]);
   };
   const handleDelete = (expense: FinancialTransaction) => {
     // show confirm dialog
@@ -111,7 +138,6 @@ const Wallet = () => {
                             : `ring-none`,
                           `group  col-span-1 divide-y divide-gray-200 rounded-lg shadow bg-white focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500`
                         )}
-
                         ref={expenseRef}
                         key={expense.id}
                       >
@@ -152,9 +178,9 @@ const Wallet = () => {
                                 ${Intl.NumberFormat().format(expense.amount)}
                               </h3>
                               <span
-                                className={`inline-block truncate flex-shrink-0 rounded-full ${expense.category.backgroundColor} px-2 py-0.5 text-xs font-medium text-slate-900`}
+                                className={`inline-block truncate flex-shrink-0 rounded-full ${expense?.category?.backgroundColor ?? "bg-cyan-600"} px-2 py-0.5 text-xs font-medium text-slate-900`}
                               >
-                                {expense.category.name}
+                                {expense?.category?.name ?? "None"}
                               </span>
                             </div>
                             <p className="mt-1 truncate text-sm text-gray-500">
@@ -165,9 +191,9 @@ const Wallet = () => {
                             </p>
                           </div>
                           <div
-                            className={`h-20 w-20 flex-shrink-0 rounded-full ${expense.category.backgroundColor} p-3`}
+                            className={`h-20 w-20 flex-shrink-0 rounded-full ${expense?.category?.backgroundColor ?? "bg-cyan-600"} p-3`}
                           >
-                            {expense.category.icon}
+                            {expense?.category?.icon}
                           </div>
                         </div>
                         <div>
@@ -277,11 +303,12 @@ const Wallet = () => {
                 </div>
               </div>
               <div className="bg-slate-50 min-h-52 rounded-b-lg shadow-lg relative">
-                <form action="">
+                <form onSubmit={submitHandler}>
                   <div className="relative mt-2 rounded-md shadow-sm">
                     <InputAmount
                       inputRef={inputRef}
-                      onChange={onChange}
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
                       isIncome={isIncome}
                       openCategories={openCategories}
                     />
@@ -296,19 +323,25 @@ const Wallet = () => {
                       />
                     </div>
                     <div className="mt-2">
-                      <Merchant />
-                    </div>
-                    <div className="mt-2">
-                      <Notes />
-                    </div>
-                    <div className="mt-2">
-                      <PeriodicityDropdown
-                        value={selected}
-                        onChange={setSelected}
+                      <Merchant
+                        merchant={merchant ?? ""}
+                        onMerchantChanged={(e) => setMerchant(e.target.value)}
                       />
                     </div>
                     <div className="mt-2">
-                      <ActionButtons isIncome={isIncome} />
+                      <Notes
+                        notes={notes ?? ""}
+                        onNotesChanged={(e) => setNotes(e.target.value)}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <PeriodicityDropdown
+                        value={periodicity}
+                        onChange={setPeriodicity}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <ActionButtons isIncome={isIncome} isEditing={isEditingExpense}/>
                     </div>
                   </div>
                 </form>

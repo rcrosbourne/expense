@@ -5,11 +5,13 @@ const InputAmount = ({
   onChange,
   inputRef,
   isIncome,
+    value,
   openCategories,
 }: {
   onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
   inputRef: ((el: HTMLInputElement) => void) | React.Ref<any> | undefined;
   isIncome: boolean;
+  value: string;
   openCategories: () => void;
 }) => {
   return (
@@ -43,6 +45,7 @@ const InputAmount = ({
             decimalScale={2}
             fixedDecimalScale
             onChange={onChange}
+            value={value}
             getInputRef={inputRef}
             autoComplete="off"
           />
