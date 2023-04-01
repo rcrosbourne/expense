@@ -1,6 +1,15 @@
 import { classNames } from "@/app/utils";
+import React from "react";
 
-const ActionButtons = ({ isIncome, isEditing }: { isIncome: boolean, isEditing: boolean }) => {
+const ActionButtons = ({
+  isIncome,
+  isEditing,
+  onCancel,
+}: {
+  isIncome: boolean;
+  isEditing: boolean;
+  onCancel: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}) => {
   return (
     <div className="flex items-center justify-around gap-4">
       <button
@@ -13,7 +22,7 @@ const ActionButtons = ({ isIncome, isEditing }: { isIncome: boolean, isEditing: 
             " focus-visible:outline-teal-600 transition-colors duration-1000 ease-in-out"
         )}
       >
-          {isEditing ? "Save" : "Create"}
+        {isEditing ? "Save" : "Create"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 520 520"
@@ -27,6 +36,7 @@ const ActionButtons = ({ isIncome, isEditing }: { isIncome: boolean, isEditing: 
       </button>
       <button
         type="button"
+        onClick={onCancel}
         className="inline-flex items-center gap-x-2 border border-slate-500 rounded-md py-2.5 px-3.5 text-sm font-semibold text-slate-500 shadow-sm hover:bg-slate-500 hover:text-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
       >
         Cancel

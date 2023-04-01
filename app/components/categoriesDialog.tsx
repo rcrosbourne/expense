@@ -1,17 +1,26 @@
-import React, {Fragment} from 'react';
-import {expenseCategories, incomeCategories} from "@/app/data/categories";
-import {Dialog, Transition} from "@headlessui/react";
-import {classNames} from "@/app/utils";
+import React, { Fragment } from "react";
+import { expenseCategories, incomeCategories } from "@/app/data/categories";
+import { Dialog, Transition } from "@headlessui/react";
+import { classNames } from "@/app/utils";
+import { Category } from "@/app/types/category";
 const CategoriesDialog = ({
   isOpen,
   close,
   type,
+  selectedCategory,
+  setSelectedCategory,
 }: {
   isOpen: boolean;
   close: () => void;
   type: "expense" | "income";
+  selectedCategory: Category | undefined;
+  setSelectedCategory: (category: Category) => void;
 }) => {
   const categories = type == "expense" ? expenseCategories : incomeCategories;
+  const handleSelection = (category: Category) => {
+    setSelectedCategory(category);
+    close();
+  }
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={close}>
@@ -51,13 +60,13 @@ const CategoriesDialog = ({
                     className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
                   >
                     {categories.map((category) => (
-                      <button key={category.name} className="group">
-                        <li className="col-span-1 flex rounded-md shadow-sm">
+                      <button key={category.name} className="group" onClick={() => handleSelection(category)}>
+                        <li className={`col-span-1 flex rounded-md shadow-sm ${selectedCategory?.name === category.name ? "ring-2 ring-offset-1 ring-teal-800" : ""}`}>
                           <div
                             className={classNames(
                               category.backgroundColor,
                               category.foregroundColor,
-                              "flex w-12 h-12 p-2.5 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium p-1 group-hover:cursor-pointer"
+                              "flex w-12 h-12 p-2.5 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium group-hover:cursor-pointer"
                             )}
                           >
                             {category.icon}

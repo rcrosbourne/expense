@@ -1,5 +1,5 @@
 "use client";
-import React, { LiHTMLAttributes } from "react";
+import React, { Fragment, LiHTMLAttributes } from "react";
 import { classNames } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -16,7 +16,14 @@ import Switcher from "@/app/wallet/[id]/components/Switcher";
 import InputAmount from "@/app/wallet/[id]/components/InputAmount";
 import { incomeAndExpenses } from "@/app/data/incomeAndExpenses";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
-import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
+import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
+import { Category } from "@/app/types/category";
+import { Dialog, Transition } from "@headlessui/react";
+import {
+  ExclamationTriangleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import ConfirmDialog from "@/app/components/confirmDialog";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -37,6 +44,13 @@ const Wallet = () => {
     React.useState<FinancialTransaction | null>(null);
   const [merchant, setMerchant] = React.useState<string | undefined>("");
   const [notes, setNotes] = React.useState<string | undefined>("");
+  const [category, setCategory] = React.useState<Category | undefined>(
+    undefined
+  );
+  const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
+  const [expenseToBeDeleted, setExpenseToBeDeleted] = React.useState<
+    FinancialTransaction | undefined
+  >(undefined);
   const inputRef = React.useRef();
   const expenseRef = React.useRef(null);
 
@@ -96,6 +110,7 @@ const Wallet = () => {
     });
     setNotes(expense.notes ?? "");
     setPeriodicity(expense.periodicity);
+    setCategory(expense.category);
   };
   const handleCancel = (expense: FinancialTransaction) => {
     // show the edit form
@@ -105,12 +120,32 @@ const Wallet = () => {
     //clear all the fields
     setMerchant("");
     setAmount("");
-    setDueDate({startDate: null, endDate: null});
+    setDueDate({ startDate: null, endDate: null });
     setNotes("");
     setPeriodicity(recurringPeriodicity[0]);
+    setCategory(undefined);
+  };
+
+  const cancelHandler = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    if (!editExpense) {
+      // clear all the fields
+      setMerchant("");
+      setAmount("");
+      setDueDate({ startDate: null, endDate: null });
+      setNotes("");
+      setPeriodicity(recurringPeriodicity[0]);
+      setCategory(undefined);
+      return;
+    }
+    handleCancel(editExpense);
   };
   const handleDelete = (expense: FinancialTransaction) => {
     // show confirm dialog
+    setExpenseToBeDeleted(expense);
+    setOpenConfirmDelete(true);
   };
   return (
     <main className="-mt-24 pb-8">
@@ -178,7 +213,10 @@ const Wallet = () => {
                                 ${Intl.NumberFormat().format(expense.amount)}
                               </h3>
                               <span
-                                className={`inline-block truncate flex-shrink-0 rounded-full ${expense?.category?.backgroundColor ?? "bg-cyan-600"} px-2 py-0.5 text-xs font-medium text-slate-900`}
+                                className={`inline-block truncate flex-shrink-0 rounded-full ${
+                                  expense?.category?.backgroundColor ??
+                                  "bg-cyan-600"
+                                } px-2 py-0.5 text-xs font-medium text-slate-900`}
                               >
                                 {expense?.category?.name ?? "None"}
                               </span>
@@ -191,7 +229,10 @@ const Wallet = () => {
                             </p>
                           </div>
                           <div
-                            className={`h-20 w-20 flex-shrink-0 rounded-full ${expense?.category?.backgroundColor ?? "bg-cyan-600"} p-3`}
+                            className={`h-20 w-20 flex-shrink-0 rounded-full ${
+                              expense?.category?.backgroundColor ??
+                              "bg-cyan-600"
+                            } p-3`}
                           >
                             {expense?.category?.icon}
                           </div>
@@ -311,6 +352,7 @@ const Wallet = () => {
                       onChange={(e) => setAmount(e.target.value)}
                       isIncome={isIncome}
                       openCategories={openCategories}
+                      category={category}
                     />
                   </div>
                   <div className="p-4 space-y-8">
@@ -341,7 +383,11 @@ const Wallet = () => {
                       />
                     </div>
                     <div className="mt-2">
-                      <ActionButtons isIncome={isIncome} isEditing={isEditingExpense}/>
+                      <ActionButtons
+                        isIncome={isIncome}
+                        isEditing={isEditingExpense}
+                        onCancel={cancelHandler}
+                      />
                     </div>
                   </div>
                 </form>
@@ -354,6 +400,28 @@ const Wallet = () => {
         isOpen={isCategoriesOpen}
         close={closeCategories}
         type={isIncome ? "income" : "expense"}
+        selectedCategory={category}
+        setSelectedCategory={(category) => setCategory(category)}
+      />
+      <ConfirmDialog
+        openConfirm={openConfirmDelete}
+        setOpenConfirm={setOpenConfirmDelete}
+        title={"Delete expense/income"}
+        message={
+          `Are you sure you want to delete expense ${expenseToBeDeleted?.category?.name} with amount $${expenseToBeDeleted?.amount} 
+          This action cannot be undone.`
+        }
+        confirmButtonText={"Delete"}
+        cancelButtonText={"Cancel"}
+        confirm={(status) => {
+          if (status) {
+            console.log({ expenseToBeDeleted });
+            setOpenConfirmDelete(false);
+          } else {
+            setExpenseToBeDeleted(undefined);
+            setOpenConfirmDelete(false);
+          }
+        }}
       />
     </main>
   );
