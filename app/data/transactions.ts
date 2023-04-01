@@ -2,7 +2,7 @@ import { FinancialTransaction } from "@/app/types/financialTransaction";
 import dayjs from "dayjs";
 import { expenseCategories, incomeCategories } from "@/app/data/categories";
 
-export const incomeAndExpenses: FinancialTransaction[] = [
+export const transactions: FinancialTransaction[] = [
   {
     id: 1,
     amount: 10003.45,
