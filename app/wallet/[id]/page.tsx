@@ -323,7 +323,7 @@ const Wallet = () => {
                 </Tab.Panel>
                 <Tab.Panel
                   className={classNames(
-                    "rounded-xl bg-slate-100",
+                    "rounded-xl bg-slate-100 overflow-hidden",
                     "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2"
                   )}
                 >
