@@ -13,7 +13,7 @@ import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
 import Notes from "@/app/wallet/[id]/components/notes";
 import Merchant from "@/app/wallet/[id]/components/merchant";
 import Switcher from "@/app/wallet/[id]/components/Switcher";
-import InputAmount from "@/app/wallet/[id]/components/InputAmount";
+import InputAmount from "@/app/wallet/[id]/components/inputAmount";
 import { transactions } from "@/app/data/transactions";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
@@ -21,6 +21,7 @@ import { Category } from "@/app/types/category";
 import ConfirmDialog from "@/app/components/confirmDialog";
 import TransactionList from "@/app/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
+import BudgetCalendar from "@/app/wallet/[id]/components/budgetCalendar";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -304,8 +305,6 @@ const Wallet = () => {
                     "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2"
                   )}
                 >
-                  <ul>
-                    <li className="relative rounded-md p-3 hover:bg-gray-100">
                       <section aria-labelledby="quick-links-title">
                         <div className="sm:grid-cols-1 overflow-hidden rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
                           <h2 className="sr-only" id="quick-links-title">
@@ -321,17 +320,21 @@ const Wallet = () => {
                           />
                         </div>
                       </section>
-                    </li>
-                    <li className="relative rounded-md p-3 hover:bg-gray-100">
+                </Tab.Panel>
+                <Tab.Panel
+                  className={classNames(
+                    "rounded-xl bg-slate-100",
+                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2"
+                  )}
+                >
                       <section aria-labelledby="quick-links-title">
                         <div className="sm:grid-cols-1 overflow-hidden rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
                           <h2 className="sr-only" id="quick-links-title">
                             Calendar
                           </h2>
+                          <BudgetCalendar />
                         </div>
                       </section>
-                    </li>
-                  </ul>
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
