@@ -34,9 +34,9 @@ const Wallet = () => {
   const [periodicity, setPeriodicity] = React.useState(recurringPeriodicity[0]);
   const [isCategoriesOpen, setIsCategoriesOpen] =
     React.useState<boolean>(false);
-  const [isEditingExpense, setIsEditingExpense] =
+  const [isEditingTransaction, setIsEditingTransaction] =
     React.useState<boolean>(false);
-  const [editExpense, setEditExpense] =
+  const [editTransaction, setEditTransaction] =
     React.useState<FinancialTransaction | null>(null);
   const [merchant, setMerchant] = React.useState<string | undefined>("");
   const [notes, setNotes] = React.useState<string | undefined>("");
@@ -44,35 +44,11 @@ const Wallet = () => {
     undefined
   );
   const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
-  const [expenseToBeDeleted, setExpenseToBeDeleted] = React.useState<
-    FinancialTransaction | undefined
-  >(undefined);
-  const inputRef = React.useRef();
-  const expenseRef = React.useRef(null);
+  const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<FinancialTransaction | undefined>(undefined);
+  const amountInputRef = React.useRef();
+  const transactionRef = React.useRef(null);
+  const [transaction, setTransaction] = React.useState<FinancialTransaction|null>(null);
 
-  React.useEffect(() => {
-    if (isEditingExpense) {
-      if (!inputRef.current) return;
-      if (!editExpense) return;
-      let inputElement = inputRef.current as HTMLInputElement;
-      inputElement.value = formatNumberAsCurrency(editExpense.amount);
-      inputElement.focus();
-    } else {
-      // Change focus from the input to the expense list item
-      if (!expenseRef.current) return;
-      let liElement = expenseRef.current as HTMLLIElement;
-      liElement.focus();
-    }
-  }, [isEditingExpense, editExpense]);
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Remove the separator and convert to number
-    let inputElement = e.currentTarget as HTMLInputElement;
-    let value = inputElement.value.replace(",", "");
-    if (value !== amount) {
-      setAmount(value);
-    }
-    console.log({ value, amount });
-  };
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
@@ -90,9 +66,9 @@ const Wallet = () => {
   };
   const handleEdit = (expense: FinancialTransaction) => {
     // show the edit form
-    if (!inputRef.current) return;
-    setEditExpense(expense);
-    setIsEditingExpense(true);
+    if (!amountInputRef.current) return;
+    setEditTransaction(expense);
+    setIsEditingTransaction(true);
     setIsIncome(expense.type === "income");
     // set all the fields
     setMerchant(expense?.merchant);
@@ -109,9 +85,9 @@ const Wallet = () => {
   };
   const handleCancel = (expense: FinancialTransaction) => {
     // show the edit form
-    if (!inputRef.current) return;
-    setEditExpense(null);
-    setIsEditingExpense(false);
+    if (!amountInputRef.current) return;
+    setEditTransaction(null);
+    setIsEditingTransaction(false);
     //clear all the fields
     setMerchant("");
     setAmount("");
@@ -121,11 +97,9 @@ const Wallet = () => {
     setCategory(undefined);
   };
 
-  const cancelHandler = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const cancelHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    if (!editExpense) {
+    if (!editTransaction) {
       // clear all the fields
       setMerchant("");
       setAmount("");
@@ -135,11 +109,11 @@ const Wallet = () => {
       setCategory(undefined);
       return;
     }
-    handleCancel(editExpense);
+    handleCancel(editTransaction);
   };
   const handleDelete = (expense: FinancialTransaction) => {
     // show confirm dialog
-    setExpenseToBeDeleted(expense);
+    setTransactionToBeDeleted(expense);
     setOpenConfirmDelete(true);
   };
   return (
@@ -157,8 +131,8 @@ const Wallet = () => {
                 </h2>
                 <TransactionList
                   transactions={transactions}
-                  editingTransaction={editExpense}
-                  transactionRef={expenseRef}
+                  editingTransaction={editTransaction}
+                  transactionRef={transactionRef}
                   onEdit={handleEdit}
                   onCancel={handleCancel}
                   onDelete={handleDelete}
@@ -183,7 +157,7 @@ const Wallet = () => {
                 <form onSubmit={submitHandler}>
                   <div className="relative mt-2 rounded-md shadow-sm">
                     <InputAmount
-                      inputRef={inputRef}
+                      inputRef={amountInputRef}
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       isIncome={isIncome}
@@ -221,7 +195,7 @@ const Wallet = () => {
                     <div className="mt-2">
                       <ActionButtons
                         isIncome={isIncome}
-                        isEditing={isEditingExpense}
+                        isEditing={isEditingTransaction}
                         onCancel={cancelHandler}
                       />
                     </div>
@@ -243,16 +217,16 @@ const Wallet = () => {
         openConfirm={openConfirmDelete}
         setOpenConfirm={setOpenConfirmDelete}
         title={"Delete expense/income"}
-        message={`Are you sure you want to delete expense ${expenseToBeDeleted?.category?.name} with amount $${formatNumberAsCurrency(expenseToBeDeleted?.amount)} 
+        message={`Are you sure you want to delete expense ${transactionToBeDeleted?.category?.name} with amount $${formatNumberAsCurrency(transactionToBeDeleted?.amount)} 
           This action cannot be undone.`}
         confirmButtonText={"Delete"}
         cancelButtonText={"Cancel"}
         confirm={(status) => {
           if (status) {
-            console.log({ expenseToBeDeleted });
+            console.log({ expenseToBeDeleted: transactionToBeDeleted });
             setOpenConfirmDelete(false);
           } else {
-            setExpenseToBeDeleted(undefined);
+            setTransactionToBeDeleted(undefined);
             setOpenConfirmDelete(false);
           }
         }}
