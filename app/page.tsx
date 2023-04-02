@@ -1,11 +1,9 @@
-"use client";
 import Image from "next/image";
 import { classNames } from "@/app/utils";
 import {
   CheckBadgeIcon,
   ClockIcon,
 } from "@heroicons/react/24/outline";
-import {User} from "@/app/types";
 import Link from "next/link";
 
 const user = {
@@ -202,7 +200,7 @@ export default function Home() {
                     <h2 className="sr-only" id="quick-links-title">
                       Quick links
                     </h2>
-                    {actions.map((action, actionIdx) => (
+                    {actions.map((action) => (
                       <div
                         key={action.name}
                         className="group rounded-lg relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500"
@@ -359,10 +357,12 @@ export default function Home() {
                             <li key={person.handle} className="py-4">
                               <div className="flex items-center space-x-4">
                                 <div className="flex-shrink-0">
-                                  <img
+                                  <Image
                                     className="h-8 w-8 rounded-full"
                                     src={person.imageUrl}
                                     alt=""
+                                    height={32}
+                                    width={32}
                                   />
                                 </div>
                                 <div className="min-w-0 flex-1">
