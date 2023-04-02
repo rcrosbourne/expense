@@ -147,6 +147,22 @@ const generateCalendarFromMonth = (month: string) => {
     });
     day.setDate(day.getDate() + 1);
   }
+  // if number of weeks is less than 6 add the rest of the days to the calendar
+  if (calendar.length < 42) {
+    const lastDayOfCalendar = calendar[calendar.length - 1].date;
+    const lastDayOfCalendarDate = dayjs(lastDayOfCalendar).toDate();
+    let day = dayjs(lastDayOfCalendarDate).add(1, "day").toDate();
+    while (calendar.length < 42) {
+      calendar.push({
+        date: day.toISOString().split("T")[0],
+        transactions: [],
+        isCurrentMonth: false,
+        isToday: dayjs(day).isSame(dayjs(), "day"),
+        isSelected: dayjs(day).isSame(dayjs(month), "day"),
+      });
+      day.setDate(day.getDate() + 1);
+    }
+  }
   return { month: dayjs(month).format("MMMM YYYY"), calendar };
 };
 const BudgetCalendar = () => {
@@ -173,9 +189,9 @@ const BudgetCalendar = () => {
   const handlePreviousMonth = () => {
     setCurrentMonth(dayjs(currentMonth).subtract(1, "month").toISOString());
   };
-    const handleNextMonth = () => {
-        setCurrentMonth(dayjs(currentMonth).add(1, "month").toISOString());
-    }
+  const handleNextMonth = () => {
+    setCurrentMonth(dayjs(currentMonth).add(1, "month").toISOString());
+  };
   // const {month, calendar:days } = generateCalendarFromMonth("2023-04-03");
   // const selectedDay = days.find((day) => day.isSelected);
   return (
