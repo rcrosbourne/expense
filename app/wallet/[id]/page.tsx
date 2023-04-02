@@ -332,7 +332,7 @@ const Wallet = () => {
                           <h2 className="sr-only" id="quick-links-title">
                             Calendar
                           </h2>
-                          <BudgetCalendar />
+                          <BudgetCalendar transactions={transactions}/>
                         </div>
                       </section>
                 </Tab.Panel>
