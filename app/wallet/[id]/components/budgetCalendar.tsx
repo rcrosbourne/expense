@@ -6,20 +6,31 @@ import {
   EllipsisHorizontalIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
-import { classNames } from "@/app/utils";
+import {classNames, formatNumberAsCurrency} from "@/app/utils";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 
+type CalendarDay = {
+    date: string;
+    transactions: FinancialTransaction[];
+    isCurrentMonth: boolean;
+    isToday: boolean;
+    isSelected: boolean;
+}
+type Calendar = {
+    month: string;
+    days: CalendarDay[];
+}
 const generateCalendarFromMonth = (
   month: string,
   transactions: FinancialTransaction[]
-) => {
+): Calendar => {
   const firstDayOfMonth = dayjs(month).startOf("month").toDate();
   const lastDayOfMonth = dayjs(month).endOf("month").toDate();
   const firstDayOfCalendar = dayjs(firstDayOfMonth).startOf("week").toDate();
   const lastDayOfCalendar = dayjs(lastDayOfMonth).endOf("week").toDate();
-  const calendar = [];
+  const calendar:CalendarDay[] = [];
   let day = firstDayOfCalendar;
   while (day <= lastDayOfCalendar) {
     // if there are transactions for the day, add them to the calendar
@@ -51,7 +62,7 @@ const generateCalendarFromMonth = (
       day.setDate(day.getDate() + 1);
     }
   }
-  return { month: dayjs(month).format("MMMM YYYY"), calendar };
+  return { month: dayjs(month).format("MMMM YYYY"), days: calendar };
 };
 const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) => {
   const [currentMonth, setCurrentMonth] = React.useState(
@@ -67,12 +78,12 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
       isSelected: boolean;
     }[]
   >([]);
-  const [selectedDay, setSelectedDay] = React.useState(undefined);
+  const [selectedDay, setSelectedDay] = React.useState<CalendarDay|undefined>(undefined);
   React.useEffect(() => {
-    const { month, calendar } = generateCalendarFromMonth(currentMonth, transactions);
+    const { month, days } = generateCalendarFromMonth(currentMonth, transactions);
     setMonth(month);
-    setDays(calendar);
-    setSelectedDay(calendar.find((day) => day.isSelected));
+    setDays(days);
+    setSelectedDay(days.find((day) => day.isSelected));
   }, [currentMonth, transactions]);
   const handlePreviousMonth = () => {
     setCurrentMonth(dayjs(currentMonth).subtract(1, "month").toISOString());
@@ -366,7 +377,7 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
                     day.isCurrentMonth
                       ? "bg-white"
                       : "bg-gray-50 text-gray-500",
-                    "relative px-3 py-2"
+                    "relative px-3 py-2 lg:min-h-[120px]"
                   )}
                 >
                   <time
@@ -391,7 +402,7 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
                               dateTime={transaction.date}
                               className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
                             >
-                              {transaction.amount}
+                              ${formatNumberAsCurrency(transaction.amount)}
                             </time>
                           </a>
                         </li>
@@ -441,7 +452,7 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
                     {day.date.split("-").pop().replace(/^0/, "")}
                   </time>
                   <span className="sr-only">
-                    {day.transactions.length} events
+                    {day.transactions.length} transactions
                   </span>
                   {day.transactions.length > 0 && (
                     <span className="-mx-0.5 mt-auto flex flex-wrap-reverse">
@@ -468,24 +479,25 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
               >
                 <div className="flex-auto">
                   <p className="font-semibold text-gray-900">
-                    {transaction.category.name}
+                    {transaction?.category?.name}
                   </p>
                   <time
                     dateTime={transaction.date}
                     className="mt-2 flex items-center text-gray-700"
                   >
-                    <ClockIcon
-                      className="mr-2 h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    {transaction.amount}
+                    {transaction.category?.icon && (
+                      <span className="mr-2 h-5 w-5 text-gray-400">
+                        {transaction.category.icon}
+                      </span>
+                    )}
+                    ${formatNumberAsCurrency(transaction.amount)}
                   </time>
                 </div>
                 <a
-                  href={transaction.href}
+                  href="#"
                   className="ml-6 flex-none self-center rounded-md bg-white px-3 py-2 font-semibold text-gray-900 opacity-0 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400 focus:opacity-100 group-hover:opacity-100"
                 >
-                  Edit<span className="sr-only">, {transaction.amount}</span>
+                  Edit<span className="sr-only">, ${formatNumberAsCurrency(transaction.amount)}</span>
                 </a>
               </li>
             ))}
