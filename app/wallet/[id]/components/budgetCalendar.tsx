@@ -212,17 +212,16 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
                     <ol className="mt-2">
                       {day.transactions.slice(0, 2).map((transaction) => (
                         <li key={transaction.id}>
-                          <a href={""} className="group flex">
+                          <button type="button" className="group flex w-full">
                             <p className="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
                               {transaction.category?.name}
                             </p>
-                            <time
-                              dateTime={transaction.date}
+                            <p
                               className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
                             >
-                              ${formatNumberAsCurrency(transaction.amount)}
-                            </time>
-                          </a>
+                              {"$" + formatNumberAsCurrency(transaction.amount)}
+                            </p>
+                          </button>
                         </li>
                       ))}
                       {day.transactions.length > 2 && (
