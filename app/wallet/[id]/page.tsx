@@ -47,7 +47,6 @@ const Wallet = () => {
   const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<FinancialTransaction | undefined>(undefined);
   const amountInputRef = React.useRef();
   const transactionRef = React.useRef(null);
-  const [transaction, setTransaction] = React.useState<FinancialTransaction|null>(null);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
