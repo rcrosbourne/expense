@@ -85,14 +85,7 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
     setDays(days);
     setSelectedDay(days.find((day) => day.isSelected));
   }, [currentMonth, transactions]);
-  const handlePreviousMonth = () => {
-    setCurrentMonth(dayjs(currentMonth).subtract(1, "month").toISOString());
-  };
-  const handleNextMonth = () => {
-    setCurrentMonth(dayjs(currentMonth).add(1, "month").toISOString());
-  };
-  // const {month, calendar:days } = generateCalendarFromMonth("2023-04-03");
-  // const selectedDay = days.find((day) => day.isSelected);
+
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none lg:px-0">
@@ -107,7 +100,7 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
             />
             <button
               type="button"
-              onClick={handlePreviousMonth}
+              onClick={() => setCurrentMonth(dayjs(currentMonth).subtract(1, "month").toISOString())}
               className="flex items-center justify-center rounded-l-md py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span className="sr-only">Previous month</span>
@@ -123,7 +116,7 @@ const BudgetCalendar = ({transactions}: {transactions: FinancialTransaction[]}) 
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
               type="button"
-              onClick={handleNextMonth}
+              onClick={() => setCurrentMonth(dayjs(currentMonth).add(1, "month").toISOString())}
               className="flex items-center justify-center rounded-r-md py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
             >
               <span className="sr-only">Next month</span>
