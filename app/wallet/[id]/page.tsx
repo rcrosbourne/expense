@@ -70,6 +70,9 @@ const Wallet = () => {
   const handleEdit = (expense: FinancialTransaction) => {
     // show the edit form
     if (!amountInputRef.current) return;
+    // input ref should have focus
+    let inputElement = amountInputRef.current as HTMLInputElement;
+    inputElement.focus();
     setEditTransaction(expense);
     setIsEditingTransaction(true);
     setIsIncome(expense.type === "income");
