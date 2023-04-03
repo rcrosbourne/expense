@@ -1,5 +1,5 @@
 import React from "react";
-import {classNames, formatNumberAsCurrency} from "@/app/utils";
+import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 
 const TransactionList = ({
@@ -93,7 +93,8 @@ const TransactionList = ({
             <div>
               <div className="-mt-px flex divide-x divide-gray-200">
                 <div className="flex w-0 flex-1">
-                  {!editingTransaction || editingTransaction.id !== transaction.id ? (
+                  {!editingTransaction ||
+                  editingTransaction.id !== transaction.id ? (
                     <button
                       type="button"
                       onClick={() => onEdit(transaction)}
@@ -131,7 +132,7 @@ const TransactionList = ({
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
-                        className="h-5 w-5"
+                        className="h-5 w-5 fill-current"
                       >
                         <linearGradient
                           id="a"
@@ -141,11 +142,10 @@ const TransactionList = ({
                           y2="79.534"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop offset=".006" stopColor="#3b8bf5" />
-                          <stop offset="1" stopColor="#c7d5f3" />
+                          <stop offset=".006" />
+                          <stop offset="1" />
                         </linearGradient>
                         <path
-                          fill="url(#a)"
                           d="M79.331 432.754c-97.359-97.442-97.359-255.921 0-353.276 97.664-97.664 255.7-97.658 353.276.004 62.444 62.444 87.365 154.305 65.03 239.733-1.61 6.159-7.897 9.833-14.07 8.238-6.159-1.61-9.848-7.912-8.238-14.07C495.6 235.844 472.98 152.465 416.3 95.782c-88.616-88.686-232.051-88.607-320.665 0-88.371 88.37-88.367 232.223.004 320.673 106.537 106.537 286.044 80.879 358.459-50.16 3.089-5.57 10.096-7.593 15.669-4.515 5.573 3.081 7.593 10.096 4.515 15.669-79.833 144.412-277.563 172.702-394.951 55.305zm270.198-270.193c-4.504-4.504-11.8-4.504-16.303 0l-77.245 77.245-77.245-77.245c-4.504-4.504-11.8-4.504-16.303 0-4.504 4.5-4.504 11.804 0 16.303l77.245 77.245-77.245 77.245c-4.504 4.5-4.504 11.803 0 16.303 4.504 4.504 11.8 4.504 16.303 0l77.245-77.245 77.245 77.245c4.504 4.504 11.8 4.504 16.303 0 4.504-4.5 4.504-11.803 0-16.303l-77.245-77.245 77.245-77.245c4.503-4.5 4.503-11.803 0-16.303z"
                         />
                       </svg>

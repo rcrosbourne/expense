@@ -67,4 +67,15 @@ export const transactions: FinancialTransaction[] = [
     merchant: "ZS Associates",
     periodicity: "One-time payment",
   },
+    {
+
+    id: 7,
+    amount: 62923.45,
+    type: "expense",
+    date: dayjs().tz("America/Jamaica").subtract(5, "days").format("MMMM DD, YYYY"),
+    // select a random category from incomeCategories
+    category: expenseCategories[1],
+    merchant: "PriceSmart",
+    periodicity: "One-time payment",
+    }
 ];
