@@ -1,19 +1,15 @@
 import React, { Fragment } from "react";
 import {
-  AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisHorizontalIcon,
-  XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
 import { classNames, formatNumberAsCurrency } from "@/app/utils";
-import { ClockIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 import * as Popover from "@radix-ui/react-popover";
-import { Close } from "@radix-ui/react-popover";
 type CalendarDay = {
   date: string;
   transactions: FinancialTransaction[];
