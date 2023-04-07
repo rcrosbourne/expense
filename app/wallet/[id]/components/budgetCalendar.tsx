@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisHorizontalIcon,
@@ -8,7 +7,7 @@ import {
 import { Menu, Transition } from "@headlessui/react";
 import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import dayjs from "dayjs";
-import { FinancialTransaction } from "@/app/types/financialTransaction";
+import { FinancialTransaction } from "@/app/types";
 import * as Popover from "@radix-ui/react-popover";
 type CalendarDay = {
   date: string;

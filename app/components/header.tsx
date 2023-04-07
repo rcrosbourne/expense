@@ -54,7 +54,7 @@ const Header = ({
                     <Menu.Button className="flex rounded-full bg-white text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
                       <span className="sr-only">Open user menu</span>
                       <Image
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full object-cover"
                         src={user.imageUrl}
                         alt=""
                         width={32}
@@ -181,10 +181,12 @@ const Header = ({
                     <div className="pt-3 pb-2">
                       <div className="flex items-center justify-between px-4">
                         <div>
-                          <img
+                          <Image
                             className="h-8 w-auto"
                             src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=600"
                             alt="Your Company"
+                            height={32}
+                            width={32}
                           />
                         </div>
                         <div className="-mr-2">
@@ -210,7 +212,7 @@ const Header = ({
                       <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
                           <Image
-                            className="h-10 w-10 rounded-full"
+                            className="h-10 w-10 rounded-full object-cover"
                             src={user.imageUrl}
                             alt=""
                             width={(10 / 4) * 16}
