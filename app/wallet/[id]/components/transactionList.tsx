@@ -1,6 +1,6 @@
 import React from "react";
 import { classNames, formatNumberAsCurrency } from "@/app/utils";
-import { FinancialTransaction } from "@/app/types/financialTransaction";
+import { FinancialTransaction } from "@/app/types";
 import { CancelIcon, EditIcon, RecurringIcon, TrashCanIcon } from "@/app/components/icons";
 
 const TransactionList = ({

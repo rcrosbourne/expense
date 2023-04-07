@@ -2,8 +2,7 @@ import React, {Fragment} from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { recurringPeriodicity } from "@/app/data/recurringPeriodicity";
 import { classNames } from "@/app/utils";
-import { CheckIcon } from "@heroicons/react/20/solid";
-import {Periodicity} from "@/app/types/periodicity";
+import {Periodicity} from "@/app/types";
 import {RecurringIcon, TickIcon} from "@/app/components/icons";
 
 const PeriodicityDropdown = ({

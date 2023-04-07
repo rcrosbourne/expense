@@ -1,6 +1,6 @@
 import { NumericFormat } from "react-number-format";
 import React from "react";
-import { Category } from "@/app/types/category";
+import { Category } from "@/app/types";
 import {SquaresIcon} from "@/app/components/icons";
 
 const InputAmount = ({

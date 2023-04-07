@@ -5,14 +5,7 @@ import {
   ClockIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-
-const user = {
-  name: "James Hagon",
-  email: "chelsea.hagon@example.com",
-  role: "Human Resources Manager",
-  imageUrl:
-    "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+import {user} from "@/app/data/user"
 const stats = [
   { label: "Total", value: "$100,000.00" },
   { label: "Last 30 days", value: "$300,000.00" },
@@ -147,7 +140,7 @@ export default function Home() {
                         <div className="sm:flex sm:space-x-5">
                           <div className="flex-shrink-0">
                             <Image
-                              className="mx-auto h-20 w-20 rounded-full"
+                              className="mx-auto h-20 w-20 rounded-full object-cover"
                               src={user.imageUrl}
                               alt=""
                               height={80}

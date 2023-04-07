@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { expenseCategories, incomeCategories } from "@/app/data/categories";
 import { Dialog, Transition } from "@headlessui/react";
 import { classNames } from "@/app/utils";
-import { Category } from "@/app/types/category";
+import { Category } from "@/app/types";
 const CategoriesDialog = ({
   isOpen,
   close,
