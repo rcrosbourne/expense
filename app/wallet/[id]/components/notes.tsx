@@ -1,5 +1,5 @@
 import React from "react";
-import {TodoList} from "@/app/components/icons";
+import {TodoListIcon} from "@/app/components/icons";
 
 const Notes = ({notes, onNotesChanged}: {notes: string, onNotesChanged: (event: React.ChangeEvent<HTMLInputElement>) => void}) => {
   return (
@@ -21,7 +21,7 @@ const Notes = ({notes, onNotesChanged}: {notes: string, onNotesChanged: (event: 
           onChange={onNotesChanged}
         />
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <TodoList className="h-5 w-5 text-gray-400" />
+            <TodoListIcon className="h-5 w-5 text-gray-400" />
         </div>
       </div>
     </>

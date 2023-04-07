@@ -1,5 +1,5 @@
 import React from "react";
-import {Shop} from "@/app/components/icons";
+import {ShopIcon} from "@/app/components/icons";
 const Merchant = ({
   merchant,
   onMerchantChanged,
@@ -26,7 +26,7 @@ const Merchant = ({
           onChange={onMerchantChanged}
         />
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <Shop className="h-5 w-5 text-gray-400" />
+            <ShopIcon className="h-5 w-5 text-gray-400" />
         </div>
       </div>
     </>

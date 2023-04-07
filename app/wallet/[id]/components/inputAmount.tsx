@@ -1,7 +1,7 @@
 import { NumericFormat } from "react-number-format";
 import React from "react";
 import { Category } from "@/app/types/category";
-import {Squares} from "@/app/components/icons";
+import {SquaresIcon} from "@/app/components/icons";
 
 const InputAmount = ({
   onChange,
@@ -73,14 +73,14 @@ const InputAmount = ({
                   {category && category.icon ? (
                     category.icon
                   ) : (
-                      <Squares />
+                      <SquaresIcon />
                   )}
                 </div>
                 <div className="relative inline-flex h-5 w-5 text-white">
                   {category && category.icon ? (
                     category.icon
                   ) : (
-                        <Squares />
+                        <SquaresIcon />
                   )}
                 </div>
               </div>

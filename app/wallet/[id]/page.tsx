@@ -22,7 +22,7 @@ import ConfirmDialog from "@/app/components/confirmDialog";
 import TransactionList from "@/app/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
 import BudgetCalendar from "@/app/wallet/[id]/components/budgetCalendar";
-import {Calendar, CheckList} from "@/app/components/icons";
+import {CalendarIcon, CheckListIcon} from "@/app/components/icons";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -148,7 +148,7 @@ const Wallet = () => {
                   }
                 >
                   <span>
-                    <CheckList className="aspect-square h-6"/>
+                    <CheckListIcon className="aspect-square h-6"/>
                   </span>
                   <span className="hidden sm:inline-block">Details</span>
                 </Tab>
@@ -164,7 +164,7 @@ const Wallet = () => {
                   }
                 >
                   <span>
-                    <Calendar/>
+                    <CalendarIcon/>
                   </span>
                   <span>Calendar</span>
                 </Tab>

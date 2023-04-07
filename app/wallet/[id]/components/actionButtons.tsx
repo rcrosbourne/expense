@@ -1,6 +1,6 @@
 import { classNames } from "@/app/utils";
 import React from "react";
-import { Tick, X } from "@/app/components/icons";
+import { TickIcon, XIcon } from "@/app/components/icons";
 
 const ActionButtons = ({
   isIncome,
@@ -24,7 +24,7 @@ const ActionButtons = ({
         )}
       >
         {isEditing ? "Save" : "Create"}
-        <Tick className="-mr-0.5 h-5 w-5 text-slate-50 fill-current" />
+        <TickIcon className="-mr-0.5 h-5 w-5 text-slate-50 fill-current" />
       </button>
       <button
         type="button"
@@ -32,7 +32,7 @@ const ActionButtons = ({
         className="inline-flex items-center gap-x-2 border border-slate-500 rounded-md py-2.5 px-3.5 text-sm font-semibold text-slate-500 shadow-sm hover:bg-slate-500 hover:text-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
       >
         Cancel
-        <X className="-mr-0.5 h-5 w-5 fill-current" />
+        <XIcon className="-mr-0.5 h-5 w-5 fill-current" />
       </button>
     </div>
   );

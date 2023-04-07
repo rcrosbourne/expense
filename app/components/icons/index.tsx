@@ -625,7 +625,7 @@ export const TitheIcon: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const CheckList: React.FC<IconProps> = ({
+export const CheckListIcon: React.FC<IconProps> = ({
   className = "fill-current",
 }) => {
   return (
@@ -649,7 +649,7 @@ export const CheckList: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const Calendar: React.FC<IconProps> = ({
+export const CalendarIcon: React.FC<IconProps> = ({
   className = "fill-current h-6 aspect-square",
 }) => {
   return (
@@ -766,7 +766,7 @@ export const Calendar: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const Tick: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const TickIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -781,7 +781,7 @@ export const Tick: React.FC<IconProps> = ({ className = "fill-current" }) => {
   );
 };
 
-export const X: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const XIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -793,7 +793,7 @@ export const X: React.FC<IconProps> = ({ className = "fill-current" }) => {
   );
 };
 
-export const Squares: React.FC<IconProps> = ({
+export const SquaresIcon: React.FC<IconProps> = ({
   className = "fill-current",
 }) => {
   return (
@@ -809,7 +809,7 @@ export const Squares: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const Shop: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const ShopIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -823,7 +823,7 @@ export const Shop: React.FC<IconProps> = ({ className = "fill-current" }) => {
   );
 };
 
-export const TodoList: React.FC<IconProps> = ({
+export const TodoListIcon: React.FC<IconProps> = ({
   className = "fill-current",
 }) => {
   return (
@@ -837,7 +837,7 @@ export const TodoList: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const Recurring: React.FC<IconProps> = ({
+export const RecurringIcon: React.FC<IconProps> = ({
   className = "fill-current",
 }) => {
   return (
@@ -867,7 +867,7 @@ export const Recurring: React.FC<IconProps> = ({
   );
 };
 
-export const Edit: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const EditIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -893,7 +893,7 @@ export const Edit: React.FC<IconProps> = ({ className = "fill-current" }) => {
   );
 };
 
-export const Cancel: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const CancelIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -915,7 +915,7 @@ export const Cancel: React.FC<IconProps> = ({ className = "fill-current" }) => {
     </svg>
   );
 };
-export const TrashCan: React.FC<IconProps> = ({
+export const TrashCanIcon: React.FC<IconProps> = ({
   className = "fill-current",
 }) => {
   return (

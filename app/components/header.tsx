@@ -181,10 +181,12 @@ const Header = ({
                     <div className="pt-3 pb-2">
                       <div className="flex items-center justify-between px-4">
                         <div>
-                          <img
+                          <Image
                             className="h-8 w-auto"
                             src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=600"
                             alt="Your Company"
+                            height={32}
+                            width={32}
                           />
                         </div>
                         <div className="-mr-2">

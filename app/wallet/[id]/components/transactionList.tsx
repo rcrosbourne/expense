@@ -1,7 +1,7 @@
 import React from "react";
 import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
-import { Cancel, Edit, Recurring, TrashCan } from "@/app/components/icons";
+import { CancelIcon, EditIcon, RecurringIcon, TrashCanIcon } from "@/app/components/icons";
 
 const TransactionList = ({
   transactions,
@@ -37,7 +37,7 @@ const TransactionList = ({
                 {transaction.periodicity !== "One-time payment" && (
                   <>
                     <span className="sr-only">Recurring</span>
-                    <Recurring className="h-6 w-6 fill-current" />
+                    <RecurringIcon className="h-6 w-6 fill-current" />
                   </>
                 )}
               </div>
@@ -79,7 +79,7 @@ const TransactionList = ({
                       onClick={() => onEdit(transaction)}
                       className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                     >
-                      <Edit className="h-5 w-5 text-gray-400" />
+                      <EditIcon className="h-5 w-5 text-gray-400" />
                       Edit
                     </button>
                   ) : (
@@ -88,7 +88,7 @@ const TransactionList = ({
                       onClick={() => onCancel(transaction)}
                       className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                     >
-                      <Cancel className="h-5 w-5 fill-current" />
+                      <CancelIcon className="h-5 w-5 fill-current" />
                       Cancel
                     </button>
                   )}
@@ -99,7 +99,7 @@ const TransactionList = ({
                     onClick={() => onDelete(transaction)}
                     className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                   >
-                    <TrashCan className="h-5 w-5 text-gray-400" />
+                    <TrashCanIcon className="h-5 w-5 text-gray-400" />
                     Delete
                   </button>
                 </div>
