@@ -766,7 +766,9 @@ export const CalendarIcon: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const TickIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const TickIcon: React.FC<IconProps> = ({
+  className = "fill-current",
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -809,7 +811,9 @@ export const SquaresIcon: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const ShopIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const ShopIcon: React.FC<IconProps> = ({
+  className = "fill-current",
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -867,7 +871,9 @@ export const RecurringIcon: React.FC<IconProps> = ({
   );
 };
 
-export const EditIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const EditIcon: React.FC<IconProps> = ({
+  className = "fill-current",
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -893,7 +899,9 @@ export const EditIcon: React.FC<IconProps> = ({ className = "fill-current" }) =>
   );
 };
 
-export const CancelIcon: React.FC<IconProps> = ({ className = "fill-current" }) => {
+export const CancelIcon: React.FC<IconProps> = ({
+  className = "fill-current",
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -929,6 +937,82 @@ export const TrashCanIcon: React.FC<IconProps> = ({
         fill="#fc0005"
         fillRule="evenodd"
         d="M170.8 14.221A14.21 14.21 0 0 1 185 .014L326.991.006a14.233 14.233 0 0 1 14.2 14.223v35.117H170.8zm233.461 477.443a21.75 21.75 0 0 1-21.856 20.33H127.954a21.968 21.968 0 0 1-21.854-20.416L84.326 173.06H427.5l-23.234 318.6zm56.568-347.452H51.171v-33A33.035 33.035 0 0 1 84.176 78.2l343.644-.011a33.051 33.051 0 0 1 33 33.02v33zm-270.79 291.851a14.422 14.422 0 1 0 28.844 0V233.816a14.42 14.42 0 0 0-28.839-.01v202.257zm102.9 0a14.424 14.424 0 1 0 28.848 0V233.816a14.422 14.422 0 0 0-28.843-.01z"
+      />
+    </svg>
+  );
+};
+
+export const BarChartIcon: React.FC<IconProps> = ({
+  className = "fill-current",
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      className={className}
+    >
+      <path
+        fill="#acb3ba"
+        d="M0 482.132h512v26.667H0z"
+        data-original="#acb3ba"
+      />
+      <path
+        fill="#e77474"
+        d="M21.333 267.732h78.933v193.07H21.333z"
+        data-original="#cdd6e0"
+      />
+      <path
+        fill="#4cdbc4"
+        d="M119.47 174.931h78.933v285.87H119.47z"
+        data-original="#4cdbc4"
+      />
+      <path
+        fill="#ffd15c"
+        d="M216.53 218.671h78.933v242.13H216.53z"
+        data-original="#ffd15c"
+      />
+      <path
+        fill="#84dbff"
+        d="M314.67 309.331h78.933v150.4H314.67z"
+        data-original="#84dbff"
+      />
+      <path
+        fill="#ff7058"
+        d="M411.73 140.801h78.933v318.93H411.73z"
+        data-original="#ff7058"
+      />
+      <path
+        fill="#e77474"
+        d="m334.933 194.134-150.4-150.399-131.2 131.199L38.4 160.001 184.533 13.869l150.4 150.399L458.667 40.535 473.6 55.468z"
+        data-original="#cdd6e0"
+      />
+      <circle
+        cx="45.867"
+        cy="167.471"
+        r="26.667"
+        fill="#40596b"
+        data-original="#40596b"
+      />
+      <circle
+        cx="184.53"
+        cy="29.869"
+        r="26.667"
+        fill="#40596b"
+        data-original="#40596b"
+      />
+      <circle
+        cx="333.87"
+        cy="180.271"
+        r="26.667"
+        fill="#40596b"
+        data-original="#40596b"
+      />
+      <circle
+        cx="466.13"
+        cy="48.002"
+        r="26.667"
+        fill="#40596b"
+        data-original="#40596b"
       />
     </svg>
   );

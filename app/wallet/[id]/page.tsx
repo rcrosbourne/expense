@@ -22,11 +22,37 @@ import ConfirmDialog from "@/app/components/confirmDialog";
 import TransactionList from "@/app/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
 import BudgetCalendar from "@/app/wallet/[id]/components/budgetCalendar";
-import {CalendarIcon, CheckListIcon} from "@/app/components/icons";
+import {
+  BarChartIcon,
+  CalendarIcon,
+  CheckListIcon,
+} from "@/app/components/icons";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
+ChartJS.register(ArcElement, Tooltip, Legend);
+const pieData = {
+  labels: ['Total Income', 'Total Expense'],
+  datasets: [
+    {
+      label: 'Amount',
+      data: [350000, 250000],
+      backgroundColor: [
+        'hsla(175, 77%, 26%, 0.5)',
+        'hsla(0, 91%, 71%, 0.5)',
 
+      ],
+      borderColor: [
+        'hsla(175, 77%, 26%, 1)',
+        'hsla(0, 91%, 71%, 1)',
+
+      ],
+      borderWidth: 2,
+    },
+  ],
+};
 const Wallet = () => {
   const [isIncome, setIsIncome] = React.useState(false);
   const [amount, setAmount] = React.useState("");
@@ -53,6 +79,9 @@ const Wallet = () => {
   const amountInputRef = React.useRef();
   const transactionRef = React.useRef(null);
 
+  React.useEffect(() => {
+
+  }, []);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
@@ -148,7 +177,7 @@ const Wallet = () => {
                   }
                 >
                   <span>
-                    <CheckListIcon className="aspect-square h-6"/>
+                    <CheckListIcon className="h-6 sm:h-8 aspect-square" />
                   </span>
                   <span className="hidden sm:inline-block">Details</span>
                 </Tab>
@@ -164,9 +193,25 @@ const Wallet = () => {
                   }
                 >
                   <span>
-                    <CalendarIcon/>
+                    <CalendarIcon className="h-6 sm:h-8 aspect-square" />
                   </span>
-                  <span>Calendar</span>
+                  <span className="hidden sm:inline-block">Calendar</span>
+                </Tab>
+                <Tab
+                  className={({ selected }) =>
+                    classNames(
+                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
+                      selected
+                        ? "bg-slate-100 shadow"
+                        : "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
+                    )
+                  }
+                >
+                  <span>
+                    <BarChartIcon className="h-6 sm:h-8 aspect-square" />
+                  </span>
+                  <span className="hidden sm:inline-block">Reports</span>
                 </Tab>
               </Tab.List>
               <Tab.Panels className="mt-2">
@@ -204,6 +249,23 @@ const Wallet = () => {
                         Calendar
                       </h2>
                       <BudgetCalendar transactions={transactions} />
+                    </div>
+                  </section>
+                </Tab.Panel>
+                <Tab.Panel
+                  className={classNames(
+                    "rounded-xl bg-slate-100 overflow-hidden",
+                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2"
+                  )}
+                >
+                  <section aria-labelledby="quick-links-title">
+                    <div className="sm:grid-cols-1 overflow-hidden rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
+                      <h2 className="sr-only" id="quick-links-title">
+                        Reports
+                      </h2>
+                      <div className="h-96 aspect-square">
+                        <Pie data={pieData} />;
+                      </div>
                     </div>
                   </section>
                 </Tab.Panel>

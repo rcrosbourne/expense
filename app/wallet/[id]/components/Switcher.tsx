@@ -27,7 +27,7 @@ const Switcher = ({
         <Switch.Label className="absolute inset-y-0 left-0 top-1.5 text-sm pl-8 @2xl/section:pl-24">
           Expense
         </Switch.Label>
-        <Switch.Label className="absolute inset-y-0 right-0 top-1.5 text-sm pr-4 pr-8 @2xl/section:pr-24">
+        <Switch.Label className="absolute inset-y-0 right-0 top-1.5 text-sm pr-8 @2xl/section:pr-24">
           Income
         </Switch.Label>
       </Switch>
