@@ -27,31 +27,118 @@ import {
   CalendarIcon,
   CheckListIcon,
 } from "@/app/components/icons";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
-ChartJS.register(ArcElement, Tooltip, Legend);
-const pieData = {
-  labels: ['Total Income', 'Total Expense'],
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
+const data = [50000, 250000];
+const barOptions = {
+  plugins: {
+    title: {
+      display: true,
+      text: "Chart.js Bar Chart - Stacked",
+    },
+  },
+  responsive: true,
+  interaction: {
+    mode: "index" as const,
+    intersect: false,
+  },
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
+    },
+  },
+};
+const barData = {
+  labels: ["January", "February", "March", "April"],
   datasets: [
     {
-      label: 'Amount',
-      data: [350000, 250000],
-      backgroundColor: [
-        'hsla(175, 77%, 26%, 0.5)',
-        'hsla(0, 91%, 71%, 0.5)',
-
-      ],
-      borderColor: [
-        'hsla(175, 77%, 26%, 1)',
-        'hsla(0, 91%, 71%, 1)',
-
-      ],
+      label: "Dataset 1",
+      data: [100, 200, 300, 400],
+      backgroundColor: "rgb(255, 99, 132)",
+    },
+    {
+      label: "Dataset 2",
+      data: [200, 300, 400, 500],
+      backgroundColor: "rgb(54, 162, 235)",
+    },
+  ],
+};
+const barExpenseData = {
+  labels: ["Groceries", "Shopping", "Mortgage", "Rent", "Utilities"],
+  datasets: [
+    {
+      label: "YTD Expense",
+      data: [100, 200, 300, 400, 440, 50, 900],
+      backgroundColor: "rgb(255, 99, 132)",
+    },
+  ],
+};
+const pieData = {
+  labels: ["Remaining Income", "Total Expense"],
+  datasets: [
+    {
+      label: "Amount",
+      data,
+      backgroundColor: ["hsla(175, 77%, 26%, 0.5)", "hsla(0, 91%, 71%, 0.5)"],
+      borderColor: ["hsla(175, 77%, 26%, 1)", "hsla(0, 91%, 71%, 1)"],
       borderWidth: 2,
     },
   ],
+  // plugins: {
+  //   tooltip: {
+  //     callbacks: {
+  //       label: function (context) {
+  //         console.log(context);
+  //         // const item = data[context.dataIndex];
+  //         // return ` $${item.toFixed(2)} (${item.toFixed(2)}%)`;
+  //       },
+  //     },
+  //   },
+  //   legend: {
+  //     position: 'top',
+  //     labels: {
+  //       generateLabels: function (chart) {
+  //         return chart.data.labels.map((label, i) => {
+  //           const item = data[i];
+  //           return {
+  //             text: `${label}: $${item.toFixed(2)} (${item.toFixed(2)}%)`,
+  //             fillStyle: chart.data.datasets[0].backgroundColor[i],
+  //             strokeStyle: chart.data.datasets[0].borderColor[i],
+  //             lineWidth: 1,
+  //             hidden: isNaN(chart.data.datasets[0].data[i]),
+  //
+  //             // Extra data used for toggling the correct item
+  //             index: i,
+  //           };
+  //         });
+  //       },
+  //     },
+  //   },
+  // },
 };
 const Wallet = () => {
   const [isIncome, setIsIncome] = React.useState(false);
@@ -79,9 +166,7 @@ const Wallet = () => {
   const amountInputRef = React.useRef();
   const transactionRef = React.useRef(null);
 
-  React.useEffect(() => {
-
-  }, []);
+  React.useEffect(() => {}, []);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
@@ -263,8 +348,73 @@ const Wallet = () => {
                       <h2 className="sr-only" id="quick-links-title">
                         Reports
                       </h2>
-                      <div className="h-96 aspect-square">
-                        <Pie data={pieData} />;
+                      <div className="flex w-full items-center justify-between">
+                        <div className="bg-slate-50 rounded shadow h-full w-full p-4">
+                          <Tab.Group>
+                            <div className="flex items-center justify-between w-full border-b border-slate-200">
+                              <h3 className="hidden md:inline-block">Performance</h3>
+                              <Tab.List className="space-x-8">
+                                <Tab
+                                    className={({ selected }) =>
+                                        classNames(
+                                            "border-b-2 py-4 px-1 text-center text-sm font-medium",
+                                            selected
+                                                ? "border-indigo-500 text-indigo-600"
+                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                        )
+                                    }
+                                >
+                                  <span className="hidden sm:inline-block">Income vs Expenses</span>
+                                  <span className="sm:hidden">I vs E</span>
+                                </Tab>
+                                <Tab
+                                    className={({ selected }) =>
+                                        classNames(
+                                            "border-b-2 py-4 px-1 text-center text-sm font-medium truncate",
+                                            selected
+                                                ? "border-indigo-500 text-indigo-600"
+                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                        )
+                                    }
+                                >
+                                  <span className="hidden sm:inline-block">Income vs Expenses (Monthly)</span>
+                                  <span className="sm:hidden">I vs E (monthly)</span>
+
+                                </Tab>
+                                <Tab
+                                  className={({ selected }) =>
+                                    classNames(
+                                      "border-b-2 py-4 px-1 text-center text-sm font-medium",
+                                      selected
+                                        ? "border-indigo-500 text-indigo-600"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                    )
+                                  }
+                                >
+                                  Expense Breakdown
+                                </Tab>
+
+                              </Tab.List>
+                            </div>
+                            <Tab.Panels className="mt-4">
+                              <Tab.Panel>
+                                <div className="flex items-center justify-center">
+                                  <Pie data={pieData} />
+                                </div>
+                              </Tab.Panel>
+                              <Tab.Panel>
+                                <div className="flex items-center justify-center">
+                                  <Bar data={barData} options={barOptions} />
+                                </div>
+                              </Tab.Panel>
+                              <Tab.Panel>
+                                <div className="flex items-center justify-center">
+                                  <Bar data={barExpenseData} options={barOptions} />
+                                </div>
+                              </Tab.Panel>
+                            </Tab.Panels>
+                          </Tab.Group>
+                        </div>
                       </div>
                     </div>
                   </section>
