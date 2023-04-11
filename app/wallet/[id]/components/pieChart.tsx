@@ -33,43 +33,47 @@ const options = {
 function chartDataConfiguration(
   transactions: FinancialTransaction[]
 ): ChartData<"pie", number[], unknown> {
-  const { totalIncome, totalExpense } =
-    calculateTotalIncomeAndExpense(transactions);
+  const { labels, data, backgroundColor, borderColor } =
+    calculateIncomeBreakdownByType(transactions);
   return {
-    labels: ["Total Income", "Total Expense"],
+    labels,
     datasets: [
       {
         type: "pie" as const,
-        data: [totalIncome.amount, totalExpense.amount],
-        backgroundColor: ["hsla(175, 77%, 26%, 0.5)", "hsla(0, 91%, 71%, 0.5)"],
-        borderColor: ["hsla(175, 77%, 26%, 1)", "hsla(0, 91%, 71%, 1)"],
+        data,
+        backgroundColor,
+        borderColor,
         borderWidth: 2,
       },
     ],
   };
 }
-function calculateTotalIncomeAndExpense(transactions: FinancialTransaction[]) {
-  const totalIncome = transactions.reduce(
-    (acc, curr) => {
-      if (curr.type === "income") {
-        acc.amount += curr.amount;
-        return acc;
-      }
-      return acc;
-    },
-    { amount: 0 }
+function calculateIncomeBreakdownByType(transactions: FinancialTransaction[]) {
+  // filter out transactions that are not of type income.
+  const incomeTransactions = transactions.filter(
+    (transaction) => transaction.type === "income"
   );
-  const totalExpense = transactions.reduce(
-    (acc, curr) => {
-      if (curr.type === "expense") {
-        acc.amount += curr.amount;
-        return acc;
+  let labels: string[] = [];
+  let data: number[] = [];
+  let backgroundColor: string[] = [];
+  let borderColor: string[] = [];
+  // create a map of categories and their total amount.
+  incomeTransactions.forEach((transaction) => {
+    const category = transaction.category;
+    if (category) {
+      const index = labels.indexOf(category.name);
+      if (index === -1) {
+        labels.push(category.name);
+        data.push(transaction.amount);
+        // add an alpha channel of 80% to the background color.
+        backgroundColor.push(`${category.backgroundColorAsHsl!.replace(")", ", 80%)").replace("hsl", "hsla")}`);
+        borderColor.push(category.backgroundColorAsHsl!);
+      } else {
+        data[index] += transaction.amount;
       }
-      return acc;
-    },
-    { amount: 0 }
-  );
-  return { totalIncome, totalExpense };
+    }
+  });
+  return { labels, data, backgroundColor, borderColor };
 }
 const PieChart = ({
   transactions,
