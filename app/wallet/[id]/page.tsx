@@ -12,7 +12,7 @@ import PeriodicityDropdown from "@/app/wallet/[id]/components/periodicityDropdow
 import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
 import Notes from "@/app/wallet/[id]/components/notes";
 import Merchant from "@/app/wallet/[id]/components/merchant";
-import Switcher from "@/app/wallet/[id]/components/Switcher";
+import Switcher from "@/app/wallet/[id]/components/switcher";
 import InputAmount from "@/app/wallet/[id]/components/inputAmount";
 import { transactions } from "@/app/data/transactions";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
@@ -38,6 +38,7 @@ import {
   Title,
 } from "chart.js";
 import { Pie, Bar } from "react-chartjs-2";
+import PieChart from "@/app/wallet/[id]/components/pieChart";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -97,49 +98,7 @@ const barExpenseData = {
     },
   ],
 };
-const pieData = {
-  labels: ["Remaining Income", "Total Expense"],
-  datasets: [
-    {
-      label: "Amount",
-      data,
-      backgroundColor: ["hsla(175, 77%, 26%, 0.5)", "hsla(0, 91%, 71%, 0.5)"],
-      borderColor: ["hsla(175, 77%, 26%, 1)", "hsla(0, 91%, 71%, 1)"],
-      borderWidth: 2,
-    },
-  ],
-  // plugins: {
-  //   tooltip: {
-  //     callbacks: {
-  //       label: function (context) {
-  //         console.log(context);
-  //         // const item = data[context.dataIndex];
-  //         // return ` $${item.toFixed(2)} (${item.toFixed(2)}%)`;
-  //       },
-  //     },
-  //   },
-  //   legend: {
-  //     position: 'top',
-  //     labels: {
-  //       generateLabels: function (chart) {
-  //         return chart.data.labels.map((label, i) => {
-  //           const item = data[i];
-  //           return {
-  //             text: `${label}: $${item.toFixed(2)} (${item.toFixed(2)}%)`,
-  //             fillStyle: chart.data.datasets[0].backgroundColor[i],
-  //             strokeStyle: chart.data.datasets[0].borderColor[i],
-  //             lineWidth: 1,
-  //             hidden: isNaN(chart.data.datasets[0].data[i]),
-  //
-  //             // Extra data used for toggling the correct item
-  //             index: i,
-  //           };
-  //         });
-  //       },
-  //     },
-  //   },
-  // },
-};
+
 const Wallet = () => {
   const [isIncome, setIsIncome] = React.useState(false);
   const [amount, setAmount] = React.useState("");
@@ -398,9 +357,7 @@ const Wallet = () => {
                             </div>
                             <Tab.Panels className="mt-4">
                               <Tab.Panel>
-                                <div className="flex items-center justify-center">
-                                  <Pie data={pieData} />
-                                </div>
+                                <PieChart transactions={transactions} />
                               </Tab.Panel>
                               <Tab.Panel>
                                 <div className="flex items-center justify-center">
