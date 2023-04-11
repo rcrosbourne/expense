@@ -80,7 +80,7 @@ const PieChart = ({
     chartDataConfiguration(transactions)
   );
   return (
-    <div className="flex items-center justify-center max-h-[500px]">
+    <div className="flex items-center justify-center md:min-h-[500px]">
       <Pie data={data} options={options} />
     </div>
   );
