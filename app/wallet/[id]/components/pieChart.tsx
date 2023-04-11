@@ -15,6 +15,8 @@ import { formatNumberAsCurrency } from "@/app/utils";
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 const options = {
+  responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     tooltip: {
       callbacks: {
@@ -28,7 +30,9 @@ const options = {
     },
   },
 };
-function chartDataConfiguration(transactions: FinancialTransaction[]): ChartData<"pie", number[], unknown> {
+function chartDataConfiguration(
+  transactions: FinancialTransaction[]
+): ChartData<"pie", number[], unknown> {
   const { totalIncome, totalExpense } =
     calculateTotalIncomeAndExpense(transactions);
   return {
@@ -67,10 +71,16 @@ function calculateTotalIncomeAndExpense(transactions: FinancialTransaction[]) {
   );
   return { totalIncome, totalExpense };
 }
-const PieChart = ({transactions,}: { transactions: FinancialTransaction[]}) => {
-  const [data, setData] = React.useState<ChartData<"pie", number[], unknown>>(chartDataConfiguration(transactions));
+const PieChart = ({
+  transactions,
+}: {
+  transactions: FinancialTransaction[];
+}) => {
+  const [data, setData] = React.useState<ChartData<"pie", number[], unknown>>(
+    chartDataConfiguration(transactions)
+  );
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center max-h-[500px]">
       <Pie data={data} options={options} />
     </div>
   );
