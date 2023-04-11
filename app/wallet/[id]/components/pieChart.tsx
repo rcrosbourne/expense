@@ -1,26 +1,34 @@
 import { FinancialTransaction } from "@/app/types";
 import React from "react";
 import { Pie } from "react-chartjs-2";
-import {ChartData, ChartTypeRegistry, TooltipItem} from 'chart.js';
-import {formatNumberAsCurrency} from "@/app/utils";
+import {
+  Chart as ChartJS,
+  ChartData,
+  ChartTypeRegistry,
+  TooltipItem,
+  Legend,
+  Tooltip,
+  ArcElement,
+} from "chart.js";
+import { formatNumberAsCurrency } from "@/app/utils";
+
+ChartJS.register(Tooltip, Legend, ArcElement);
 
 const options = {
   plugins: {
     tooltip: {
       callbacks: {
         title: (tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]) => {
-            return tooltipItems[0].label;
+          return tooltipItems[0].label;
         },
         label: (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
-            return `$${formatNumberAsCurrency(tooltipItem.raw as number)}`;
+          return `$${formatNumberAsCurrency(tooltipItem.raw as number)}`;
         },
       },
     },
   },
 };
-function chartDataConfiguration (
-  transactions: FinancialTransaction[]
-): ChartData<"pie", number[], unknown> {
+function chartDataConfiguration(transactions: FinancialTransaction[]): ChartData<"pie", number[], unknown> {
   const { totalIncome, totalExpense } =
     calculateTotalIncomeAndExpense(transactions);
   return {
@@ -59,25 +67,12 @@ function calculateTotalIncomeAndExpense(transactions: FinancialTransaction[]) {
   );
   return { totalIncome, totalExpense };
 }
-const PieChart = ({
-  transactions,
-}: {
-  transactions: FinancialTransaction[];
-}) => {
-  const [data, setData] = React.useState<ChartData<"pie", number[], unknown>>({
-    labels: ["Amount"],
-    datasets: [],
-  });
-
-  React.useEffect(() => {
-    const { totalIncome, totalExpense } = calculateTotalIncomeAndExpense(transactions);
-    setData(chartDataConfiguration(transactions));
-  }, [transactions]);
+const PieChart = ({transactions,}: { transactions: FinancialTransaction[]}) => {
+  const [data, setData] = React.useState<ChartData<"pie", number[], unknown>>(chartDataConfiguration(transactions));
   return (
     <div className="flex items-center justify-center">
       <Pie data={data} options={options} />
     </div>
   );
 };
-
 export default PieChart;
