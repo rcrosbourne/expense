@@ -1,38 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Expense Tracker
+
+Expense Tracker is a simple and intuitive budget application designed to help users keep track of their personal finances. The application makes it easy to manage and visualize your expenses, allowing you to keep your budget under control and achieve your financial goals.
+
+**[Visit the live app here](https://expense-kappa.vercel.app/)**
+
+## Features
+
+- Add, edit, and delete expenses
+- Categorize expenses for better organization
+- Visualize expenses with charts and graphs
+- Set monthly budget limits and monitor progress
+- Track income and expenses over time
+- Export and import data for backup and recovery
+- Responsive design for use on mobile devices
 
 ## Getting Started
 
-First, run the development server:
+To get started with Expense Tracker, simply follow these steps:
+
+### Prerequisites
+
+- Git
+- Node.js (version 12 or later)
+- npm (version 6 or later)
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+git clone https://github.com/rcrosbourne/expense.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd expense
+npm install
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. Start the development server
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Open your browser and navigate to `http://localhost:3000` to see the application running.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To use Expense Tracker, follow these simple steps:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. **Add an expense**: Click on the "Add Expense" button and fill in the required fields. Click "Save" to add the expense to your list.
+2. **Edit an expense**: To edit an existing expense, click on the pencil icon next to the expense, update the information as needed, and click "Save".
+3. **Delete an expense**: To delete an expense, click on the trashcan icon next to the expense and confirm your decision.
+4. **Categorize expenses**: Assign a category to each expense to help you keep track of your spending habits.
+5. **Visualize expenses**: View your expenses in various charts and graphs to get a better understanding of your spending patterns.
+6. **Set budget limits**: Set monthly budget limits for each category and track your progress throughout the month.
+7. **Export and import data**: Use the export and import features to back up your data or transfer it to another device.
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+We welcome contributions to Expense Tracker! To contribute, follow these steps:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Fork the repository
+2. Create a new branch for your feature or bugfix (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'Add your feature'`)
+4. Push your branch to your forked repository (`git push origin feature/your-feature`)
+5. Create a pull request and describe your changes
+
+## License
+
+Expense Tracker is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contact
+
+Rainaldo Crosbourne - rcrosbourne@email.com
+
+Project link: https://github.com/rcrosbourne/expense
+
+Feel free to reach out if you have any questions, suggestions, or need support with the application.
