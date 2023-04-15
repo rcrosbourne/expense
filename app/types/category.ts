@@ -28,7 +28,7 @@ type CategoryBackgroundColors = {
   "bg-pink-300": true;
   "bg-rose-300": true;
 };
-type CategoryBackgroundColorsAsHsl = {
+export type CategoryBackgroundColorsAsHsl = {
   "bg-slate-300": "hsl(212.7,26.8%,83.9%)";
   "bg-gray-300": "hsl(216,12.2%,83.9%)";
   "bg-zinc-300": "hsl(240,4.9%,83.9%)";

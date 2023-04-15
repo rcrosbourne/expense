@@ -17,7 +17,7 @@ import InputAmount from "@/app/wallet/[id]/components/inputAmount";
 import { transactions } from "@/app/data/transactions";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
-import { Category } from "@/app/types/category";
+import {AnyCategory, Category} from "@/app/types/category";
 import ConfirmDialog from "@/app/components/confirmDialog";
 import TransactionList from "@/app/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
@@ -116,7 +116,7 @@ const Wallet = () => {
     React.useState<FinancialTransaction | null>(null);
   const [merchant, setMerchant] = React.useState<string | undefined>("");
   const [notes, setNotes] = React.useState<string | undefined>("");
-  const [category, setCategory] = React.useState<Category | undefined>(
+  const [category, setCategory] = React.useState<AnyCategory | undefined>(
     undefined
   );
   const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
@@ -359,7 +359,6 @@ const Wallet = () => {
                             <Tab.Panels className="mt-4">
                               <Tab.Panel>
                                 <IncomeBreakdown transactions={transactions} />
-
                               </Tab.Panel>
                               <Tab.Panel>
                                 <div className="flex items-center justify-center">
