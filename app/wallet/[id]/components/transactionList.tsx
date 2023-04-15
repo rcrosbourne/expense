@@ -1,7 +1,15 @@
 import React from "react";
-import { classNames, formatNumberAsCurrency } from "@/app/utils";
+import {
+  classNames,
+  formatNumberAsCurrency,
+} from "@/app/utils";
 import { FinancialTransaction } from "@/app/types";
-import { CancelIcon, EditIcon, RecurringIcon, TrashCanIcon } from "@/app/components/icons";
+import {
+  CancelIcon,
+  EditIcon,
+  RecurringIcon,
+  TrashCanIcon,
+} from "@/app/components/icons";
 
 const TransactionList = ({
   transactions,
@@ -47,9 +55,7 @@ const TransactionList = ({
                     ${formatNumberAsCurrency(transaction.amount)}
                   </h3>
                   <span
-                    className={`inline-block truncate flex-shrink-0 rounded-full ${
-                      transaction?.category?.backgroundColor ?? "bg-cyan-600"
-                    } px-2 py-0.5 text-xs font-medium text-slate-900`}
+                    className={`inline-block truncate flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-medium text-slate-900 ${transaction.category?.backgroundColor}`}
                   >
                     {transaction?.category?.name ?? "None"}
                   </span>
@@ -62,9 +68,7 @@ const TransactionList = ({
                 </p>
               </div>
               <div
-                className={`h-20 w-20 flex-shrink-0 rounded-full ${
-                  transaction?.category?.backgroundColor ?? "bg-cyan-600"
-                } p-3`}
+                className={`h-20 w-20 flex-shrink-0 rounded-full p-3 ${transaction.category?.backgroundColor}`}
               >
                 {transaction?.category?.icon}
               </div>

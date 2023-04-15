@@ -1,4 +1,4 @@
-import {Category, Periodicity} from "@/app/types";
+import {AnyCategory, Periodicity} from "@/app/types";
 export type FinancialTransaction = {
     id: number;
     type: "income" | "expense";
@@ -7,5 +7,5 @@ export type FinancialTransaction = {
     date: string;
     merchant?: string;
     notes?: string;
-    category?:Category;
+    category?:AnyCategory;
 }
