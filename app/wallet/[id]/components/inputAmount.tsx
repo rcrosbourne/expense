@@ -1,7 +1,7 @@
 import { NumericFormat } from "react-number-format";
 import React from "react";
-import { Category } from "@/app/types";
-import {SquaresIcon} from "@/app/components/icons";
+import { AnyCategory} from "@/app/types";
+import { SquaresIcon } from "@/app/components/icons";
 
 const InputAmount = ({
   onChange,
@@ -16,7 +16,7 @@ const InputAmount = ({
   isIncome: boolean;
   value: string;
   openCategories: () => void;
-  category: Category | undefined;
+  category: AnyCategory | undefined;
 }) => {
   return (
     <>
@@ -70,18 +70,10 @@ const InputAmount = ({
             >
               <div className="relative flex h-5 w-5 fill-current">
                 <div className="absolute inline-flex h-full w-full animate-ping opacity-75 text-white">
-                  {category && category.icon ? (
-                    category.icon
-                  ) : (
-                      <SquaresIcon />
-                  )}
+                  {category && category.icon ? category.icon : <SquaresIcon />}
                 </div>
                 <div className="relative inline-flex h-5 w-5 text-white">
-                  {category && category.icon ? (
-                    category.icon
-                  ) : (
-                        <SquaresIcon />
-                  )}
+                  {category && category.icon ? category.icon : <SquaresIcon />}
                 </div>
               </div>
             </button>

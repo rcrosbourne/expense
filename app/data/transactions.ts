@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { expenseCategories, incomeCategories } from "@/app/data/categories";
+import exp from "constants";
 dayjs.extend(timezone);
 dayjs.extend(utc);
 export const transactions: FinancialTransaction[] = [
@@ -103,5 +104,16 @@ export const transactions: FinancialTransaction[] = [
     category: incomeCategories[3],
     merchant: "ZS Associates",
     periodicity: "One-time payment",
+  },
+  {
+    id: 10,
+    amount: 120342.45,
+    type: "expense",
+    date: dayjs().tz("America/Jamaica").subtract(2, "month").format("MMMM DD, YYYY"),
+    // select a random category from incomeCategories
+    category: expenseCategories[12],
+    merchant: "ZS Associates",
+    periodicity: "One-time payment",
   }
+
 ];

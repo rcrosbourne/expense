@@ -40,6 +40,7 @@ import {
 import { Pie, Bar } from "react-chartjs-2";
 import PieChart from "@/app/wallet/[id]/components/pieChart";
 import IncomeBreakdown from "@/app/wallet/[id]/components/incomeBreakdown";
+import ExpenseBreakdown from "@/app/wallet/[id]/components/expenseBreakdown";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -337,8 +338,8 @@ const Wallet = () => {
                                         )
                                     }
                                 >
-                                  <span className="hidden sm:inline-block">Income vs Expenses (Monthly)</span>
-                                  <span className="sm:hidden">I vs E (monthly)</span>
+                                  <span className="hidden sm:inline-block">Expense</span>
+                                  <span className="sm:hidden">Expense</span>
 
                                 </Tab>
                                 <Tab
@@ -361,9 +362,7 @@ const Wallet = () => {
                                 <IncomeBreakdown transactions={transactions} />
                               </Tab.Panel>
                               <Tab.Panel>
-                                <div className="flex items-center justify-center">
-                                  <Bar data={barData} options={barOptions} />
-                                </div>
+                                  <ExpenseBreakdown transactions={transactions} />
                               </Tab.Panel>
                               <Tab.Panel>
                                 <div className="flex items-center justify-center">

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { expenseCategories, incomeCategories } from "@/app/data/categories";
 import { Dialog, Transition } from "@headlessui/react";
 import { classNames } from "@/app/utils";
-import { Category } from "@/app/types";
+import {AnyCategory, Category} from "@/app/types";
 const CategoriesDialog = ({
   isOpen,
   close,
@@ -13,11 +13,11 @@ const CategoriesDialog = ({
   isOpen: boolean;
   close: () => void;
   type: "expense" | "income";
-  selectedCategory: Category | undefined;
-  setSelectedCategory: (category: Category) => void;
+  selectedCategory: AnyCategory | undefined;
+  setSelectedCategory: (category: AnyCategory) => void;
 }) => {
   const categories = type == "expense" ? expenseCategories : incomeCategories;
-  const handleSelection = (category: Category) => {
+  const handleSelection = (category: AnyCategory) => {
     setSelectedCategory(category);
     close();
   }
