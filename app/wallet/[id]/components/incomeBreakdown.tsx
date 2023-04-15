@@ -1,16 +1,24 @@
 import React from "react";
-import {FinancialTransaction} from "@/app/types";
+import { FinancialTransaction } from "@/app/types";
 import PieChart from "@/app/wallet/[id]/components/pieChart";
-import {ChartData, ChartTypeRegistry, TooltipItem} from "chart.js";
-import {addAlphaToHsl, formatNumberAsCurrency} from "@/app/utils";
-
+import {
+  ChartData,
+  ChartOptions,
+  ChartTypeRegistry,
+  TooltipItem,
+} from "chart.js";
+import { addAlphaToHsl, formatNumberAsCurrency } from "@/app/utils";
+import BarChart from "@/app/wallet/[id]/components/barChart";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 const options = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,
-      text: 'Income Breakdown by type',
+      text: "Income Breakdown by category",
     },
     tooltip: {
       callbacks: {
@@ -24,11 +32,17 @@ const options = {
     },
   },
 };
-const IncomeBreakdown = ({transactions}: {transactions: FinancialTransaction[]}) => {
-  function calculateIncomeBreakdownByType(transactions: FinancialTransaction[]) {
-    // filter out transactions that are not of type income.
+const IncomeBreakdown = ({
+  transactions,
+}: {
+  transactions: FinancialTransaction[];
+}) => {
+  function calculateIncomeBreakdownByType(
+    transactions: FinancialTransaction[]
+  ) {
+    //filter for income transactions
     const incomeTransactions = transactions.filter(
-        (transaction) => transaction.type === "income"
+      (transaction) => transaction.type === "income"
     );
     let labels: string[] = [];
     let data: number[] = [];
@@ -43,19 +57,21 @@ const IncomeBreakdown = ({transactions}: {transactions: FinancialTransaction[]})
           labels.push(category.name);
           data.push(transaction.amount);
           // add an alpha channel of 80% to the background color.
-          backgroundColor.push(addAlphaToHsl(category.backgroundColorAsHsl!,0.8));
+          backgroundColor.push(
+            addAlphaToHsl(category.backgroundColorAsHsl!, 0.8)
+          );
           borderColor.push(category.backgroundColorAsHsl!);
         } else {
           data[index] += transaction.amount;
         }
       }
     });
-    return {labels, data, backgroundColor, borderColor};
+    return { labels, data, backgroundColor, borderColor };
   }
 
-  function chartDataConfiguration(): ChartData<"pie", number[], unknown> {
-    const {labels, data, backgroundColor, borderColor} =
-        calculateIncomeBreakdownByType(transactions);
+  function pieChartConfiguration(): ChartData<"pie", number[], unknown> {
+    const { labels, data, backgroundColor, borderColor } =
+      calculateIncomeBreakdownByType(transactions);
     return {
       labels,
       datasets: [
@@ -69,9 +85,81 @@ const IncomeBreakdown = ({transactions}: {transactions: FinancialTransaction[]})
       ],
     };
   }
+  function barChartConfiguration(): ChartData<"bar", number[], unknown> {
+    const startDate = dayjs().startOf("year");
+    const endDate = dayjs();
 
+    const transactionsByMonth: { [key: number]: { [key: string]: number } } =
+      {};
+    transactions
+      .filter((t) => t.type === "income")
+      .forEach((transaction) => {
+        const transactionDate = dayjs(transaction.date);
+
+        if (transactionDate.isBetween(startDate, endDate, "day", "[]")) {
+          const month = transactionDate.month();
+
+          if (!transactionsByMonth[month]) {
+            transactionsByMonth[month] = {};
+          }
+
+          const category = transaction.category!.name;
+
+          if (!transactionsByMonth[month][category]) {
+            transactionsByMonth[month][category] = 0;
+          }
+
+          transactionsByMonth[month][category] += transaction.amount;
+        }
+      });
+    const labels = Array.from({ length: dayjs().month() + 1 }, (_, i) =>
+      dayjs().month(i).format("MMM")
+    );
+    const categories = [
+      ...new Set(
+        transactions
+          .filter((t) => t.type === "income")
+          .map((t) => t.category?.name)
+      ),
+    ];
+    const datasets = categories.map((category) => ({
+      label: category,
+      data: labels.map(
+        (_, month) => transactionsByMonth[month]?.[category!] ?? 0
+      ),
+      backgroundColor: transactions.find((t) => t.category?.name === category)
+        ?.category?.backgroundColorAsHsl,
+    }));
+    return {
+        labels,
+        datasets,
+    };
+  }
+  const barChartOptions: ChartOptions<"bar"> = {
+    plugins: {
+      title: {
+        display: true,
+        text: "Income breakdown YTD",
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  };
   return (
-      <PieChart dataFunction={chartDataConfiguration} options={options}/>
-  )
-}
+    <div>
+      <PieChart dataFunction={pieChartConfiguration} options={options} />
+      <BarChart
+        dataFunction={barChartConfiguration}
+        options={barChartOptions}
+      />
+    </div>
+  );
+};
 export default IncomeBreakdown;
