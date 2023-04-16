@@ -76,7 +76,7 @@ Expense Tracker is licensed under the MIT License. See the [LICENSE](LICENSE) fi
 
 ## Contact
 
-Rainaldo Crosbourne - rcrosbourne@email.com
+Rainaldo Crosbourne - rcrosbourne@gmail.com
 
 Project link: https://github.com/rcrosbourne/expense
 
