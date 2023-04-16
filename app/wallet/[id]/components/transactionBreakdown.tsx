@@ -95,13 +95,7 @@ const TransactionBreakdown = ({
     const labels = Array.from({ length: dayjs().month() + 1 }, (_, i) =>
       dayjs().month(i).format("MMM")
     );
-    const categories = [
-      ...new Set(
-        transactions
-          .filter((t) => t.type === "income")
-          .map((t) => t.category?.name)
-      ),
-    ];
+    const categories = [...new Set(transactions.map((t) => t.category?.name))];
     const datasets = categories.map((category) => ({
       label: category,
       data: labels.map(
