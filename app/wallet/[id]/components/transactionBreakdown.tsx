@@ -12,44 +12,26 @@ import BarChart from "@/app/wallet/[id]/components/barChart";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
-const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    title: {
-      display: true,
-      text: "Income Breakdown by category",
-    },
-    tooltip: {
-      callbacks: {
-        title: (tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]) => {
-          return tooltipItems[0].label;
-        },
-        label: (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
-          return `$${formatNumberAsCurrency(tooltipItem.raw as number)}`;
-        },
-      },
-    },
-  },
-};
-const ExpenseBreakdown = ({
+
+const TransactionBreakdown = ({
   transactions,
+  pieChartTitle,
+  barChartTitle,
 }: {
   transactions: FinancialTransaction[];
+  pieChartTitle?: string;
+  barChartTitle?: string;
 }) => {
   function calculateIncomeBreakdownByType(
     transactions: FinancialTransaction[]
   ) {
     //filter for income transactions
-    const incomeTransactions = transactions.filter(
-      (transaction) => transaction.type === "expense"
-    );
     let labels: string[] = [];
     let data: number[] = [];
     let backgroundColor: string[] = [];
     let borderColor: string[] = [];
     // create a map of categories and their total amount.
-    incomeTransactions.forEach((transaction) => {
+    transactions.forEach((transaction) => {
       const category = transaction.category;
       if (category) {
         const index = labels.indexOf(category.name);
@@ -91,34 +73,32 @@ const ExpenseBreakdown = ({
 
     const transactionsByMonth: { [key: number]: { [key: string]: number } } =
       {};
-    transactions
-      .filter((t) => t.type === "expense")
-      .forEach((transaction) => {
-        const transactionDate = dayjs(transaction.date);
+    transactions.forEach((transaction) => {
+      const transactionDate = dayjs(transaction.date);
 
-        if (transactionDate.isBetween(startDate, endDate, "day", "[]")) {
-          const month = transactionDate.month();
+      if (transactionDate.isBetween(startDate, endDate, "day", "[]")) {
+        const month = transactionDate.month();
 
-          if (!transactionsByMonth[month]) {
-            transactionsByMonth[month] = {};
-          }
-
-          const category = transaction.category!.name;
-
-          if (!transactionsByMonth[month][category]) {
-            transactionsByMonth[month][category] = 0;
-          }
-
-          transactionsByMonth[month][category] += transaction.amount;
+        if (!transactionsByMonth[month]) {
+          transactionsByMonth[month] = {};
         }
-      });
+
+        const category = transaction.category!.name;
+
+        if (!transactionsByMonth[month][category]) {
+          transactionsByMonth[month][category] = 0;
+        }
+
+        transactionsByMonth[month][category] += transaction.amount;
+      }
+    });
     const labels = Array.from({ length: dayjs().month() + 1 }, (_, i) =>
       dayjs().month(i).format("MMM")
     );
     const categories = [
       ...new Set(
         transactions
-          .filter((t) => t.type === "expense")
+          .filter((t) => t.type === "income")
           .map((t) => t.category?.name)
       ),
     ];
@@ -131,18 +111,19 @@ const ExpenseBreakdown = ({
         ?.category?.backgroundColorAsHsl,
     }));
     return {
-        labels,
-        datasets,
+      labels,
+      datasets,
     };
   }
   const barChartOptions: ChartOptions<"bar"> = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        text: "Income breakdown YTD",
+        text: barChartTitle || "Income breakdown YTD",
       },
     },
-    responsive: true,
     scales: {
       x: {
         stacked: true,
@@ -152,9 +133,32 @@ const ExpenseBreakdown = ({
       },
     },
   };
+  const pieChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: pieChartTitle || "Income Breakdown by category",
+      },
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]) => {
+            return tooltipItems[0].label;
+          },
+          label: (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
+            return `$${formatNumberAsCurrency(tooltipItem.raw as number)}`;
+          },
+        },
+      },
+    },
+  };
   return (
-    <div>
-      <PieChart dataFunction={pieChartConfiguration} options={options} />
+    <div className="flex flex-col gap-4">
+      <PieChart
+        dataFunction={pieChartConfiguration}
+        options={pieChartOptions}
+      />
       <BarChart
         dataFunction={barChartConfiguration}
         options={barChartOptions}
@@ -162,4 +166,4 @@ const ExpenseBreakdown = ({
     </div>
   );
 };
-export default ExpenseBreakdown;
+export default TransactionBreakdown;
