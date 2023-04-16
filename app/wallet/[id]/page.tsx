@@ -37,10 +37,8 @@ import {
   BarElement,
   Title,
 } from "chart.js";
-import { Pie, Bar } from "react-chartjs-2";
-import PieChart from "@/app/wallet/[id]/components/pieChart";
-import IncomeBreakdown from "@/app/wallet/[id]/components/incomeBreakdown";
-import ExpenseBreakdown from "@/app/wallet/[id]/components/expenseBreakdown";
+import { Bar } from "react-chartjs-2";
+import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -359,10 +357,10 @@ const Wallet = () => {
                             </div>
                             <Tab.Panels className="mt-4">
                               <Tab.Panel>
-                                <IncomeBreakdown transactions={transactions} />
+                                <TransactionBreakdown transactions={transactions.filter(t => t.type === 'income')} />
                               </Tab.Panel>
                               <Tab.Panel>
-                                  <ExpenseBreakdown transactions={transactions} />
+                                  <TransactionBreakdown transactions={transactions.filter((t => t.type === 'expense'))} />
                               </Tab.Panel>
                               <Tab.Panel>
                                 <div className="flex items-center justify-center">
