@@ -97,9 +97,7 @@ const TransactionBreakdown = ({
     );
     const categories = [
       ...new Set(
-        transactions
-          .filter((t) => t.type === "income")
-          .map((t) => t.category?.name)
+        transactions.map((t) => t.category?.name)
       ),
     ];
     const datasets = categories.map((category) => ({
