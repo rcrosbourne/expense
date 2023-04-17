@@ -18,7 +18,6 @@ const AddWalletButton = () => {
     </>
   );
 };
-export default AddWalletButton;
 const AddWalletModal = ({
   open,
   setOpen,
@@ -159,3 +158,4 @@ const AddWalletModal = ({
     </Transition.Root>
   );
 };
+export default AddWalletButton;
