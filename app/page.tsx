@@ -1,67 +1,32 @@
 import Image from "next/image";
-import { classNames } from "@/app/utils";
-import { CheckBadgeIcon, ClockIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { user } from "@/app/data/user";
-import AddWallet from "@/app/addWallet";
 import AddWalletButton from "@/app/addWalletButton";
+import AddWallet from "@/app/addWallet";
+import WalletWidget from "@/app/walletWidget";
 const stats = [
   { label: "Total", value: "$100,000.00" },
   { label: "Last 30 days", value: "$300,000.00" },
   { label: "Last 7 days", value: "$75,000.00" },
 ];
-const actions = [
+const wallets = [
   {
-    icon: ClockIcon,
-    name: "My Wallet",
+    name: "My Personal Wallet",
     href: "/wallet/1",
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
     currentBalance: "$100,000.00",
-    last30Days: "$300,000.00",
-    last7Days: "$75,000.00",
+    category: "personal",
+    budget: "$75,000.00",
   },
   {
-    icon: CheckBadgeIcon,
-    name: "Benefits",
+    name: "My Business Wallet",
     href: "/wallet/2",
     iconForeground: "text-purple-700",
     iconBackground: "bg-purple-50",
     currentBalance: "$100,000.00",
-    last30Days: "$300,000.00",
-    last7Days: "$75,000.00",
+    category: "business",
+    budget: "$30,000.00",
   },
-  // {
-  //   icon: UsersIcon,
-  //   name: "Schedule a one-on-one",
-  //   href: "#",
-  //   iconForeground: "text-sky-700",
-  //   iconBackground: "bg-sky-50",
-  //      currentBalance: "$100,000.00",
-  //   last30Days: "$300,000.00",
-  //   last7Days: "$75,000.00",
-  // },
-  // {
-  //   icon: BanknotesIcon,
-  //   name: "Payroll",
-  //   href: "#",
-  //   iconForeground: "text-yellow-700",
-  //   iconBackground: "bg-yellow-50",
-  // },
-  // {
-  //   icon: ReceiptRefundIcon,
-  //   name: "Submit an expense",
-  //   href: "#",
-  //   iconForeground: "text-rose-700",
-  //   iconBackground: "bg-rose-50",
-  // },
-  // {
-  //   icon: AcademicCapIcon,
-  //   name: "Training",
-  //   href: "#",
-  //   iconForeground: "text-indigo-700",
-  //   iconBackground: "bg-indigo-50",
-  // },
 ];
 const recentHires = [
   {
@@ -182,90 +147,21 @@ export default function Home() {
 
               {/* Actions panel */}
               <section aria-labelledby="quick-links-title">
-                <div className="sm:grid-cols-2 divide-y divide-gray-200 overflow-hidden rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 divide-y divide-gray-200 rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
                   <h2 className="sr-only" id="quick-links-title">
                     Quick links
                   </h2>
-                  {actions.map((action) => (
-                    <div
-                      key={action.name}
-                      className="group rounded-lg relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500"
-                    >
-                      <div>
-                        <span
-                          className={classNames(
-                            action.iconBackground,
-                            action.iconForeground,
-                            "inline-flex rounded-lg p-3 ring-4 ring-white"
-                          )}
-                        >
-                          My Personal Wallet
-                        </span>
-                      </div>
-                      <div className="mt-8">
-                        <h3 className="text-lg font-medium">
-                          <Link
-                            href={action.href}
-                            className="focus:outline-none text-lg text-gray-900"
-                          >
-                            {/* Extend touch target to entire panel */}
-                            <span
-                              className="absolute inset-0"
-                              aria-hidden="true"
-                            />
-                            {action.currentBalance}
-                          </Link>
-                        </h3>
-                        <div className="mt-2 text-xs text-gray-500 grid grid-cols-2">
-                          <div className="flex flex-col w-full">
-                            <span>Last 7 Days</span>
-                            <span className="text-lg">{action.last7Days}</span>
-                          </div>
-                          <div className={"flex flex-col"}>
-                            <span>Last 30 Days</span>
-                            <span className="text-lg">{action.last30Days}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <span
-                        className="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400"
-                        aria-hidden="true"
-                      >
-                        <svg
-                          className="h-10 w-10"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                        >
-                          <linearGradient
-                            id="a"
-                            x1="0"
-                            x2="512"
-                            y1="-16658"
-                            y2="-16658"
-                            gradientTransform="matrix(1 0 0 -1 0 -16402)"
-                            gradientUnits="userSpaceOnUse"
-                          >
-                            <stop offset="0" stopColor="#31d8ff" />
-                            <stop offset="1" stopColor="#808bff" />
-                          </linearGradient>
-                          <path
-                            fill="url(#a)"
-                            d="M512 256c0 141.387-114.613 256-256 256S0 397.387 0 256 114.613 0 256 0s256 114.613 256 256zm0 0"
-                            data-original="url(#a)"
-                          />
-                          <g fill="#fff">
-                            <path
-                              d="M256 56c-8.285 0-15 6.715-15 15s6.715 15 15 15c93.738 0 170 76.262 170 170s-76.262 170-170 170S86 349.738 86 256c0-8.285-6.715-15-15-15s-15 6.715-15 15c0 110.281 89.719 200 200 200s200-89.719 200-200S366.281 56 256 56zm-80.93 48.285c1.914 0 3.856-.367 5.735-1.144l20.277-8.399c7.652-3.172 11.29-11.945 8.117-19.601-3.168-7.653-11.945-11.286-19.597-8.118l-20.278 8.399c-7.652 3.172-11.289 11.945-8.12 19.601 2.394 5.778 7.98 9.262 13.866 9.262zm-57.644 43.66c3.84 0 7.676-1.465 10.605-4.394l15.52-15.52c5.86-5.86 5.86-15.355 0-21.215-5.856-5.855-15.356-5.855-21.211 0l-15.524 15.524c-5.855 5.855-5.855 15.351 0 21.21a14.957 14.957 0 0 0 10.61 4.395zM75.145 209.2a14.95 14.95 0 0 0 5.734 1.148c5.883 0 11.469-3.489 13.863-9.266l8.399-20.277c3.168-7.653-.465-16.43-8.118-19.598-7.656-3.172-16.43.465-19.601 8.117l-8.399 20.278c-3.168 7.656.465 16.43 8.122 19.597zm0 0"
-                              data-original="#ffffff"
-                            />
-                            <path
-                              d="M256 178.29c-8.285 0-15 6.714-15 15V241h-47.71c-8.286 0-15 6.715-15 15s6.714 15 15 15H241v47.71c0 8.286 6.715 15 15 15s15-6.714 15-15V271h47.71c8.286 0 15-6.715 15-15s-6.714-15-15-15H271v-47.71c0-8.286-6.715-15-15-15zm0 0"
-                              data-original="#ffffff"
-                            />
-                          </g>
-                        </svg>
-                      </span>
-                    </div>
+                  {wallets.map((wallet) => (
+                    <WalletWidget
+                      key={wallet.name}
+                      name={wallet.name}
+                      href={wallet.href}
+                      category={wallet.category}
+                      budget={wallet.budget}
+                      currentBalance={wallet.currentBalance}
+                      iconForeground={wallet.iconForeground}
+                      iconBackground={wallet.iconBackground}
+                    />
                   ))}
                 </div>
               </section>
