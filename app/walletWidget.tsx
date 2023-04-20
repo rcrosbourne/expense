@@ -1,19 +1,25 @@
 "use client";
 import React from "react";
-import {capitalize, classNames} from "@/app/utils";
+import { capitalize, classNames } from "@/app/utils";
 import Link from "next/link";
-import { EditIcon, TrashCanIcon } from "@/app/components/icons";
+import { CancelIcon, EditIcon, TrashCanIcon } from "@/app/components/icons";
+import { Wallet } from "@/app/types";
 
 type WalletWidgetProps = {
+  id: number;
   name: string;
   href: string;
-  budget: string;
+  budget: string | number | undefined;
   iconForeground: string;
   iconBackground: string;
   currentBalance: string;
-  category: string;
+  category: "personal" | "business";
+  onEdit: (wallet: Wallet) => void;
+  onCancel: () => void;
+  editMode: boolean;
 };
 const WalletWidget = ({
+  id = 0,
   name,
   href,
   iconForeground,
@@ -21,6 +27,9 @@ const WalletWidget = ({
   currentBalance,
   category,
   budget,
+  onEdit,
+  onCancel,
+  editMode,
 }: WalletWidgetProps) => {
   return (
     <div className="group rounded-lg relative bg-slate-50 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-cyan-500">
@@ -100,16 +109,25 @@ const WalletWidget = ({
         </div>
         <div className="flex divide-x divide-gray-200">
           <div className="flex w-0 flex-1">
-            {
+            {!editMode ? (
               <button
                 type="button"
-                onClick={() => console.log("edit")}
+                onClick={() => onEdit({ id, name, budget, category })}
                 className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
               >
                 <EditIcon className="h-5 w-5 text-gray-400" />
                 Edit
               </button>
-            }
+            ) : (
+              <button
+                type="button"
+                onClick={() => onCancel()}
+                className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
+              >
+                <CancelIcon className="h-5 w-5 fill-current" />
+                Cancel
+              </button>
+            )}
           </div>
           <div className="-ml-px flex w-0 flex-1">
             <button

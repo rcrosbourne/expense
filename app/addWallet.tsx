@@ -1,11 +1,34 @@
 "use client";
 import React from "react";
 import { NumericFormat } from "react-number-format";
-import {Wallet} from "@/app/types";
+import { Wallet } from "@/app/types";
 
-const AddWallet = () => {
-  const [wallet, setWallet] = React.useState<Wallet>({id: 0, name:"", category: "personal"});
+const AddWallet = ({ editWallet }: { editWallet?: Wallet }) => {
+  const [wallet, setWallet] = React.useState<Wallet>({
+    id: 0,
+    name: "",
+    category: "personal",
+    budget: "",
+  });
+  const [editMode, setEditMode] = React.useState<boolean>(false);
+  const nameInput = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    if (!nameInput.current) return;
+    if (editWallet) {
+      setWallet(editWallet);
+      setEditMode(true);
+      nameInput.current.focus();
+    } else {
+      setWallet({ id: 0, name: "", category: "personal", budget: "" });
+      setEditMode(false);
+    }
+  }, [editWallet]);
 
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setWallet((previousWallet) => {
+      return { ...previousWallet, budget: e.target.value };
+    });
+  }
   return (
     <section aria-labelledby="add-wallet-title" className="hidden sm:block">
       <div className="overflow-hidden rounded-lg bg-slate-50 shadow">
@@ -14,7 +37,7 @@ const AddWallet = () => {
             className="text-base font-medium text-slate-900"
             id="add-wallet-title"
           >
-            Add Wallet
+            {editMode ? "Edit Wallet" : "Add Wallet"}
           </h2>
           <form onSubmit={(e) => e.preventDefault()}>
             <div className="mt-6 flow-root">
@@ -26,12 +49,15 @@ const AddWallet = () => {
                   Name
                 </label>
                 <input
+                  ref={nameInput}
                   type="text"
                   name="walletName"
                   id="walletName"
                   className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
                   value={wallet?.name}
-                  onChange={(e) => {  setWallet({ ...wallet, name: e.target.value })}}
+                  onChange={(e) => {
+                    setWallet({ ...wallet, name: e.target.value });
+                  }}
                 />
               </div>
               <div className="flex flex-col mt-4">
@@ -45,8 +71,14 @@ const AddWallet = () => {
                   id="walletCategory"
                   name="walletCategory"
                   className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                    value={wallet?.category}
-                  onChange={(e) => {  setWallet({ ...wallet, category: e.target.value === "personal" ? "personal" : "business" })}}
+                  value={wallet?.category}
+                  onChange={(e) => {
+                    setWallet({
+                      ...wallet,
+                      category:
+                        e.target.value === "personal" ? "personal" : "business",
+                    });
+                  }}
                 >
                   <option value="personal">Personal</option>
                   <option value="business">Business</option>
@@ -71,8 +103,8 @@ const AddWallet = () => {
                   maxLength={18}
                   decimalScale={2}
                   fixedDecimalScale
-                  // onChange={(e) => {  setWallet({ ...wallet, budget: parseFloat(e.target.value) })}}
-                  // value={wallet?.budget}
+                  onChange={onChange}
+                  value={wallet ? wallet.budget : ""}
                   autoComplete="off"
                 />
               </div>
@@ -82,7 +114,7 @@ const AddWallet = () => {
                 type="submit"
                 className="flex w-full items-center justify-center rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500"
               >
-                Save
+                {editMode ? "Save" : "Create"}
               </button>
             </div>
           </form>

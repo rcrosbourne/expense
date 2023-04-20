@@ -1,15 +1,25 @@
+"use client";
 import Image from "next/image";
 import { user } from "@/app/data/user";
 import AddWalletButton from "@/app/addWalletButton";
 import AddWallet from "@/app/addWallet";
 import WalletWidget from "@/app/walletWidget";
+import { Wallet } from "@/app/types";
+import React from "react";
 const stats = [
   { label: "Total", value: "$100,000.00" },
   { label: "Last 30 days", value: "$300,000.00" },
   { label: "Last 7 days", value: "$75,000.00" },
 ];
-const wallets = [
+interface WalletWidgetProps extends Wallet {
+  href: string;
+  iconForeground: string;
+  iconBackground: string;
+  currentBalance: string;
+}
+const wallets: WalletWidgetProps[] = [
   {
+    id: 1,
     name: "My Personal Wallet",
     href: "/wallet/1",
     iconForeground: "text-teal-700",
@@ -19,6 +29,7 @@ const wallets = [
     budget: "$75,000.00",
   },
   {
+    id: 2,
     name: "My Business Wallet",
     href: "/wallet/2",
     iconForeground: "text-purple-700",
@@ -83,6 +94,12 @@ const announcements = [
 ];
 
 export default function Home() {
+  const [editWallet, setEditWallet] = React.useState<Wallet | undefined>(
+    undefined
+  );
+  React.useEffect(() => {
+    console.log(editWallet);
+  }, [editWallet]);
   return (
     <>
       <main className="-mt-24 pb-8">
@@ -154,6 +171,7 @@ export default function Home() {
                   {wallets.map((wallet) => (
                     <WalletWidget
                       key={wallet.name}
+                      id={wallet.id}
                       name={wallet.name}
                       href={wallet.href}
                       category={wallet.category}
@@ -161,6 +179,9 @@ export default function Home() {
                       currentBalance={wallet.currentBalance}
                       iconForeground={wallet.iconForeground}
                       iconBackground={wallet.iconBackground}
+                      onEdit={(wallet) => setEditWallet(wallet)}
+                      onCancel={() => setEditWallet(undefined)}
+                      editMode={editWallet?.id === wallet.id}
                     />
                   ))}
                 </div>
@@ -170,7 +191,7 @@ export default function Home() {
             {/* Right column */}
             <div className="grid grid-cols-1 gap-4">
               {/* Add Wallet */}
-              <AddWallet />
+              <AddWallet editWallet={editWallet} />
               {/* Recent Hires */}
               <section aria-labelledby="recent-hires-title">
                 <div className="overflow-hidden rounded-lg bg-white shadow">
