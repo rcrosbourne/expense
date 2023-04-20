@@ -23,7 +23,7 @@ const WalletWidget = ({
   budget,
 }: WalletWidgetProps) => {
   return (
-    <div className="group rounded-lg relative bg-slate-50 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
+    <div className="group rounded-lg relative bg-slate-50 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-cyan-500">
       <div className="divide-y divide-slate-200">
         <div className="p-6 pb-2">
           <div>
