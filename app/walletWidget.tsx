@@ -16,6 +16,7 @@ type WalletWidgetProps = {
   category: "personal" | "business";
   onEdit: (wallet: Wallet) => void;
   onCancel: () => void;
+  onDelete: (wallet: Wallet) => void;
   editMode: boolean;
 };
 const WalletWidget = ({
@@ -29,6 +30,7 @@ const WalletWidget = ({
   budget,
   onEdit,
   onCancel,
+  onDelete,
   editMode,
 }: WalletWidgetProps) => {
   return (
@@ -132,7 +134,7 @@ const WalletWidget = ({
           <div className="-ml-px flex w-0 flex-1">
             <button
               type="button"
-              onClick={() => console.log("delete")}
+              onClick={() => onDelete({id, budget, name, category})}
               className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
             >
               <TrashCanIcon className="h-5 w-5 text-gray-400" />

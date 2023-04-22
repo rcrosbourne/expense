@@ -6,6 +6,7 @@ import AddWallet from "@/app/addWallet";
 import WalletWidget from "@/app/walletWidget";
 import { Wallet } from "@/app/types";
 import React from "react";
+import ConfirmDialog from "@/app/components/confirmDialog";
 const stats = [
   { label: "Total", value: "$100,000.00" },
   { label: "Last 30 days", value: "$300,000.00" },
@@ -97,6 +98,22 @@ export default function Home() {
   const [editWallet, setEditWallet] = React.useState<Wallet | undefined>(
     undefined
   );
+  const [deleteWallet, setDeleteWallet] = React.useState<Wallet | undefined>();
+  const [open, setOpen] = React.useState<boolean>(false);
+  function onDelete(wallet: Wallet) {
+    setDeleteWallet(wallet);
+    setOpen(true);
+  }
+  function onConfirm(status: boolean) {
+    console.log({status});
+    if(status) {
+      console.log("Deleted!")
+    } else {
+      console.log("Cancelled")
+    }
+    setDeleteWallet(undefined);
+    setOpen(false);
+  }
 
   return (
     <>
@@ -138,7 +155,11 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="mt-5 flex justify-center sm:mt-0">
-                        <AddWalletButton editWallet={editWallet} onCancel={() => setEditWallet(undefined)} onSave={() => setEditWallet(undefined)}/>
+                        <AddWalletButton
+                          editWallet={editWallet}
+                          onCancel={() => setEditWallet(undefined)}
+                          onSave={() => setEditWallet(undefined)}
+                        />
                       </div>
                     </div>
                   </div>
@@ -179,6 +200,7 @@ export default function Home() {
                       iconBackground={wallet.iconBackground}
                       onEdit={(wallet) => setEditWallet(wallet)}
                       onCancel={() => setEditWallet(undefined)}
+                      onDelete={onDelete}
                       editMode={editWallet?.id === wallet.id}
                     />
                   ))}
@@ -189,7 +211,10 @@ export default function Home() {
             {/* Right column */}
             <div className="grid grid-cols-1 gap-4">
               {/* Add Wallet */}
-              <AddWallet editWallet={editWallet} onSave={() => setEditWallet(undefined)} />
+              <AddWallet
+                editWallet={editWallet}
+                onSave={() => setEditWallet(undefined)}
+              />
               {/* Recent Hires */}
               <section aria-labelledby="recent-hires-title">
                 <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -252,6 +277,15 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <ConfirmDialog
+          openConfirm={open}
+          setOpenConfirm={setOpen}
+          title={"Delete Wallet"}
+          message={`You are about to delete "${deleteWallet?.name}"`}
+          confirmButtonText={"Delete"}
+          cancelButtonText={"Cancel"}
+          confirm={onConfirm}
+        />
       </main>
     </>
   );
