@@ -3,9 +3,21 @@ import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { NumericFormat } from "react-number-format";
+import { Wallet } from "@/app/types";
+import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
 
-const AddWalletButton = () => {
+const AddWalletButton = ({
+  editWallet,
+  onCancel,
+  onSave,
+}: {
+  editWallet?: Wallet;
+  onCancel: () => void;
+  onSave: () => void;
+}) => {
   const [addWalletOpen, setAddWalletOpen] = React.useState(false);
+  const windowSize = useWindowSize();
+
   return (
     <>
       <button
@@ -14,26 +26,54 @@ const AddWalletButton = () => {
       >
         Add Wallet
       </button>
-      <AddWalletModal open={addWalletOpen} setOpen={setAddWalletOpen} />
+      <AddWalletModal
+        open={addWalletOpen}
+        setOpen={setAddWalletOpen}
+        editWallet={editWallet}
+        onCancel={onCancel}
+        onSave={onSave}
+        windowSize={windowSize}
+      />
     </>
   );
 };
 const AddWalletModal = ({
   open,
   setOpen,
+  editWallet,
+  onCancel,
+  onSave,
+  windowSize,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  editWallet?: Wallet;
+  onCancel: () => void;
+  onSave: () => void;
+  windowSize: WindowSize;
 }) => {
+  const [wallet, setWallet] = React.useState<Wallet | undefined>(undefined);
+
+  React.useEffect(() => {
+    if (editWallet === undefined || windowSize.width > 640) return;
+    setWallet(editWallet);
+    setOpen(true);
+  }, [editWallet, setOpen, windowSize]);
+  function onClose() {
+    setWallet(undefined);
+    setOpen(false);
+    onCancel();
+  }
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    //   TODO: Persist wallet update
+    setWallet(undefined);
+    setOpen(false);
+    onSave();
+  }
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10 sm:hidden"
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
+      <Dialog as="div" className="relative z-10 sm:hidden" onClose={onClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -63,7 +103,7 @@ const AddWalletModal = ({
                   <button
                     type="button"
                     className="rounded-md bg-white text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-                    onClick={() => setOpen(false)}
+                    onClick={onClose}
                   >
                     <span className="sr-only">Close</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -75,10 +115,10 @@ const AddWalletModal = ({
                       as="h3"
                       className="text-base font-semibold leading-6 text-slate-900"
                     >
-                      Add Wallet
+                      {wallet?.id ? "Edit Wallet" : "Add Wallet"}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <form onSubmit={(e) => e.preventDefault()}>
+                      <form onSubmit={onSubmit}>
                         <div className="mt-6 flow-root">
                           <div className="flex flex-col">
                             <label
@@ -88,10 +128,21 @@ const AddWalletModal = ({
                               Name
                             </label>
                             <input
+                              autoFocus
                               type="text"
                               name="walletName"
                               id="walletName"
                               className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
+                              value={wallet?.name}
+                              onChange={(e) =>
+                                setWallet((previousWallet) => {
+                                  if (!previousWallet) return;
+                                  return {
+                                    ...previousWallet,
+                                    name: e.target.value,
+                                  };
+                                })
+                              }
                             />
                           </div>
                           <div className="flex flex-col mt-4">
@@ -105,6 +156,19 @@ const AddWalletModal = ({
                               id="walletCategory"
                               name="walletCategory"
                               className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
+                              value={wallet?.category}
+                              onChange={(e) =>
+                                setWallet((previousWallet) => {
+                                  if (!previousWallet) return;
+                                  return {
+                                    ...previousWallet,
+                                    category:
+                                      e.target.value === "personal"
+                                        ? "personal"
+                                        : "business",
+                                  };
+                                })
+                              }
                             >
                               <option value="personal">Personal</option>
                               <option value="business">Business</option>
@@ -129,17 +193,22 @@ const AddWalletModal = ({
                               maxLength={18}
                               decimalScale={2}
                               fixedDecimalScale
-                              // onChange={(e) => {  setWallet({ ...wallet, budget: parseFloat(e.target.value) })}}
-                              // value={wallet?.budget}
+                              value={wallet?.budget}
+                              onChange={(e) =>
+                                setWallet((previousWallet) => {
+                                  if (!previousWallet) return;
+                                  return {
+                                    ...previousWallet,
+                                    budget: e.target.value,
+                                  };
+                                })
+                              }
                               autoComplete="off"
                             />
                           </div>
                         </div>
                         <div className="mt-6">
                           <button
-                            onClick={() => {
-                              setOpen(false);
-                            }}
                             type="submit"
                             className="flex w-full items-center justify-center rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500"
                           >

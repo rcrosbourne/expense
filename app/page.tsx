@@ -97,9 +97,7 @@ export default function Home() {
   const [editWallet, setEditWallet] = React.useState<Wallet | undefined>(
     undefined
   );
-  React.useEffect(() => {
-    console.log(editWallet);
-  }, [editWallet]);
+
   return (
     <>
       <main className="-mt-24 pb-8">
@@ -140,7 +138,7 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="mt-5 flex justify-center sm:mt-0">
-                        <AddWalletButton />
+                        <AddWalletButton editWallet={editWallet} onCancel={() => setEditWallet(undefined)} onSave={() => setEditWallet(undefined)}/>
                       </div>
                     </div>
                   </div>
@@ -191,7 +189,7 @@ export default function Home() {
             {/* Right column */}
             <div className="grid grid-cols-1 gap-4">
               {/* Add Wallet */}
-              <AddWallet editWallet={editWallet} />
+              <AddWallet editWallet={editWallet} onSave={() => setEditWallet(undefined)} />
               {/* Recent Hires */}
               <section aria-labelledby="recent-hires-title">
                 <div className="overflow-hidden rounded-lg bg-white shadow">

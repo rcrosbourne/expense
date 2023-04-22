@@ -3,7 +3,7 @@ import React from "react";
 import { NumericFormat } from "react-number-format";
 import { Wallet } from "@/app/types";
 
-const AddWallet = ({ editWallet }: { editWallet?: Wallet }) => {
+const AddWallet = ({ editWallet, onSave }: { editWallet?: Wallet, onSave: () => void }) => {
   const [wallet, setWallet] = React.useState<Wallet>({
     id: 0,
     name: "",
@@ -29,6 +29,12 @@ const AddWallet = ({ editWallet }: { editWallet?: Wallet }) => {
       return { ...previousWallet, budget: e.target.value };
     });
   }
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setWallet({ id: 0, name: "", category: "personal", budget: "" });
+    setEditMode(false);
+    onSave();
+  }
   return (
     <section aria-labelledby="add-wallet-title" className="hidden sm:block">
       <div className="overflow-hidden rounded-lg bg-slate-50 shadow">
@@ -39,7 +45,7 @@ const AddWallet = ({ editWallet }: { editWallet?: Wallet }) => {
           >
             {editMode ? "Edit Wallet" : "Add Wallet"}
           </h2>
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form onSubmit={onSubmit}>
             <div className="mt-6 flow-root">
               <div className="flex flex-col">
                 <label
