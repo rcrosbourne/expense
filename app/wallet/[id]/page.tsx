@@ -125,7 +125,6 @@ const Wallet = () => {
   const amountInputRef = React.useRef();
   const transactionRef = React.useRef(null);
 
-  React.useEffect(() => {}, []);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
@@ -198,6 +197,7 @@ const Wallet = () => {
     setTransactionToBeDeleted(expense);
     setOpenConfirmDelete(true);
   };
+
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -377,7 +377,7 @@ const Wallet = () => {
               </Tab.Panels>
             </Tab.Group>
           </div>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="sm:grid grid-cols-1 gap-4 hidden">
             {/* Add Income and Expenses */}
             <section aria-labelledby="" className="@container/section">
               <div
