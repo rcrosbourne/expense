@@ -1,7 +1,5 @@
-type PortfolioStat = {
-  label: string;
-  value: string;
-};
+import {PortfolioStat} from "@/app/types";
+
 const PortfolioStats = ({ stats }: { stats: PortfolioStat[] }) => {
   return (
     <>

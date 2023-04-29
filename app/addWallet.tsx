@@ -10,19 +10,9 @@ const AddWallet = ({ editWallet, onSave }: { editWallet?: Wallet, onSave: () => 
     category: "personal",
     budget: "",
   });
-  const [editMode, setEditMode] = React.useState<boolean>(false);
   const nameInput = React.useRef<HTMLInputElement>(null);
-  React.useEffect(() => {
-    if (!nameInput.current) return;
-    if (editWallet) {
-      setWallet(editWallet);
-      setEditMode(true);
-      nameInput.current.focus();
-    } else {
-      setWallet({ id: 0, name: "", category: "personal", budget: "" });
-      setEditMode(false);
-    }
-  }, [editWallet]);
+
+  const editMode = !!editWallet;
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setWallet((previousWallet) => {
@@ -32,7 +22,7 @@ const AddWallet = ({ editWallet, onSave }: { editWallet?: Wallet, onSave: () => 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setWallet({ id: 0, name: "", category: "personal", budget: "" });
-    setEditMode(false);
+    // setEditMode(false);
     onSave();
   }
   return (

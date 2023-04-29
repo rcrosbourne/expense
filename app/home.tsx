@@ -1,20 +1,15 @@
 "use client";
 
 import React from "react";
-import {Wallet, WalletWidgetProps} from "@/app/types";
+import {PortfolioStat, User, Wallet, WalletWidgetProps} from "@/app/types";
 import Image from "next/image";
-import { user } from "@/app/data/user";
+
 import AddWalletButton from "@/app/addWalletButton";
 import AddWallet from "@/app/addWallet";
 import WalletWidget from "@/app/walletWidget";
 import ConfirmDialog from "@/app/components/confirmDialog";
 import UserInfo from "@/app/userInfo";
 import PortfolioStats from "@/app/PortfolioStats";
-const stats = [
-  { label: "Total", value: "$100,000.00" },
-  { label: "Last 30 days", value: "$300,000.00" },
-  { label: "Last 7 days", value: "$75,000.00" },
-];
 const recentHires = [
   {
     name: "Leonard Krasner",
@@ -69,8 +64,7 @@ const announcements = [
   },
 ];
 
-
-const Home = ({wallets}:{wallets: WalletWidgetProps[]}) => {
+const Home = ({wallets, user, stats}:{wallets: WalletWidgetProps[], user: User, stats: PortfolioStat[]}) => {
   const [editWallet, setEditWallet] = React.useState<Wallet | undefined>(
     undefined
   );
@@ -121,7 +115,6 @@ const Home = ({wallets}:{wallets: WalletWidgetProps[]}) => {
                   </div>
                 </div>
               </section>
-
               {/* Actions panel */}
               <section aria-labelledby="quick-links-title">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 divide-y divide-gray-200 rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
