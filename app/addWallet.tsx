@@ -3,27 +3,32 @@ import React from "react";
 import { NumericFormat } from "react-number-format";
 import { Wallet } from "@/app/types";
 
-const AddWallet = ({ editWallet, onSave }: { editWallet?: Wallet, onSave: () => void }) => {
-  const [wallet, setWallet] = React.useState<Wallet>({
-    id: 0,
-    name: "",
-    category: "personal",
-    budget: "",
-  });
-  const [editMode, setEditMode] = React.useState<boolean>(false);
+const INITIAL_WALLET: Wallet = {
+  id: 0,
+  name: "",
+  category: "personal",
+  budget: "",
+};
+const AddWallet = ({
+  editWallet,
+  onSave,
+}: {
+  editWallet?: Wallet;
+  onSave: () => void;
+}) => {
+  const [wallet, setWallet] = React.useState<Wallet>(INITIAL_WALLET);
   const nameInput = React.useRef<HTMLInputElement>(null);
+  const editMode = !!editWallet;
   React.useEffect(() => {
-    if (!nameInput.current) return;
-    if (editWallet) {
-      setWallet(editWallet);
-      setEditMode(true);
-      nameInput.current.focus();
+    if(!editWallet) {
+      setWallet(INITIAL_WALLET);
     } else {
-      setWallet({ id: 0, name: "", category: "personal", budget: "" });
-      setEditMode(false);
+      setWallet(editWallet);
+      if(!nameInput.current) return;
+      const inputControl = nameInput.current;
+      inputControl.focus()
     }
   }, [editWallet]);
-
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setWallet((previousWallet) => {
       return { ...previousWallet, budget: e.target.value };
@@ -32,7 +37,7 @@ const AddWallet = ({ editWallet, onSave }: { editWallet?: Wallet, onSave: () => 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setWallet({ id: 0, name: "", category: "personal", budget: "" });
-    setEditMode(false);
+    // setEditMode(false);
     onSave();
   }
   return (

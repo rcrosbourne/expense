@@ -53,7 +53,7 @@ const AddWalletModal = ({
   windowSize: WindowSize;
 }) => {
   const [wallet, setWallet] = React.useState<Wallet | undefined>(undefined);
-
+  const nameInput = React.useRef();
   React.useEffect(() => {
     if (editWallet === undefined || windowSize.width > 640) return;
     setWallet(editWallet);
