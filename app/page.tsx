@@ -99,10 +99,10 @@ export default function Home() {
     undefined
   );
   const [deleteWallet, setDeleteWallet] = React.useState<Wallet | undefined>();
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [openConfirm, setOpenConfirm] = React.useState<boolean>(false);
   function onDelete(wallet: Wallet) {
     setDeleteWallet(wallet);
-    setOpen(true);
+    setOpenConfirm(true);
   }
   function onConfirm(status: boolean) {
     console.log({status});
@@ -112,7 +112,7 @@ export default function Home() {
       console.log("Cancelled")
     }
     setDeleteWallet(undefined);
-    setOpen(false);
+    setOpenConfirm(false);
   }
 
   return (
@@ -278,8 +278,8 @@ export default function Home() {
           </div>
         </div>
         <ConfirmDialog
-          openConfirm={open}
-          setOpenConfirm={setOpen}
+          openConfirm={openConfirm}
+          setOpenConfirm={setOpenConfirm}
           title={"Delete Wallet"}
           message={`You are about to delete "${deleteWallet?.name}"`}
           confirmButtonText={"Delete"}
