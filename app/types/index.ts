@@ -5,3 +5,4 @@ export * from "./category";
 export * from "./periodicity";
 export * from "./financialTransaction";
 export * from "./wallet";
+export * from "./walletWidgetProps";

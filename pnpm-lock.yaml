@@ -16,6 +16,7 @@ specifiers:
   dayjs: ^1.11.6
   eslint: 8.36.0
   eslint-config-next: 13.2.4
+  immer: ^10.0.1
   next: 13.2.4
   next-auth: ^4.20.1
   nodemailer: ^6.9.1
@@ -30,6 +31,7 @@ specifiers:
   react-tailwindcss-datepicker: ^1.5.1
   tailwindcss: ^3.3.0
   typescript: 5.0.2
+  use-immer: ^0.9.0
 
 dependencies:
   '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
@@ -46,6 +48,7 @@ dependencies:
   dayjs: 1.11.7
   eslint: 8.36.0
   eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
+  immer: 10.0.1
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_3tbpwx46tlrk4rci3doelizria
   nodemailer: 6.9.1
@@ -55,6 +58,7 @@ dependencies:
   react-number-format: 5.1.4_biqbaboplfbrettd7655fr4n2y
   react-tailwindcss-datepicker: 1.5.1_dayjs@1.11.7+react@18.2.0
   typescript: 5.0.2
+  use-immer: 0.9.0_immer@10.0.1+react@18.2.0
 
 devDependencies:
   autoprefixer: 10.4.14_postcss@8.4.21
@@ -1757,6 +1761,10 @@ packages:
     engines: {node: '>= 4'}
     dev: false
 
+  /immer/10.0.1:
+    resolution: {integrity: sha512-zg++jJLsKKTwXGeSYIw0HgChSYQGtu0UDTnbKx5aGLYgte4CwTmH9eJDYyQ6FheyUtBe+lQW9FrGxya1G+Dtmg==}
+    dev: false
+
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -3057,6 +3065,16 @@ packages:
       '@types/react': 18.0.28
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /use-immer/0.9.0_immer@10.0.1+react@18.2.0:
+    resolution: {integrity: sha512-/L+enLi0nvuZ6j4WlyK0US9/ECUtV5v9RUbtxnn5+WbtaXYUaOBoKHDNL9I5AETdurQ4rIFIj/s+Z5X80ATyKw==}
+    peerDependencies:
+      immer: '>=2.0.0'
+      react: ^16.8.0 || ^17.0.1 || ^18.0.0
+    dependencies:
+      immer: 10.0.1
+      react: 18.2.0
     dev: false
 
   /use-isomorphic-layout-effect/1.1.2_pmekkgnqduwlme35zpnqhenc34:
