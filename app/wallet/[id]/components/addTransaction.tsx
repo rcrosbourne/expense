@@ -10,6 +10,8 @@ import PeriodicityDropdown from "@/app/wallet/[id]/components/periodicityDropdow
 import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/app/components/categoriesDialog";
 import {Actions} from "@/app/wallet/[id]/page";
+import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
+import dayjs from "dayjs";
 
 const INITIAL_STATE: FinancialTransaction = {
   id: 0,
@@ -44,6 +46,10 @@ const AddTransaction = ({ transactionToBeEdited, dispatch }: { transactionToBeEd
    const amountInputElement = amountInputRef.current as HTMLInputElement;
    setTransaction((t) => ({...t, amount: amountInputElement.value}))
  }
+ function onDateChanged(date: DateValueType) {
+    if(date === null) return;
+    setTransaction((t) => ({...t, date}))
+ }
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("Submitted");
@@ -57,7 +63,6 @@ const AddTransaction = ({ transactionToBeEdited, dispatch }: { transactionToBeEd
       dispatch({type: "save-transaction", editTransaction: transaction, newTransaction: undefined});
       console.log("Editing txn");
     }
-    console.log({transaction});
     setTransaction(INITIAL_STATE);
   }
   return (
@@ -99,7 +104,7 @@ const AddTransaction = ({ transactionToBeEdited, dispatch }: { transactionToBeEd
                 useRange={false}
                 asSingle={true}
                 value={transaction.date}
-                onDateChanged={(date) => setTransaction((t) => ({...t, date}))}
+                onDateChanged={onDateChanged}
               />
             </div>
             <div className="mt-2">
