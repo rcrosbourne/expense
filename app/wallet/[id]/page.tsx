@@ -29,6 +29,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
+import {useImmerReducer} from "use-immer";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -89,25 +90,52 @@ const barExpenseData = {
   ],
 };
 
+type State = {
+  transactionForEdit?: FinancialTransaction
+}
+const INITIAL_STATE:State =  {
+ transactionForEdit: undefined
+}
+export type Actions = {
+  type: "add-transaction" | "edit-transaction" |"save-transaction" | "delete-transaction" | "cancel";
+  editTransaction?: FinancialTransaction;
+  newTransaction?: FinancialTransaction;
+}
+function reducer(state: State, actions: Actions) {
+  switch (actions.type) {
+    case "add-transaction": {
+      state.transactionForEdit = undefined;
+      return;
+    }
+    case "cancel": {
+      state.transactionForEdit = undefined;
+      return;
+    }
+    case "edit-transaction": {
+      state.transactionForEdit = actions.editTransaction;
+      return;
+    }
+    case "save-transaction": {
+      state.transactionForEdit = undefined;
+      return;
+    }
+  }
+}
+
 const Wallet = () => {
-  const [isEditingTransaction, setIsEditingTransaction] =
-    React.useState<boolean>(false);
-  const [editTransaction, setEditTransaction] =
-    React.useState<FinancialTransaction | null>(null);
   const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
   const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<
     FinancialTransaction | undefined
   >(undefined);
 
-  const [expense, setExpense] = React.useState<FinancialTransaction | undefined>();
+  const [transactionToBeEdited, setTransactionToBeEdited] = React.useState<FinancialTransaction | undefined>(undefined);
   const transactionRef = React.useRef(null);
-
-
-  const handleEdit = (expense: FinancialTransaction) => {
-    setExpense((prevState) => ({...prevState, ...expense}));
+  // add reducer to manage the user action
+  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE)
+  const handleEdit = (transactionForEdit: FinancialTransaction) => {
+    setTransactionToBeEdited(transactionForEdit);
   };
   const handleCancel = (expense: FinancialTransaction) => {
-
   };
 
   const cancelHandler = (
@@ -195,10 +223,10 @@ const Wallet = () => {
                       </h2>
                       <TransactionList
                         transactions={transactions}
-                        editingTransaction={editTransaction}
+                        editingTransaction={state.transactionForEdit}
                         transactionRef={transactionRef}
-                        onEdit={handleEdit}
-                        onCancel={handleCancel}
+                        onEdit={(transactionForEdit) => dispatch({type: "edit-transaction", editTransaction: transactionForEdit})}
+                        onCancel={(t) => dispatch({type: "cancel"})}
                         onDelete={handleDelete}
                       />
                     </div>
@@ -302,7 +330,7 @@ const Wallet = () => {
           </div>
           <div className="sm:grid grid-cols-1 gap-4 hidden">
             {/* Add Income and Expenses */}
-            <AddTransaction expense={expense} />
+            <AddTransaction transactionToBeEdited={state.transactionForEdit} dispatch={dispatch}/>
           </div>{" "}
         </div>
       </div>

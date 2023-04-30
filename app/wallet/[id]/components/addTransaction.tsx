@@ -1,5 +1,5 @@
 import React from "react";
-import { classNames } from "@/app/utils";
+import {classNames} from "@/app/utils";
 import { FinancialTransaction } from "@/app/types";
 import Switcher from "@/app/wallet/[id]/components/switcher";
 import InputAmount from "@/app/wallet/[id]/components/inputAmount";
@@ -9,27 +9,36 @@ import Notes from "@/app/wallet/[id]/components/notes";
 import PeriodicityDropdown from "@/app/wallet/[id]/components/periodicityDropdown";
 import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/app/components/categoriesDialog";
+import {Actions} from "@/app/wallet/[id]/page";
 
 const INITIAL_STATE: FinancialTransaction = {
   id: 0,
   type: "expense",
   amount: undefined,
-  date: { startDate: new Date(), endDate: null },
+  date: { startDate: null, endDate: null },
   periodicity: "One-time payment",
 };
-const AddTransaction = ({ expense }: { expense?: FinancialTransaction }) => {
+const AddTransaction = ({ transactionToBeEdited, dispatch }: { transactionToBeEdited?: FinancialTransaction, dispatch: React.Dispatch<Actions> }) => {
   // If we get an expense, and it is income type or if we have no expense the default type is income
   const [transaction, setTransaction] = React.useState<FinancialTransaction>(INITIAL_STATE);
   const [isCategoriesOpen, setIsCategoriesOpen] = React.useState<boolean>(false);
   const isIncome = transaction?.type === "income" ?? "expense";
   const amountInputRef = React.useRef();
   React.useEffect(() => {
-    if (!expense) {
+    if (!transactionToBeEdited) {
       setTransaction(INITIAL_STATE);
     } else {
-      setTransaction(expense);
+      setTransaction(transactionToBeEdited);
     }
-  }, [expense]);
+  }, [transactionToBeEdited]);
+
+  console.log({transaction});
+  function cancel() {
+    console.log("Cancelling!!!!")
+    dispatch({type: "cancel"});
+    //set transaction to reset state
+    setTransaction(INITIAL_STATE);
+  }
  function onAmountChanged(e: React.ChangeEvent<HTMLInputElement>) {
    if(!amountInputRef.current) return;
    const amountInputElement = amountInputRef.current as HTMLInputElement;
@@ -38,6 +47,16 @@ const AddTransaction = ({ expense }: { expense?: FinancialTransaction }) => {
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("Submitted");
+    // if we are adding a new transaction we dispatch
+    if(!transactionToBeEdited) {
+      // there was no transaction for edit
+      dispatch({type: "add-transaction", newTransaction: transaction, editTransaction: undefined});
+      console.log("Add new txn");
+    } else {
+      // here we dispatch an edit-transaction
+      dispatch({type: "save-transaction", editTransaction: transaction, newTransaction: undefined});
+      console.log("Editing txn");
+    }
     console.log({transaction});
     setTransaction(INITIAL_STATE);
   }
@@ -67,7 +86,7 @@ const AddTransaction = ({ expense }: { expense?: FinancialTransaction }) => {
           <div className="relative mt-2 rounded-md shadow-sm">
             <InputAmount
               inputRef={amountInputRef}
-              value={transaction.amount?.toString() ?? ""}
+              value={transaction.amount as string ?? ""}
               onChange={onAmountChanged}
               isIncome={isIncome}
               openCategories={() => setIsCategoriesOpen(true)}
@@ -104,8 +123,8 @@ const AddTransaction = ({ expense }: { expense?: FinancialTransaction }) => {
             <div className="mt-2">
               <ActionButtons
                 isIncome={isIncome}
-                isEditing={!!expense}
-                onCancel={() => setTransaction(INITIAL_STATE)}
+                isEditing={!!transactionToBeEdited}
+                onCancel={cancel}
               />
             </div>
           </div>

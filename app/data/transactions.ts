@@ -11,10 +11,13 @@ export const transactions: FinancialTransaction[] = [
     id: 1,
     amount: 10003.45,
     type: "expense",
-    date: dayjs()
-      .tz("America/Jamaica")
-      .subtract(2, "days")
-      .format("MMMM DD, YYYY"),
+    date: {
+      startDate: dayjs()
+        .tz("America/Jamaica")
+        .subtract(2, "days")
+          .toDate(),
+      endDate: null,
+    },
     notes: "Lorem ipsum",
     // select a random category from expenseCategories
     category: expenseCategories[0],
@@ -25,7 +28,7 @@ export const transactions: FinancialTransaction[] = [
     id: 2,
     amount: 423.04,
     type: "expense",
-    date: dayjs().tz("America/Jamaica").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs().tz("America/Jamaica").toDate(), endDate: null },
     // select a random category from expenseCategories
     category: expenseCategories[3],
     merchant: "KFC",
@@ -35,7 +38,7 @@ export const transactions: FinancialTransaction[] = [
     id: 3,
     amount: 10909.45,
     type: "expense",
-    date: dayjs().tz("America/Jamaica").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs().tz("America/Jamaica").toDate(), endDate: null },
     // select a random category from expenseCategories
     category: expenseCategories[6],
     merchant: "KFC",
@@ -45,7 +48,7 @@ export const transactions: FinancialTransaction[] = [
     id: 4,
     amount: 223030.45,
     type: "expense",
-    date: dayjs().tz("America/Jamaica").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs().tz("America/Jamaica").toDate(), endDate: null },
     // select a random category from expenseCategories
     category: expenseCategories[9],
     merchant: "KFC",
@@ -55,7 +58,7 @@ export const transactions: FinancialTransaction[] = [
     id: 5,
     amount: 323030.45,
     type: "income",
-    date: dayjs().tz("America/Jamaica").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs().tz("America/Jamaica").toDate(), endDate: null },
     // select a random category from incomeCategories
     category: incomeCategories[2],
     merchant: "Medullan",
@@ -65,7 +68,7 @@ export const transactions: FinancialTransaction[] = [
     id: 6,
     amount: 223030.45,
     type: "income",
-    date: dayjs().tz("America/Jamaica").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs().tz("America/Jamaica").toDate(), endDate: null },
     // select a random category from incomeCategories
     category: incomeCategories[4],
     merchant: "ZS Associates",
@@ -75,10 +78,10 @@ export const transactions: FinancialTransaction[] = [
     id: 7,
     amount: 62923.45,
     type: "expense",
-    date: dayjs()
+    date: {startDate: dayjs()
       .tz("America/Jamaica")
       .subtract(5, "days")
-      .format("MMMM DD, YYYY"),
+      .toDate(), endDate: null },
     // select a random category from incomeCategories
     category: expenseCategories[1],
     merchant: "PriceSmart",
@@ -88,18 +91,23 @@ export const transactions: FinancialTransaction[] = [
     id: 8,
     amount: 12000.45,
     type: "income",
-    date: dayjs().tz("America/Jamaica").subtract(1, "month").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs()
+      .tz("America/Jamaica")
+      .subtract(1, "month")
+      .toDate(), endDate: null },
     // select a random category from incomeCategories
     category: incomeCategories[2],
     merchant: "ZS Associates",
     periodicity: "One-time payment",
   },
   {
-
     id: 9,
     amount: 120342.45,
     type: "income",
-    date: dayjs().tz("America/Jamaica").subtract(2, "month").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs()
+      .tz("America/Jamaica")
+      .subtract(2, "month")
+      .toDate(), endDate: null },
     // select a random category from incomeCategories
     category: incomeCategories[3],
     merchant: "ZS Associates",
@@ -109,11 +117,13 @@ export const transactions: FinancialTransaction[] = [
     id: 10,
     amount: 120342.45,
     type: "expense",
-    date: dayjs().tz("America/Jamaica").subtract(2, "month").format("MMMM DD, YYYY"),
+    date: {startDate: dayjs()
+      .tz("America/Jamaica")
+      .subtract(2, "month")
+      .toDate(), endDate: null },
     // select a random category from incomeCategories
     category: expenseCategories[12],
-    merchant: "ZS Associates",
+    merchant: "Pandora",
     periodicity: "One-time payment",
-  }
-
+  },
 ];
