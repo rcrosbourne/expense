@@ -34,7 +34,6 @@ const AddTransaction = ({ transactionToBeEdited, dispatch }: { transactionToBeEd
     }
   }, [transactionToBeEdited]);
 
-  console.log({transaction});
   function cancel() {
     console.log("Cancelling!!!!")
     dispatch({type: "cancel"});

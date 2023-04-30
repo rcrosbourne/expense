@@ -29,7 +29,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
-import {useImmerReducer} from "use-immer";
+import { useImmerReducer } from "use-immer";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -91,16 +91,28 @@ const barExpenseData = {
 };
 
 type State = {
-  transactionForEdit?: FinancialTransaction
-}
-const INITIAL_STATE:State =  {
- transactionForEdit: undefined
-}
+  openDeleteDialog?: boolean;
+  transactionForEdit?: FinancialTransaction;
+  transactionForDelete?: FinancialTransaction;
+};
+const INITIAL_STATE: State = {
+  openDeleteDialog: false,
+  transactionForEdit: undefined,
+  transactionForDelete: undefined,
+};
 export type Actions = {
-  type: "add-transaction" | "edit-transaction" |"save-transaction" | "delete-transaction" | "cancel";
+  type:
+    | "add-transaction"
+    | "edit-transaction"
+    | "save-transaction"
+    | "delete-transaction"
+    | "deleting-transaction"
+    | "deleted-transaction"
+    | "cancel";
   editTransaction?: FinancialTransaction;
   newTransaction?: FinancialTransaction;
-}
+  deleteTransaction?: FinancialTransaction;
+};
 function reducer(state: State, actions: Actions) {
   switch (actions.type) {
     case "add-transaction": {
@@ -109,6 +121,8 @@ function reducer(state: State, actions: Actions) {
     }
     case "cancel": {
       state.transactionForEdit = undefined;
+      state.transactionForDelete = undefined;
+      state.openDeleteDialog = false;
       return;
     }
     case "edit-transaction": {
@@ -119,34 +133,25 @@ function reducer(state: State, actions: Actions) {
       state.transactionForEdit = undefined;
       return;
     }
+    case "deleting-transaction": {
+      state.transactionForDelete = actions.deleteTransaction;
+      state.openDeleteDialog = true;
+      return;
+    }
+    case "deleted-transaction": {
+      state.transactionForDelete = actions.deleteTransaction;
+      state.openDeleteDialog = false;
+      return;
+    }
   }
 }
 
 const Wallet = () => {
-  const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
-  const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<
-    FinancialTransaction | undefined
-  >(undefined);
-
-  const [transactionToBeEdited, setTransactionToBeEdited] = React.useState<FinancialTransaction | undefined>(undefined);
   const transactionRef = React.useRef(null);
   // add reducer to manage the user action
-  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE)
-  const handleEdit = (transactionForEdit: FinancialTransaction) => {
-    setTransactionToBeEdited(transactionForEdit);
-  };
-  const handleCancel = (expense: FinancialTransaction) => {
-  };
-
-  const cancelHandler = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-
-  };
-  const handleDelete = (expense: FinancialTransaction) => {
-    // show confirm dialog
-    setTransactionToBeDeleted(expense);
-    setOpenConfirmDelete(true);
+  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
+  const handleDelete = (transaction: FinancialTransaction) => {
+    dispatch({ type: "deleting-transaction", deleteTransaction: transaction });
   };
 
   return (
@@ -225,8 +230,13 @@ const Wallet = () => {
                         transactions={transactions}
                         editingTransaction={state.transactionForEdit}
                         transactionRef={transactionRef}
-                        onEdit={(transactionForEdit) => dispatch({type: "edit-transaction", editTransaction: transactionForEdit})}
-                        onCancel={(t) => dispatch({type: "cancel"})}
+                        onEdit={(transactionForEdit) =>
+                          dispatch({
+                            type: "edit-transaction",
+                            editTransaction: transactionForEdit,
+                          })
+                        }
+                        onCancel={(t) => dispatch({ type: "cancel" })}
                         onDelete={handleDelete}
                       />
                     </div>
@@ -262,34 +272,39 @@ const Wallet = () => {
                         <div className="bg-slate-50 rounded shadow h-full w-full p-4">
                           <Tab.Group>
                             <div className="flex items-center justify-between w-full border-b border-slate-200">
-                              <h3 className="hidden md:inline-block">Performance</h3>
+                              <h3 className="hidden md:inline-block">
+                                Performance
+                              </h3>
                               <Tab.List className="space-x-8">
                                 <Tab
-                                    className={({ selected }) =>
-                                        classNames(
-                                            "border-b-2 py-4 px-1 text-center text-sm font-medium",
-                                            selected
-                                                ? "border-indigo-500 text-indigo-600"
-                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                                        )
-                                    }
+                                  className={({ selected }) =>
+                                    classNames(
+                                      "border-b-2 py-4 px-1 text-center text-sm font-medium",
+                                      selected
+                                        ? "border-indigo-500 text-indigo-600"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                    )
+                                  }
                                 >
-                                  <span className="hidden sm:inline-block">Income</span>
+                                  <span className="hidden sm:inline-block">
+                                    Income
+                                  </span>
                                   <span className="sm:hidden">Income</span>
                                 </Tab>
                                 <Tab
-                                    className={({ selected }) =>
-                                        classNames(
-                                            "border-b-2 py-4 px-1 text-center text-sm font-medium truncate",
-                                            selected
-                                                ? "border-indigo-500 text-indigo-600"
-                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                                        )
-                                    }
+                                  className={({ selected }) =>
+                                    classNames(
+                                      "border-b-2 py-4 px-1 text-center text-sm font-medium truncate",
+                                      selected
+                                        ? "border-indigo-500 text-indigo-600"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                    )
+                                  }
                                 >
-                                  <span className="hidden sm:inline-block">Expense</span>
+                                  <span className="hidden sm:inline-block">
+                                    Expense
+                                  </span>
                                   <span className="sm:hidden">Expense</span>
-
                                 </Tab>
                                 <Tab
                                   className={({ selected }) =>
@@ -303,19 +318,29 @@ const Wallet = () => {
                                 >
                                   Expense Breakdown
                                 </Tab>
-
                               </Tab.List>
                             </div>
                             <Tab.Panels className="mt-4">
                               <Tab.Panel>
-                                <TransactionBreakdown transactions={transactions.filter(t => t.type === 'income')} />
+                                <TransactionBreakdown
+                                  transactions={transactions.filter(
+                                    (t) => t.type === "income"
+                                  )}
+                                />
                               </Tab.Panel>
                               <Tab.Panel>
-                                  <TransactionBreakdown transactions={transactions.filter((t => t.type === 'expense'))} />
+                                <TransactionBreakdown
+                                  transactions={transactions.filter(
+                                    (t) => t.type === "expense"
+                                  )}
+                                />
                               </Tab.Panel>
                               <Tab.Panel>
                                 <div className="flex items-center justify-center">
-                                  <Bar data={barExpenseData} options={barOptions} />
+                                  <Bar
+                                    data={barExpenseData}
+                                    options={barOptions}
+                                  />
                                 </div>
                               </Tab.Panel>
                             </Tab.Panels>
@@ -330,30 +355,35 @@ const Wallet = () => {
           </div>
           <div className="sm:grid grid-cols-1 gap-4 hidden">
             {/* Add Income and Expenses */}
-            <AddTransaction transactionToBeEdited={state.transactionForEdit} dispatch={dispatch}/>
+            <AddTransaction
+              transactionToBeEdited={state.transactionForEdit}
+              dispatch={dispatch}
+            />
           </div>{" "}
         </div>
       </div>
 
       <ConfirmDialog
-        openConfirm={openConfirmDelete}
-        setOpenConfirm={setOpenConfirmDelete}
+        openConfirm={state.openDeleteDialog!}
+        setOpenConfirm={(isOpen) =>
+          !isOpen
+            ? dispatch({ type: "cancel" })
+            : dispatch({ type: "deleting-transaction" })
+        }
         title={"Delete expense/income"}
         message={`Are you sure you want to delete expense ${
-          transactionToBeDeleted?.category?.name
+          state.transactionForDelete?.category?.name
         } with amount $${formatNumberAsCurrency(
-          transactionToBeDeleted?.amount
+          state.transactionForDelete?.amount
         )} 
           This action cannot be undone.`}
         confirmButtonText={"Delete"}
         cancelButtonText={"Cancel"}
         confirm={(status) => {
           if (status) {
-            console.log({ expenseToBeDeleted: transactionToBeDeleted });
-            setOpenConfirmDelete(false);
+            dispatch({ type: "deleted-transaction", deleteTransaction: state.transactionForDelete });
           } else {
-            setTransactionToBeDeleted(undefined);
-            setOpenConfirmDelete(false);
+            dispatch({ type: "cancel", deleteTransaction: undefined });
           }
         }}
       />
