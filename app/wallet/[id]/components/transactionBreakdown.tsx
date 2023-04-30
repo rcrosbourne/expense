@@ -37,14 +37,14 @@ const TransactionBreakdown = ({
         const index = labels.indexOf(category.name);
         if (index === -1) {
           labels.push(category.name);
-          data.push(transaction.amount);
+          data.push(transaction.amount! as number);
           // add an alpha channel of 80% to the background color.
           backgroundColor.push(
             addAlphaToHsl(category.backgroundColorAsHsl!, 0.8)
           );
           borderColor.push(category.backgroundColorAsHsl!);
         } else {
-          data[index] += transaction.amount;
+          data[index] += transaction.amount! as number;
         }
       }
     });
@@ -74,7 +74,7 @@ const TransactionBreakdown = ({
     const transactionsByMonth: { [key: number]: { [key: string]: number } } =
       {};
     transactions.forEach((transaction) => {
-      const transactionDate = dayjs(transaction.date);
+      const transactionDate = dayjs(transaction.date!.startDate);
 
       if (transactionDate.isBetween(startDate, endDate, "day", "[]")) {
         const month = transactionDate.month();
@@ -89,7 +89,7 @@ const TransactionBreakdown = ({
           transactionsByMonth[month][category] = 0;
         }
 
-        transactionsByMonth[month][category] += transaction.amount;
+        transactionsByMonth[month][category] += transaction.amount! as number;
       }
     });
     const labels = Array.from({ length: dayjs().month() + 1 }, (_, i) =>

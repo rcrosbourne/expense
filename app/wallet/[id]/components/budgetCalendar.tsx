@@ -9,6 +9,7 @@ import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import dayjs from "dayjs";
 import { FinancialTransaction } from "@/app/types";
 import * as Popover from "@radix-ui/react-popover";
+import formatDateOrReturnDefault from "@/app/utils/formatDateOrReturnDefault";
 type CalendarDay = {
   date: string;
   transactions: FinancialTransaction[];
@@ -33,7 +34,7 @@ const generateCalendarFromMonth = (
   while (day <= lastDayOfCalendar) {
     // if there are transactions for the day, add them to the calendar
     const transactionsForDay = transactions.filter((transaction) => {
-      return dayjs(transaction.date).isSame(day, "day");
+      return dayjs(transaction.date?.startDate).isSame(day, "day");
     });
     calendar.push({
       date: day.toISOString().split("T")[0],
@@ -346,7 +347,7 @@ const BudgetCalendar = ({
                     {transaction?.category?.name}
                   </p>
                   <time
-                    dateTime={transaction.date}
+                    dateTime={formatDateOrReturnDefault(transaction.date)}
                     className="mt-2 flex items-center text-gray-700"
                   >
                     {transaction.category?.icon && (

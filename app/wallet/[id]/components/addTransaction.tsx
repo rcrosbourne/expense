@@ -11,7 +11,6 @@ import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/app/components/categoriesDialog";
 import {Actions} from "@/app/wallet/[id]/page";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
-import dayjs from "dayjs";
 
 const INITIAL_STATE: FinancialTransaction = {
   id: 0,
