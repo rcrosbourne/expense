@@ -39,6 +39,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
+import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -122,6 +123,8 @@ const Wallet = () => {
   const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<
     FinancialTransaction | undefined
   >(undefined);
+
+  const [expense, setExpense] = React.useState<FinancialTransaction | undefined>();
   const amountInputRef = React.useRef();
   const transactionRef = React.useRef(null);
 
@@ -150,17 +153,19 @@ const Wallet = () => {
     setIsEditingTransaction(true);
     setIsIncome(expense.type === "income");
     // set all the fields
+    //TODO: Refactor to remove individual field setting.
     setMerchant(expense?.merchant);
     setAmount(formatNumberAsCurrency(expense.amount));
     setDueDate(() => {
-      if (!expense.date) {
+      if (!expense.date?.startDate) {
         return { startDate: dayjs().format("YYYY-MM-DD"), endDate: null };
       }
-      return { startDate: expense.date, endDate: expense.date };
+      return { startDate: expense.date.startDate, endDate: expense.date.startDate };
     });
     setNotes(expense.notes ?? "");
     setPeriodicity(expense.periodicity);
     setCategory(expense.category);
+    setExpense((prevState) => ({...prevState, ...expense}));
   };
   const handleCancel = (expense: FinancialTransaction) => {
     // show the edit form
@@ -379,77 +384,11 @@ const Wallet = () => {
           </div>
           <div className="sm:grid grid-cols-1 gap-4 hidden">
             {/* Add Income and Expenses */}
-            <section aria-labelledby="" className="@container/section">
-              <div
-                className={classNames(
-                  isIncome ? "bg-teal-700" : "bg-red-400",
-                  " rounded-t-lg  shadow transition-colors duration-1000 ease-in-out h-[150px]"
-                )}
-              >
-                <div className="mx-auto p-4 flex justify-center relative">
-                  <Switcher isIncome={isIncome} setIsIncome={setIsIncome} />
-                </div>
-              </div>
-              <div className="bg-slate-50 min-h-52 rounded-b-lg shadow-lg relative">
-                <form onSubmit={submitHandler}>
-                  <div className="relative mt-2 rounded-md shadow-sm">
-                    <InputAmount
-                      inputRef={amountInputRef}
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      isIncome={isIncome}
-                      openCategories={openCategories}
-                      category={category}
-                    />
-                  </div>
-                  <div className="p-4 space-y-8">
-                    <div className="mt-2">
-                      <DatePicker
-                        useRange={false}
-                        asSingle={true}
-                        value={dueDate}
-                        onDateChanged={handleDateChanged}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <Merchant
-                        merchant={merchant ?? ""}
-                        onMerchantChanged={(e) => setMerchant(e.target.value)}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <Notes
-                        notes={notes ?? ""}
-                        onNotesChanged={(e) => setNotes(e.target.value)}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <PeriodicityDropdown
-                        value={periodicity}
-                        onChange={setPeriodicity}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <ActionButtons
-                        isIncome={isIncome}
-                        isEditing={isEditingTransaction}
-                        onCancel={cancelHandler}
-                      />
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </section>
+            <AddTransaction expense={expense} />
           </div>{" "}
         </div>
       </div>
-      <CategoriesDialog
-        isOpen={isCategoriesOpen}
-        close={closeCategories}
-        type={isIncome ? "income" : "expense"}
-        selectedCategory={category}
-        setSelectedCategory={(category) => setCategory(category)}
-      />
+
       <ConfirmDialog
         openConfirm={openConfirmDelete}
         setOpenConfirm={setOpenConfirmDelete}
