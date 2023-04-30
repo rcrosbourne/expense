@@ -4,20 +4,9 @@ import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import CategoriesDialog from "@/app/components/categoriesDialog";
-import { recurringPeriodicity } from "@/app/data/recurringPeriodicity";
-import DatePicker from "@/app/components/datePicker";
 import WalletOverview from "@/app/wallet/[id]/components/walletOverview";
-import PeriodicityDropdown from "@/app/wallet/[id]/components/periodicityDropdown";
-import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
-import Notes from "@/app/wallet/[id]/components/notes";
-import Merchant from "@/app/wallet/[id]/components/merchant";
-import Switcher from "@/app/wallet/[id]/components/switcher";
-import InputAmount from "@/app/wallet/[id]/components/inputAmount";
 import { transactions } from "@/app/data/transactions";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
-import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
-import {AnyCategory, Category} from "@/app/types/category";
 import ConfirmDialog from "@/app/components/confirmDialog";
 import TransactionList from "@/app/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
@@ -101,101 +90,30 @@ const barExpenseData = {
 };
 
 const Wallet = () => {
-  const [isIncome, setIsIncome] = React.useState(false);
-  const [amount, setAmount] = React.useState("");
-  const [dueDate, setDueDate] = React.useState<DateValueType>({
-    startDate: new Date(),
-    endDate: null,
-  });
-  const [periodicity, setPeriodicity] = React.useState(recurringPeriodicity[0]);
-  const [isCategoriesOpen, setIsCategoriesOpen] =
-    React.useState<boolean>(false);
   const [isEditingTransaction, setIsEditingTransaction] =
     React.useState<boolean>(false);
   const [editTransaction, setEditTransaction] =
     React.useState<FinancialTransaction | null>(null);
-  const [merchant, setMerchant] = React.useState<string | undefined>("");
-  const [notes, setNotes] = React.useState<string | undefined>("");
-  const [category, setCategory] = React.useState<AnyCategory | undefined>(
-    undefined
-  );
   const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
   const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<
     FinancialTransaction | undefined
   >(undefined);
 
   const [expense, setExpense] = React.useState<FinancialTransaction | undefined>();
-  const amountInputRef = React.useRef();
   const transactionRef = React.useRef(null);
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
-  };
 
-  // @ts-ignore
-  const handleDateChanged = (newDueDate) => {
-    setDueDate(newDueDate);
-  };
-  const openCategories = () => {
-    setIsCategoriesOpen(true);
-  };
-  const closeCategories = () => {
-    setIsCategoriesOpen(false);
-  };
   const handleEdit = (expense: FinancialTransaction) => {
-    // show the edit form
-    if (!amountInputRef.current) return;
-    // input ref should have focus
-    let inputElement = amountInputRef.current as HTMLInputElement;
-    inputElement.focus();
-    setEditTransaction(expense);
-    setIsEditingTransaction(true);
-    setIsIncome(expense.type === "income");
-    // set all the fields
-    //TODO: Refactor to remove individual field setting.
-    setMerchant(expense?.merchant);
-    setAmount(formatNumberAsCurrency(expense.amount));
-    setDueDate(() => {
-      if (!expense.date?.startDate) {
-        return { startDate: dayjs().format("YYYY-MM-DD"), endDate: null };
-      }
-      return { startDate: expense.date.startDate, endDate: expense.date.startDate };
-    });
-    setNotes(expense.notes ?? "");
-    setPeriodicity(expense.periodicity);
-    setCategory(expense.category);
     setExpense((prevState) => ({...prevState, ...expense}));
   };
   const handleCancel = (expense: FinancialTransaction) => {
-    // show the edit form
-    if (!amountInputRef.current) return;
-    setEditTransaction(null);
-    setIsEditingTransaction(false);
-    //clear all the fields
-    setMerchant("");
-    setAmount("");
-    setDueDate({ startDate: null, endDate: null });
-    setNotes("");
-    setPeriodicity(recurringPeriodicity[0]);
-    setCategory(undefined);
+
   };
 
   const cancelHandler = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault();
-    if (!editTransaction) {
-      // clear all the fields
-      setMerchant("");
-      setAmount("");
-      setDueDate({ startDate: null, endDate: null });
-      setNotes("");
-      setPeriodicity(recurringPeriodicity[0]);
-      setCategory(undefined);
-      return;
-    }
-    handleCancel(editTransaction);
+
   };
   const handleDelete = (expense: FinancialTransaction) => {
     // show confirm dialog

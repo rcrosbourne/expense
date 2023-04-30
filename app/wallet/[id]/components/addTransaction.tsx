@@ -13,19 +13,22 @@ import CategoriesDialog from "@/app/components/categoriesDialog";
 const INITIAL_STATE: FinancialTransaction = {
   id: 0,
   type: "expense",
-  amount: 0,
+  amount: undefined,
   date: { startDate: new Date(), endDate: null },
   periodicity: "One-time payment",
 };
 const AddTransaction = ({ expense }: { expense?: FinancialTransaction }) => {
   // If we get an expense, and it is income type or if we have no expense the default type is income
-  const [transaction, setTransaction] = React.useState(INITIAL_STATE);
+  const [transaction, setTransaction] = React.useState<FinancialTransaction>(INITIAL_STATE);
   const [isCategoriesOpen, setIsCategoriesOpen] = React.useState<boolean>(false);
-  const isIncome = transaction.type === "income";
+  const isIncome = transaction?.type === "income" ?? "expense";
   const amountInputRef = React.useRef();
   React.useEffect(() => {
-    if (!expense) return;
-    setTransaction(expense);
+    if (!expense) {
+      setTransaction(INITIAL_STATE);
+    } else {
+      setTransaction(expense);
+    }
   }, [expense]);
  function onAmountChanged(e: React.ChangeEvent<HTMLInputElement>) {
    if(!amountInputRef.current) return;
@@ -64,7 +67,7 @@ const AddTransaction = ({ expense }: { expense?: FinancialTransaction }) => {
           <div className="relative mt-2 rounded-md shadow-sm">
             <InputAmount
               inputRef={amountInputRef}
-              value={transaction.amount.toString()}
+              value={transaction.amount?.toString() ?? ""}
               onChange={onAmountChanged}
               isIncome={isIncome}
               openCategories={() => setIsCategoriesOpen(true)}

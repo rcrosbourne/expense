@@ -3,7 +3,7 @@ import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 export type FinancialTransaction = {
     id: number;
     type: "income" | "expense";
-    amount: number | string;
+    amount: number | string | undefined;
     periodicity: Periodicity;
     date: DateValueType;
     merchant?: string;
