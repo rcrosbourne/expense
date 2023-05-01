@@ -82,7 +82,7 @@ const AddTransactionModal = ({
                       <div className="relative mt-2 rounded-md shadow-sm">
                         <InputAmount
                           inputRef={amountInputRef}
-                          value={transaction.amount.toString()}
+                          value={(transaction.amount as string) ?? ""}
                           onChange={onAmountChanged}
                           isIncome={isIncome}
                           openCategories={() => {}}
