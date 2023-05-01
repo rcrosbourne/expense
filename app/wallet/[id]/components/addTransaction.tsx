@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { classNames } from "@/app/utils";
 import { FinancialTransaction } from "@/app/types";
 import Switcher from "@/app/wallet/[id]/components/switcher";
@@ -11,7 +11,8 @@ import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/app/components/categoriesDialog";
 import { Actions } from "@/app/wallet/[id]/page";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
-import { transactions } from "@/app/data/transactions";
+import { Dialog, Transition } from "@headlessui/react";
+import useWindowSize from "@/app/hooks/useWindowSize";
 
 const INITIAL_STATE: FinancialTransaction = {
   id: 0,
@@ -23,16 +24,20 @@ const INITIAL_STATE: FinancialTransaction = {
 const AddTransaction = ({
   transactionToBeEdited,
   dispatch,
+    showAsModal,
 }: {
   transactionToBeEdited?: FinancialTransaction;
   dispatch: React.Dispatch<Actions>;
+  showAsModal: boolean
 }) => {
   // If we get an expense, and it is income type or if we have no expense the default type is income
   const [transaction, setTransaction] =
     React.useState<FinancialTransaction>(INITIAL_STATE);
   const [isCategoriesOpen, setIsCategoriesOpen] =
     React.useState<boolean>(false);
+  const windowSize = useWindowSize();
   const isIncome = transaction?.type === "income" ?? "expense";
+
   const amountInputRef = React.useRef<null | HTMLInputElement>(null);
   React.useEffect(() => {
     if (!transactionToBeEdited) {
@@ -94,6 +99,54 @@ const AddTransaction = ({
         transactionToBeEdited={transactionToBeEdited}
         cancel={cancel}
       />
+      <Transition appear show={showAsModal ?? false} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10  sm:hidden"
+          onClose={() => {}}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full min-h-full max-w-md transform rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+                  <AddTransactionForm
+                    isIncome={isIncome}
+                    transaction={transaction}
+                    setTransaction={setTransaction}
+                    submitHandler={submitHandler}
+                    amountInputRef={amountInputRef}
+                    onAmountChanged={onAmountChanged}
+                    setIsCategoriesOpen={setIsCategoriesOpen}
+                    onDateChanged={onDateChanged}
+                    transactionToBeEdited={transactionToBeEdited}
+                    cancel={cancel}
+                  />
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
       <CategoriesDialog
         isOpen={isCategoriesOpen}
         close={() => setIsCategoriesOpen(false)}

@@ -1,10 +1,12 @@
 import React from "react";
 import { walletStats } from "@/app/data/walletStatus";
-import AddTransactionModal from "@/app/wallet/[id]/components/addTransactionModal";
+import {Actions} from "@/app/wallet/[id]/page";
+import useWindowSize from "@/app/hooks/useWindowSize";
 
-const WalletOverview = () => {
+const WalletOverview = ({dispatch}: {dispatch: React.Dispatch<Actions>}) => {
   const [showAddTransaction, setShowAddTransaction] =
     React.useState<boolean>(false);
+  const windowSize = useWindowSize();
   return (
     <section aria-labelledby="profile-overview-title">
       <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -26,7 +28,7 @@ const WalletOverview = () => {
             <div className="mt-5 flex justify-center sm:mt-0">
               <button
                 type="button"
-                onClick={() => setShowAddTransaction(true)}
+                onClick={() => dispatch({type: "add-transaction", windowSize})}
                 className="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:hidden hover:bg-gray-50"
               >
                 Add Expense / Income
@@ -55,7 +57,6 @@ const WalletOverview = () => {
           </div>
         </div>
       </div>
-      <AddTransactionModal show={showAddTransaction} isIncome={false} />
     </section>
   );
 };

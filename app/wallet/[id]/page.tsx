@@ -30,6 +30,7 @@ import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
 import { useImmerReducer } from "use-immer";
+import useWindowSize, {WindowSize} from "@/app/hooks/useWindowSize";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -94,11 +95,14 @@ type State = {
   openDeleteDialog?: boolean;
   transactionForEdit?: FinancialTransaction;
   transactionForDelete?: FinancialTransaction;
+  showDialog?: boolean;
+  showAsModal?: boolean;
 };
 const INITIAL_STATE: State = {
   openDeleteDialog: false,
   transactionForEdit: undefined,
   transactionForDelete: undefined,
+  showAsModal: false,
 };
 export type Actions = {
   type:
@@ -112,25 +116,30 @@ export type Actions = {
   editTransaction?: FinancialTransaction;
   newTransaction?: FinancialTransaction;
   deleteTransaction?: FinancialTransaction;
+  windowSize?: WindowSize;
 };
 function reducer(state: State, actions: Actions) {
   switch (actions.type) {
     case "add-transaction": {
       state.transactionForEdit = undefined;
+      state.showAsModal = actions && actions.windowSize && actions.windowSize.width < 640;
       return;
     }
     case "cancel": {
       state.transactionForEdit = undefined;
       state.transactionForDelete = undefined;
       state.openDeleteDialog = false;
+      state.showAsModal = false;
       return;
     }
     case "edit-transaction": {
       state.transactionForEdit = actions.editTransaction;
+      state.showAsModal = actions && actions.windowSize && actions.windowSize.width < 640;
       return;
     }
     case "save-transaction": {
       state.transactionForEdit = undefined;
+      state.showAsModal = false;
       return;
     }
     case "deleting-transaction": {
@@ -153,6 +162,7 @@ const Wallet = () => {
   const handleDelete = (transaction: FinancialTransaction) => {
     dispatch({ type: "deleting-transaction", deleteTransaction: transaction });
   };
+  const windowSize = useWindowSize();
 
   return (
     <main className="-mt-24 pb-8">
@@ -161,7 +171,7 @@ const Wallet = () => {
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-            <WalletOverview />
+            <WalletOverview  dispatch={dispatch}/>
             {/*Tabs go here */}
             <Tab.Group>
               <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">
@@ -234,6 +244,7 @@ const Wallet = () => {
                           dispatch({
                             type: "edit-transaction",
                             editTransaction: transactionForEdit,
+                            windowSize
                           })
                         }
                         onCancel={(t) => dispatch({ type: "cancel" })}
@@ -357,6 +368,7 @@ const Wallet = () => {
             {/* Add Income and Expenses */}
             <AddTransaction
               transactionToBeEdited={state.transactionForEdit}
+              showAsModal={state.showAsModal ?? false}
               dispatch={dispatch}
             />
           </div>{" "}
