@@ -4,8 +4,6 @@ import {Actions} from "@/app/wallet/[id]/page";
 import useWindowSize from "@/app/hooks/useWindowSize";
 
 const WalletOverview = ({dispatch}: {dispatch: React.Dispatch<Actions>}) => {
-  const [showAddTransaction, setShowAddTransaction] =
-    React.useState<boolean>(false);
   const windowSize = useWindowSize();
   return (
     <section aria-labelledby="profile-overview-title">

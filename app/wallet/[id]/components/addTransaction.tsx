@@ -12,7 +12,6 @@ import CategoriesDialog from "@/app/components/categoriesDialog";
 import { Actions } from "@/app/wallet/[id]/page";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Dialog, Transition } from "@headlessui/react";
-import useWindowSize from "@/app/hooks/useWindowSize";
 
 const INITIAL_STATE: FinancialTransaction = {
   id: 0,
@@ -24,18 +23,17 @@ const INITIAL_STATE: FinancialTransaction = {
 const AddTransaction = ({
   transactionToBeEdited,
   dispatch,
-    showAsModal,
+  showAsModal,
 }: {
   transactionToBeEdited?: FinancialTransaction;
   dispatch: React.Dispatch<Actions>;
-  showAsModal: boolean
+  showAsModal: boolean;
 }) => {
   // If we get an expense, and it is income type or if we have no expense the default type is income
   const [transaction, setTransaction] =
     React.useState<FinancialTransaction>(INITIAL_STATE);
   const [isCategoriesOpen, setIsCategoriesOpen] =
     React.useState<boolean>(false);
-  const windowSize = useWindowSize();
   const isIncome = transaction?.type === "income" ?? "expense";
 
   const amountInputRef = React.useRef<null | HTMLInputElement>(null);
