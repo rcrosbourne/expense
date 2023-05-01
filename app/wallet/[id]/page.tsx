@@ -4,20 +4,9 @@ import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import CategoriesDialog from "@/app/components/categoriesDialog";
-import { recurringPeriodicity } from "@/app/data/recurringPeriodicity";
-import DatePicker from "@/app/components/datePicker";
 import WalletOverview from "@/app/wallet/[id]/components/walletOverview";
-import PeriodicityDropdown from "@/app/wallet/[id]/components/periodicityDropdown";
-import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
-import Notes from "@/app/wallet/[id]/components/notes";
-import Merchant from "@/app/wallet/[id]/components/merchant";
-import Switcher from "@/app/wallet/[id]/components/switcher";
-import InputAmount from "@/app/wallet/[id]/components/inputAmount";
 import { transactions } from "@/app/data/transactions";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
-import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
-import {AnyCategory, Category} from "@/app/types/category";
 import ConfirmDialog from "@/app/components/confirmDialog";
 import TransactionList from "@/app/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
@@ -39,6 +28,9 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
+import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
+import { useImmerReducer } from "use-immer";
+import useWindowSize, {WindowSize} from "@/app/hooks/useWindowSize";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -99,105 +91,79 @@ const barExpenseData = {
   ],
 };
 
-const Wallet = () => {
-  const [isIncome, setIsIncome] = React.useState(false);
-  const [amount, setAmount] = React.useState("");
-  const [dueDate, setDueDate] = React.useState<DateValueType>({
-    startDate: new Date(),
-    endDate: null,
-  });
-  const [periodicity, setPeriodicity] = React.useState(recurringPeriodicity[0]);
-  const [isCategoriesOpen, setIsCategoriesOpen] =
-    React.useState<boolean>(false);
-  const [isEditingTransaction, setIsEditingTransaction] =
-    React.useState<boolean>(false);
-  const [editTransaction, setEditTransaction] =
-    React.useState<FinancialTransaction | null>(null);
-  const [merchant, setMerchant] = React.useState<string | undefined>("");
-  const [notes, setNotes] = React.useState<string | undefined>("");
-  const [category, setCategory] = React.useState<AnyCategory | undefined>(
-    undefined
-  );
-  const [openConfirmDelete, setOpenConfirmDelete] = React.useState(false);
-  const [transactionToBeDeleted, setTransactionToBeDeleted] = React.useState<
-    FinancialTransaction | undefined
-  >(undefined);
-  const amountInputRef = React.useRef();
-  const transactionRef = React.useRef(null);
-
-  React.useEffect(() => {}, []);
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log({ merchant, amount, notes, periodicity, dueDate, isIncome });
-  };
-
-  // @ts-ignore
-  const handleDateChanged = (newDueDate) => {
-    setDueDate(newDueDate);
-  };
-  const openCategories = () => {
-    setIsCategoriesOpen(true);
-  };
-  const closeCategories = () => {
-    setIsCategoriesOpen(false);
-  };
-  const handleEdit = (expense: FinancialTransaction) => {
-    // show the edit form
-    if (!amountInputRef.current) return;
-    // input ref should have focus
-    let inputElement = amountInputRef.current as HTMLInputElement;
-    inputElement.focus();
-    setEditTransaction(expense);
-    setIsEditingTransaction(true);
-    setIsIncome(expense.type === "income");
-    // set all the fields
-    setMerchant(expense?.merchant);
-    setAmount(formatNumberAsCurrency(expense.amount));
-    setDueDate(() => {
-      if (!expense.date) {
-        return { startDate: dayjs().format("YYYY-MM-DD"), endDate: null };
-      }
-      return { startDate: expense.date, endDate: expense.date };
-    });
-    setNotes(expense.notes ?? "");
-    setPeriodicity(expense.periodicity);
-    setCategory(expense.category);
-  };
-  const handleCancel = (expense: FinancialTransaction) => {
-    // show the edit form
-    if (!amountInputRef.current) return;
-    setEditTransaction(null);
-    setIsEditingTransaction(false);
-    //clear all the fields
-    setMerchant("");
-    setAmount("");
-    setDueDate({ startDate: null, endDate: null });
-    setNotes("");
-    setPeriodicity(recurringPeriodicity[0]);
-    setCategory(undefined);
-  };
-
-  const cancelHandler = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    if (!editTransaction) {
-      // clear all the fields
-      setMerchant("");
-      setAmount("");
-      setDueDate({ startDate: null, endDate: null });
-      setNotes("");
-      setPeriodicity(recurringPeriodicity[0]);
-      setCategory(undefined);
+type State = {
+  openDeleteDialog?: boolean;
+  transactionForEdit?: FinancialTransaction;
+  transactionForDelete?: FinancialTransaction;
+  showDialog?: boolean;
+  showAsModal?: boolean;
+};
+const INITIAL_STATE: State = {
+  openDeleteDialog: false,
+  transactionForEdit: undefined,
+  transactionForDelete: undefined,
+  showAsModal: false,
+};
+export type Actions = {
+  type:
+    | "add-transaction"
+    | "edit-transaction"
+    | "save-transaction"
+    | "delete-transaction"
+    | "deleting-transaction"
+    | "deleted-transaction"
+    | "cancel";
+  editTransaction?: FinancialTransaction;
+  newTransaction?: FinancialTransaction;
+  deleteTransaction?: FinancialTransaction;
+  windowSize?: WindowSize;
+};
+function reducer(state: State, actions: Actions) {
+  switch (actions.type) {
+    case "add-transaction": {
+      state.transactionForEdit = undefined;
+      state.showAsModal = actions && actions.windowSize && actions.windowSize.width < 640;
       return;
     }
-    handleCancel(editTransaction);
+    case "cancel": {
+      state.transactionForEdit = undefined;
+      state.transactionForDelete = undefined;
+      state.openDeleteDialog = false;
+      state.showAsModal = false;
+      return;
+    }
+    case "edit-transaction": {
+      state.transactionForEdit = actions.editTransaction;
+      state.showAsModal = actions && actions.windowSize && actions.windowSize.width < 640;
+      return;
+    }
+    case "save-transaction": {
+      state.transactionForEdit = undefined;
+      state.showAsModal = false;
+      return;
+    }
+    case "deleting-transaction": {
+      state.transactionForDelete = actions.deleteTransaction;
+      state.openDeleteDialog = true;
+      return;
+    }
+    case "deleted-transaction": {
+      state.transactionForDelete = actions.deleteTransaction;
+      state.openDeleteDialog = false;
+      return;
+    }
+  }
+}
+
+const Wallet = () => {
+  const transactionRef = React.useRef(null);
+  // add reducer to manage the user action
+  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
+  const handleDelete = (transaction: FinancialTransaction) => {
+    dispatch({ type: "deleting-transaction", deleteTransaction: transaction });
   };
-  const handleDelete = (expense: FinancialTransaction) => {
-    // show confirm dialog
-    setTransactionToBeDeleted(expense);
-    setOpenConfirmDelete(true);
-  };
+  const windowSize = useWindowSize();
+
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -205,7 +171,7 @@ const Wallet = () => {
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-            <WalletOverview />
+            <WalletOverview  dispatch={dispatch}/>
             {/*Tabs go here */}
             <Tab.Group>
               <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">
@@ -272,10 +238,16 @@ const Wallet = () => {
                       </h2>
                       <TransactionList
                         transactions={transactions}
-                        editingTransaction={editTransaction}
+                        editingTransaction={state.transactionForEdit}
                         transactionRef={transactionRef}
-                        onEdit={handleEdit}
-                        onCancel={handleCancel}
+                        onEdit={(transactionForEdit) =>
+                          dispatch({
+                            type: "edit-transaction",
+                            editTransaction: transactionForEdit,
+                            windowSize
+                          })
+                        }
+                        onCancel={(t) => dispatch({ type: "cancel" })}
                         onDelete={handleDelete}
                       />
                     </div>
@@ -311,34 +283,39 @@ const Wallet = () => {
                         <div className="bg-slate-50 rounded shadow h-full w-full p-4">
                           <Tab.Group>
                             <div className="flex items-center justify-between w-full border-b border-slate-200">
-                              <h3 className="hidden md:inline-block">Performance</h3>
+                              <h3 className="hidden md:inline-block">
+                                Performance
+                              </h3>
                               <Tab.List className="space-x-8">
                                 <Tab
-                                    className={({ selected }) =>
-                                        classNames(
-                                            "border-b-2 py-4 px-1 text-center text-sm font-medium",
-                                            selected
-                                                ? "border-indigo-500 text-indigo-600"
-                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                                        )
-                                    }
+                                  className={({ selected }) =>
+                                    classNames(
+                                      "border-b-2 py-4 px-1 text-center text-sm font-medium",
+                                      selected
+                                        ? "border-indigo-500 text-indigo-600"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                    )
+                                  }
                                 >
-                                  <span className="hidden sm:inline-block">Income</span>
+                                  <span className="hidden sm:inline-block">
+                                    Income
+                                  </span>
                                   <span className="sm:hidden">Income</span>
                                 </Tab>
                                 <Tab
-                                    className={({ selected }) =>
-                                        classNames(
-                                            "border-b-2 py-4 px-1 text-center text-sm font-medium truncate",
-                                            selected
-                                                ? "border-indigo-500 text-indigo-600"
-                                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                                        )
-                                    }
+                                  className={({ selected }) =>
+                                    classNames(
+                                      "border-b-2 py-4 px-1 text-center text-sm font-medium truncate",
+                                      selected
+                                        ? "border-indigo-500 text-indigo-600"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                    )
+                                  }
                                 >
-                                  <span className="hidden sm:inline-block">Expense</span>
+                                  <span className="hidden sm:inline-block">
+                                    Expense
+                                  </span>
                                   <span className="sm:hidden">Expense</span>
-
                                 </Tab>
                                 <Tab
                                   className={({ selected }) =>
@@ -352,19 +329,29 @@ const Wallet = () => {
                                 >
                                   Expense Breakdown
                                 </Tab>
-
                               </Tab.List>
                             </div>
                             <Tab.Panels className="mt-4">
                               <Tab.Panel>
-                                <TransactionBreakdown transactions={transactions.filter(t => t.type === 'income')} />
+                                <TransactionBreakdown
+                                  transactions={transactions.filter(
+                                    (t) => t.type === "income"
+                                  )}
+                                />
                               </Tab.Panel>
                               <Tab.Panel>
-                                  <TransactionBreakdown transactions={transactions.filter((t => t.type === 'expense'))} />
+                                <TransactionBreakdown
+                                  transactions={transactions.filter(
+                                    (t) => t.type === "expense"
+                                  )}
+                                />
                               </Tab.Panel>
                               <Tab.Panel>
                                 <div className="flex items-center justify-center">
-                                  <Bar data={barExpenseData} options={barOptions} />
+                                  <Bar
+                                    data={barExpenseData}
+                                    options={barOptions}
+                                  />
                                 </div>
                               </Tab.Panel>
                             </Tab.Panels>
@@ -377,98 +364,38 @@ const Wallet = () => {
               </Tab.Panels>
             </Tab.Group>
           </div>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="sm:grid grid-cols-1 gap-4 hidden">
             {/* Add Income and Expenses */}
-            <section aria-labelledby="" className="@container/section">
-              <div
-                className={classNames(
-                  isIncome ? "bg-teal-700" : "bg-red-400",
-                  " rounded-t-lg  shadow transition-colors duration-1000 ease-in-out h-[150px]"
-                )}
-              >
-                <div className="mx-auto p-4 flex justify-center relative">
-                  <Switcher isIncome={isIncome} setIsIncome={setIsIncome} />
-                </div>
-              </div>
-              <div className="bg-slate-50 min-h-52 rounded-b-lg shadow-lg relative">
-                <form onSubmit={submitHandler}>
-                  <div className="relative mt-2 rounded-md shadow-sm">
-                    <InputAmount
-                      inputRef={amountInputRef}
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      isIncome={isIncome}
-                      openCategories={openCategories}
-                      category={category}
-                    />
-                  </div>
-                  <div className="p-4 space-y-8">
-                    <div className="mt-2">
-                      <DatePicker
-                        useRange={false}
-                        asSingle={true}
-                        value={dueDate}
-                        onDateChanged={handleDateChanged}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <Merchant
-                        merchant={merchant ?? ""}
-                        onMerchantChanged={(e) => setMerchant(e.target.value)}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <Notes
-                        notes={notes ?? ""}
-                        onNotesChanged={(e) => setNotes(e.target.value)}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <PeriodicityDropdown
-                        value={periodicity}
-                        onChange={setPeriodicity}
-                      />
-                    </div>
-                    <div className="mt-2">
-                      <ActionButtons
-                        isIncome={isIncome}
-                        isEditing={isEditingTransaction}
-                        onCancel={cancelHandler}
-                      />
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </section>
+            <AddTransaction
+              transactionToBeEdited={state.transactionForEdit}
+              showAsModal={state.showAsModal ?? false}
+              dispatch={dispatch}
+            />
           </div>{" "}
         </div>
       </div>
-      <CategoriesDialog
-        isOpen={isCategoriesOpen}
-        close={closeCategories}
-        type={isIncome ? "income" : "expense"}
-        selectedCategory={category}
-        setSelectedCategory={(category) => setCategory(category)}
-      />
+
       <ConfirmDialog
-        openConfirm={openConfirmDelete}
-        setOpenConfirm={setOpenConfirmDelete}
+        openConfirm={state.openDeleteDialog!}
+        setOpenConfirm={(isOpen) =>
+          !isOpen
+            ? dispatch({ type: "cancel" })
+            : dispatch({ type: "deleting-transaction" })
+        }
         title={"Delete expense/income"}
         message={`Are you sure you want to delete expense ${
-          transactionToBeDeleted?.category?.name
+          state.transactionForDelete?.category?.name
         } with amount $${formatNumberAsCurrency(
-          transactionToBeDeleted?.amount
+          state.transactionForDelete?.amount
         )} 
           This action cannot be undone.`}
         confirmButtonText={"Delete"}
         cancelButtonText={"Cancel"}
         confirm={(status) => {
           if (status) {
-            console.log({ expenseToBeDeleted: transactionToBeDeleted });
-            setOpenConfirmDelete(false);
+            dispatch({ type: "deleted-transaction", deleteTransaction: state.transactionForDelete });
           } else {
-            setTransactionToBeDeleted(undefined);
-            setOpenConfirmDelete(false);
+            dispatch({ type: "cancel", deleteTransaction: undefined });
           }
         }}
       />

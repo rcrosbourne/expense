@@ -10,6 +10,7 @@ import {
   RecurringIcon,
   TrashCanIcon,
 } from "@/app/components/icons";
+import formatDateOrReturnDefault from "@/app/utils/formatDateOrReturnDefault";
 
 const TransactionList = ({
   transactions,
@@ -20,7 +21,7 @@ const TransactionList = ({
   onDelete,
 }: {
   transactions: FinancialTransaction[];
-  editingTransaction: FinancialTransaction | null;
+  editingTransaction: FinancialTransaction | undefined;
   transactionRef: React.RefObject<HTMLLIElement>;
   onEdit: (transaction: FinancialTransaction) => void;
   onCancel: (transaction: FinancialTransaction) => void;
@@ -61,7 +62,7 @@ const TransactionList = ({
                   </span>
                 </div>
                 <p className="mt-1 truncate text-sm text-gray-500">
-                  {transaction.date}
+                  {formatDateOrReturnDefault(transaction.date)}
                 </p>
                 <p className="mt-1 truncate text-sm text-gray-500">
                   {transaction.merchant}
