@@ -16,10 +16,10 @@ const UserInfo = ({ user }: { user: User }) => {
       </div>
       <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
         <p className="text-sm font-medium text-gray-600">Welcome back,</p>
-        <p className="text-xl font-bold text-gray-900 sm:text-2xl">
+        <p className="text-xl text-gray-900 sm:text-2xl">
           {user.name}
         </p>
-        <p className="text-sm font-medium text-gray-600">{user.role}</p>
+        <p className="text-sm text-gray-600">{user.role}</p>
       </div>
     </div>
   );

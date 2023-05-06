@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    html,
+    body,
+    #__next, /* for Next.js */
+    main
+    {
+        height: 100%;
+    }
+}

@@ -9,6 +9,9 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+       sans: ['var(--font-wotfard)']
+      },
       keyframes: {
         slideUpAndFade: {
           from: { opacity: 0, transform: "translateY(2px)" },
