@@ -25,9 +25,11 @@ ChartJS.register(
 const BarChart = ({
   dataFunction,
   options,
+  useTotalStackedPlugin = true,
 }: {
   dataFunction: () => ChartData<"bar", number[], unknown>;
   options?: ChartOptions<"bar">;
+  useTotalStackedPlugin?: boolean;
 }) => {
   function getDynamicFontSize() {
     const screenWidth = window.innerWidth;
@@ -100,12 +102,13 @@ const BarChart = ({
       }
     },
   };
+  const plugins = useTotalStackedPlugin ? [totalStackedBarPlugin] : []
   return (
     <div className="flex items-center justify-center min-h-[300px] md:min-h-[500px]">
       <Bar
         data={dataFunction()}
         options={options}
-        plugins={[totalStackedBarPlugin]}
+        plugins={plugins}
       />
     </div>
   );

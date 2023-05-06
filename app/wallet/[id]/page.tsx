@@ -29,8 +29,9 @@ import {
 import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
-import {useImmer, useImmerReducer} from "use-immer";
-import useWindowSize, {WindowSize} from "@/app/hooks/useWindowSize";
+import { useImmer, useImmerReducer } from "use-immer";
+import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
+import BudgetBreakdown from "@/app/wallet/[id]/components/budgetBreakdown";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -122,7 +123,8 @@ function reducer(state: State, actions: Actions) {
   switch (actions.type) {
     case "add-transaction": {
       state.transactionForEdit = undefined;
-      state.showAsModal = actions && actions.windowSize && actions.windowSize.width < 640;
+      state.showAsModal =
+        actions && actions.windowSize && actions.windowSize.width < 640;
       return;
     }
     case "cancel": {
@@ -134,7 +136,8 @@ function reducer(state: State, actions: Actions) {
     }
     case "edit-transaction": {
       state.transactionForEdit = actions.editTransaction;
-      state.showAsModal = actions && actions.windowSize && actions.windowSize.width < 640;
+      state.showAsModal =
+        actions && actions.windowSize && actions.windowSize.width < 640;
       return;
     }
     case "save-transaction": {
@@ -171,7 +174,7 @@ const Wallet = () => {
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-            <WalletOverview  dispatch={dispatch}/>
+            <WalletOverview dispatch={dispatch} />
             {/*Tabs go here */}
             <Tab.Group>
               <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">
@@ -244,7 +247,7 @@ const Wallet = () => {
                           dispatch({
                             type: "edit-transaction",
                             editTransaction: transactionForEdit,
-                            windowSize
+                            windowSize,
                           })
                         }
                         onCancel={(t) => dispatch({ type: "cancel" })}
@@ -327,7 +330,7 @@ const Wallet = () => {
                                     )
                                   }
                                 >
-                                  Expense Breakdown
+                                  Budget
                                 </Tab>
                               </Tab.List>
                             </div>
@@ -347,12 +350,12 @@ const Wallet = () => {
                                 />
                               </Tab.Panel>
                               <Tab.Panel>
-                                <div className="flex items-center justify-center">
-                                  <Bar
-                                    data={barExpenseData}
-                                    options={barOptions}
-                                  />
-                                </div>
+                                <BudgetBreakdown
+                                  transactions={transactions.filter(
+                                    (t) => t.type === "expense"
+                                  )}
+                                  walletBudget={500_000}
+                                />
                               </Tab.Panel>
                             </Tab.Panels>
                           </Tab.Group>
@@ -393,7 +396,10 @@ const Wallet = () => {
         cancelButtonText={"Cancel"}
         confirm={(status) => {
           if (status) {
-            dispatch({ type: "deleted-transaction", deleteTransaction: state.transactionForDelete });
+            dispatch({
+              type: "deleted-transaction",
+              deleteTransaction: state.transactionForDelete,
+            });
           } else {
             dispatch({ type: "cancel", deleteTransaction: undefined });
           }
