@@ -8,7 +8,7 @@ const UserInfo = ({ user }: { user: User }) => {
       <div className="flex-shrink-0">
         <Image
           className="mx-auto h-20 w-20 rounded-full object-cover"
-          src={user.imageUrl}
+          src={user?.image}
           alt=""
           height={80}
           width={80}
@@ -16,10 +16,10 @@ const UserInfo = ({ user }: { user: User }) => {
       </div>
       <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
         <p className="text-sm font-medium text-gray-600">Welcome back,</p>
-        <p className="text-xl text-gray-900 sm:text-2xl">
+        <p className="text-xl text-gray-900 sm:text-2xl capitalize">
           {user.name}
         </p>
-        <p className="text-sm text-gray-600">{user.role}</p>
+        <p className="text-sm text-gray-600">{user.email}</p>
       </div>
     </div>
   );
