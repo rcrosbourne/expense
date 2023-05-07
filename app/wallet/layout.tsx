@@ -27,7 +27,6 @@ export default async function RootLayout({
       <body className={`h-full`}>
         <Providers>
           <Header
-            user={user}
             userNavigation={userNavigation}
             navigation={navigation}
           />

@@ -221,13 +221,13 @@ const Header = ({
                     <div className="pt-4 pb-2">
                       <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                          <Image
+                          {user && <Image
                             className="h-10 w-10 rounded-full object-cover"
-                            src={user?.image}
+                            src={user.image}
                             alt=""
                             width={(10 / 4) * 16}
                             height={(10 / 4) * 16}
-                          />
+                          />}
                         </div>
                         <div className="ml-3 min-w-0 flex-1">
                           <div className="truncate text-base font-medium text-gray-800 capitalize">

@@ -9,6 +9,7 @@ import {wotfard} from "@/app/utils/constants";
 import {redirect} from "next/navigation";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 import {getServerSession} from "next-auth";
+import {User} from "@/app/types";
 export const metadata = {
   title: "Expense Tracker",
   description: "Simple free way to track your expenses",
@@ -28,7 +29,6 @@ export default async function RootLayout({
       <body className={`h-full`}>
         <Providers>
           <Header
-            user={user}
             userNavigation={userNavigation}
             navigation={navigation}
           />

@@ -4,5 +4,5 @@ export const user: User = {
   name: "Daniela Crosbourne",
   email: "daniela.crosbourne@example.com",
   role: "Underwriting Manager",
-  imageUrl: profilePic,
+  image: profilePic,
 };

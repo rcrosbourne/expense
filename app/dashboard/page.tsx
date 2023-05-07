@@ -41,7 +41,7 @@ export default async function Page() {
   }
   return (
       <>
-        <Home wallets={wallets} user={user} stats={stats}/>
+        <Home wallets={wallets} stats={stats}/>
       </>
   );
 }

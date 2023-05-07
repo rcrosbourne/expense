@@ -1,7 +1,12 @@
-"use client"
-import { useState } from 'react'
-import { Dialog, Disclosure } from '@headlessui/react'
-import { Bars3Icon, MinusSmallIcon, PlusSmallIcon, XMarkIcon } from '@heroicons/react/24/outline'
+"use client";
+import { useState } from "react";
+import { Dialog, Disclosure } from "@headlessui/react";
+import {
+  Bars3Icon,
+  MinusSmallIcon,
+  PlusSmallIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -10,70 +15,82 @@ import {
   FingerPrintIcon,
   LockClosedIcon,
   ServerIcon,
-} from '@heroicons/react/20/solid'
-import {classNames} from "@/app/utils";
+} from "@heroicons/react/20/solid";
+import { classNames } from "@/app/utils";
+import Image from "next/image";
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
-]
+  { name: "Product", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Marketplace", href: "#" },
+  { name: "Company", href: "#" },
+];
 const features = [
   {
-    name: 'Easy Expense Tracking.',
-    description:"Simply input your daily expenses, and our platform will automatically categorize and organize them for you. With our state-of-the-art expense tracking system, you'll gain a clear understanding of where your money goes each month.",
+    name: "Easy Expense Tracking.",
+    description:
+      "Simply input your daily expenses, and our platform will automatically categorize and organize them for you. With our state-of-the-art expense tracking system, you'll gain a clear understanding of where your money goes each month.",
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'Customizable Budgets.',
-    description: "Set up personalized budgets for different spending categories and easily adjust them as your financial priorities change. Receive alerts when you're close to exceeding your budget, so you can make adjustments and avoid" +
-        " overspending.",
+    name: "Customizable Budgets.",
+    description:
+      "Set up personalized budgets for different spending categories and easily adjust them as your financial priorities change. Receive alerts when you're close to exceeding your budget, so you can make adjustments and avoid" +
+      " overspending.",
     icon: LockClosedIcon,
   },
   {
-    name: 'Comprehensive Reports.',
-    description: 'Visualize your spending patterns with our detailed reports and interactive charts. Identify areas where you can cut back, and discover new ways to save more money each month.',
+    name: "Comprehensive Reports.",
+    description:
+      "Visualize your spending patterns with our detailed reports and interactive charts. Identify areas where you can cut back, and discover new ways to save more money each month.",
     icon: ArrowPathIcon,
   },
   {
-    name: 'Secure & Private.',
-    description: 'Your data is protected with the highest security measures, ensuring that your financial information remains confidential and safe from unauthorized access.',
+    name: "Secure & Private.",
+    description:
+      "Your data is protected with the highest security measures, ensuring that your financial information remains confidential and safe from unauthorized access.",
     icon: FingerPrintIcon,
   },
   {
-    name: 'Sync Across Devices.',
-    description: "Access your expense tracking data anytime, anywhere with our seamless multi-device synchronization. Whether you're on your phone, tablet, or computer, your financial information is always at your fingertips.",
+    name: "Sync Across Devices.",
+    description:
+      "Access your expense tracking data anytime, anywhere with our seamless multi-device synchronization. Whether you're on your phone, tablet, or computer, your financial information is always at your fingertips.",
     icon: Cog6ToothIcon,
   },
-]
+];
 const tiers = [
   {
-    name: 'Hobby',
-    id: 'tier-hobby',
-    href: '#',
-    priceMonthly: '$19',
-    description: "The perfect plan if you're just getting started with our product.",
-    features: ['25 products', 'Up to 10,000 subscribers', 'Advanced analytics', '24-hour support response time'],
+    name: "Hobby",
+    id: "tier-hobby",
+    href: "#",
+    priceMonthly: "$19",
+    description:
+      "The perfect plan if you're just getting started with our product.",
+    features: [
+      "25 products",
+      "Up to 10,000 subscribers",
+      "Advanced analytics",
+      "24-hour support response time",
+    ],
     featured: false,
   },
   {
-    name: 'Enterprise',
-    id: 'tier-enterprise',
-    href: '#',
-    priceMonthly: '$49',
-    description: 'Dedicated support and infrastructure for your company.',
+    name: "Enterprise",
+    id: "tier-enterprise",
+    href: "#",
+    priceMonthly: "$49",
+    description: "Dedicated support and infrastructure for your company.",
     features: [
-      'Unlimited products',
-      'Unlimited subscribers',
-      'Advanced analytics',
-      'Dedicated support representative',
-      'Marketing automations',
-      'Custom integrations',
+      "Unlimited products",
+      "Unlimited subscribers",
+      "Advanced analytics",
+      "Dedicated support representative",
+      "Marketing automations",
+      "Custom integrations",
     ],
     featured: true,
   },
-]
+];
 const faqs = [
   {
     question: "What's the best thing about Switzerland?",
@@ -81,49 +98,54 @@ const faqs = [
       "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
   },
   // More questions...
-]
+];
 const footerNavigation = {
   solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+    { name: "Marketing", href: "#" },
+    { name: "Analytics", href: "#" },
+    { name: "Commerce", href: "#" },
+    { name: "Insights", href: "#" },
   ],
   support: [
-    { name: 'Pricing', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
-    { name: 'API Status', href: '#' },
+    { name: "Pricing", href: "#" },
+    { name: "Documentation", href: "#" },
+    { name: "Guides", href: "#" },
+    { name: "API Status", href: "#" },
   ],
   company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Partners', href: '#' },
+    { name: "About", href: "#" },
+    { name: "Blog", href: "#" },
+    { name: "Jobs", href: "#" },
+    { name: "Press", href: "#" },
+    { name: "Partners", href: "#" },
   ],
   legal: [
-    { name: 'Claim', href: '#' },
-    { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
+    { name: "Claim", href: "#" },
+    { name: "Privacy", href: "#" },
+    { name: "Terms", href: "#" },
   ],
-}
+};
 
 export default function Page() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white">
       {/* Header */}
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <nav
+          className="flex items-center justify-between p-6 lg:px-8"
+          aria-label="Global"
+        >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img
+              <Image
                 className="h-8 w-auto"
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                 alt=""
+                height={32}
+                width={32}
               />
             </a>
           </div>
@@ -145,21 +167,31 @@ export default function Page() {
           {/*  ))}*/}
           {/*</div>*/}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/api/auth/signin" className="text-sm font-semibold leading-6 text-white">
+            <a
+              href="/api/auth/signin"
+              className="text-sm font-semibold leading-6 text-white"
+            >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
-        <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+        <Dialog
+          as="div"
+          className="lg:hidden"
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+        >
           <div className="fixed inset-0 z-50" />
           <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
+                <Image
                   className="h-8 w-auto"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                   alt=""
+                  height={32}
+                  width={32}
                 />
               </a>
               <button
@@ -201,11 +233,6 @@ export default function Page() {
       <main>
         {/* Hero section */}
         <div className="relative isolate overflow-hidden bg-gray-900 pb-16 pt-14 sm:pb-20">
-          {/*<img*/}
-          {/*  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2830&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"*/}
-          {/*  alt=""*/}
-          {/*  className="absolute inset-0 -z-10 h-full w-full object-cover"*/}
-          {/*/>*/}
           <div
             className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
             aria-hidden="true"
@@ -214,7 +241,7 @@ export default function Page() {
               className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
               style={{
                 clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
               }}
             />
           </div>
@@ -231,10 +258,11 @@ export default function Page() {
               </div>
               <div className="text-center">
                 <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                 Track, Manage, and Optimize Your Expenses with Ease
+                  Track, Manage, and Optimize Your Expenses with Ease
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-300">
-                 Take control of your financial life with our intuitive and powerful expense tracking platform.
+                  Take control of your financial life with our intuitive and
+                  powerful expense tracking platform.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <a
@@ -246,7 +274,6 @@ export default function Page() {
                 </div>
               </div>
             </div>
-
           </div>
           <div
             className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
@@ -256,7 +283,7 @@ export default function Page() {
               className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
               style={{
                 clipPath:
-                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
               }}
             />
           </div>
@@ -266,15 +293,21 @@ export default function Page() {
         <div className="mt-32 sm:mt-56">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl sm:text-center">
-              <h2 className="text-base font-semibold leading-7 text-indigo-600">Everything you need</h2>
+              <h2 className="text-base font-semibold leading-7 text-indigo-600">
+                Everything you need
+              </h2>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-               Ready to take control of your expenses and achieve financial freedom? Sign up for a free trial today and experience the benefits of our powerful expense tracking platform. Join the thousands of satisfied users who have already transformed their financial lives with Expense.
+                Ready to take control of your expenses and achieve financial
+                freedom? Sign up for a free trial today and experience the
+                benefits of our powerful expense tracking platform. Join the
+                thousands of satisfied users who have already transformed their
+                financial lives with Expense.
               </p>
             </div>
           </div>
           <div className="relative overflow-hidden pt-16">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <img
+              <Image
                 src="https://salient.tailwindui.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpayroll.517af4e7.png&w=2048&q=75"
                 alt="App screenshot"
                 className="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-gray-900/10"
@@ -291,9 +324,12 @@ export default function Page() {
               {features.map((feature) => (
                 <div key={feature.name} className="relative pl-9">
                   <dt className="inline font-semibold text-gray-900">
-                    <feature.icon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                    <feature.icon
+                      className="absolute left-1 top-1 h-5 w-5 text-indigo-600"
+                      aria-hidden="true"
+                    />
                     {feature.name}
-                  </dt>{' '}
+                  </dt>{" "}
                   <dd className="inline">{feature.description}</dd>
                 </div>
               ))}
@@ -309,7 +345,7 @@ export default function Page() {
                 className="aspect-[1097/1023] w-[68.5625rem] bg-gradient-to-r from-[#ff4694] to-[#776fff] opacity-25"
                 style={{
                   clipPath:
-                    'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                    "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
                 }}
               />
             </div>
@@ -317,10 +353,12 @@ export default function Page() {
           <div className="mx-auto flex max-w-7xl flex-col items-center gap-x-8 gap-y-10 px-6 sm:gap-y-8 lg:px-8 xl:flex-row xl:items-stretch">
             <div className="-mt-8 w-full max-w-2xl xl:-mb-8 xl:w-96 xl:flex-none">
               <div className="relative aspect-[2/1] h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
-                <img
+                <Image
                   className="absolute inset-0 h-full w-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
                   src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2102&q=80"
                   alt=""
+                  height={800}
+                  width={1600}
                 />
               </div>
             </div>
@@ -340,7 +378,9 @@ export default function Page() {
                 </svg>
                 <blockquote className="text-xl font-semibold leading-8 text-white sm:text-2xl sm:leading-9">
                   <p>
-                    Using Expense has completely changed the way I manage my finances. It&apos;s so easy to track my expenses, and the insights have helped me save more money than ever before.
+                    Using Expense has completely changed the way I manage my
+                    finances. It&apos;s so easy to track my expenses, and the
+                    insights have helped me save more money than ever before.
                   </p>
                 </blockquote>
                 <figcaption className="mt-8 text-base">
@@ -351,31 +391,38 @@ export default function Page() {
             </div>
           </div>
         </div>
-
-
-
       </main>
 
       {/* Footer */}
-      <footer className="mt-32 bg-gray-900 sm:mt-56" aria-labelledby="footer-heading">
+      <footer
+        className="mt-32 bg-gray-900 sm:mt-56"
+        aria-labelledby="footer-heading"
+      >
         <h2 id="footer-heading" className="sr-only">
           Footer
         </h2>
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
           <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-            <img
+            <Image
               className="h-7"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
               alt="Company name"
+              width={160}
+              height={40}
             />
             <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm font-semibold leading-6 text-white">Solutions</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-white">
+                    Solutions
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.solutions.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -383,11 +430,16 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-white">Support</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-white">
+                    Support
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.support.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -397,11 +449,16 @@ export default function Page() {
               </div>
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
-                  <h3 className="text-sm font-semibold leading-6 text-white">Company</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-white">
+                    Company
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.company.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -409,11 +466,16 @@ export default function Page() {
                   </ul>
                 </div>
                 <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-white">Legal</h3>
+                  <h3 className="text-sm font-semibold leading-6 text-white">
+                    Legal
+                  </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {footerNavigation.legal.map((item) => (
                       <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-300 hover:text-white">
+                        <a
+                          href={item.href}
+                          className="text-sm leading-6 text-gray-300 hover:text-white"
+                        >
                           {item.name}
                         </a>
                       </li>
@@ -426,5 +488,5 @@ export default function Page() {
         </div>
       </footer>
     </div>
-  )
+  );
 }

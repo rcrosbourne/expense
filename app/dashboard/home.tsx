@@ -101,11 +101,9 @@ function reducer(draft: State, action: HomeActions) {
 }
 const Home = ({
   wallets,
-  user,
   stats,
 }: {
   wallets: WalletWidgetProps[];
-  user: User;
   stats: PortfolioStat[];
 }) => {
   const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
@@ -115,6 +113,7 @@ const Home = ({
         return { redirectTo: "/api/auth/signin" };
     }
   });
+  const user = session?.user as User;
   // if (status === "loading") return null;
   // if (status === "unauthenticated") return "Not authenticated";
   return (
@@ -133,7 +132,7 @@ const Home = ({
                 </h2>
                 <div className="bg-white p-6">
                   <div className="sm:flex sm:items-center sm:justify-between">
-                    {session && session?.user && <UserInfo user={session?.user} /> }
+                    {user && <UserInfo user={user} /> }
                     <div className="mt-5 flex justify-center sm:mt-0">
                       <AddWalletButton
                         editWallet={state.editWallet}
