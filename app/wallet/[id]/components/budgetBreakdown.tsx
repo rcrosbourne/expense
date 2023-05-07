@@ -3,7 +3,7 @@ import { FinancialTransaction } from "@/app/types";
 import BarChart from "@/app/wallet/[id]/components/barChart";
 import { ChartData, ChartOptions } from "chart.js";
 import dayjs from "dayjs";
-import { classNames, formatNumberAsCurrency } from "@/app/utils";
+import {classNames, formatNumberAsCurrency, formatNumberAsPercentage} from "@/app/utils";
 
 const BudgetBreakdown = ({
   transactions,
@@ -159,18 +159,24 @@ function generateStatsFromMetrics({
       name: "Total Expenses",
       value: totalExpenseString,
       change: lastTwoTotalsVarianceString,
+      changeFormat: "currency",
+      valueFormat: "currency",
       changeType: lastTwoTotalsVariance > 0 ? "negative" : "positive",
     },
     {
       name: "Total Budget",
       value: totalBudgetString,
       change: "",
+      valueFormat: "currency",
+      changeFormat: "currency",
       changeType: "positive",
     },
     {
       name: "Total Variance",
       value: totalVarianceString,
       change: totalVariancePercentageString,
+      changeFormat: "percentage",
+      valueFormat: "currency",
       changeType: totalVariance > 0 ? "positive" : "negative",
     },
   ];
@@ -181,7 +187,9 @@ type BudgetStats = {
   name: string;
   changeType: "positive" | "negative";
   change: string;
+  changeFormat: "currency" | "percentage" | "number";
   value: string;
+  valueFormat: "currency" | "percentage" | "number";
 };
 const BudgetStatsWidget = ({ stats }: { stats: BudgetStats[] }) => {
   return (
@@ -202,14 +210,77 @@ const BudgetStatsWidget = ({ stats }: { stats: BudgetStats[] }) => {
               "text-xs font-medium"
             )}
           >
-            {stat.change}
+            {stat && stat.change && <StatWidget value={stat.change} duration={700} type={stat.changeFormat}/> }
           </dd>
           <dd className="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
-            {stat.value}
+            <StatWidget value={stat.value} duration={700} type={stat.valueFormat}/>
           </dd>
         </div>
       ))}
     </dl>
   );
 };
+type StatWidget = {
+  value: number | string;
+  duration: number;
+  type: "currency" | "number" | "percentage";
+}
+const StatWidget = ({ value, duration, type }: StatWidget) => {
+  const [displayValue, setDisplayValue] = React.useState<number|string>(0);
+  const [animationStart, setAnimationStart] = React.useState(false);
+  const valueAsNumber = convertToNumber(value);
+
+  React.useEffect(() => {
+    setAnimationStart(true)
+  }, []);
+
+  function setDisplayValueFromType(tempDisplayValue: number, type: "currency" | "number" | "percentage") {
+    if (type === "currency") {
+      setDisplayValue(formatNumberAsCurrency(tempDisplayValue));
+    } else if (type === "number") {
+      setDisplayValue(tempDisplayValue);
+    } else if (type === "percentage") {
+      setDisplayValue(formatNumberAsPercentage(tempDisplayValue));
+    }
+  }
+
+  React.useEffect(() => {
+    const animateCounter = () => {
+    const startTime = Date.now();
+    const updateValue = () => {
+      const elapsedTime = Date.now() - startTime;
+      const rawProgress = elapsedTime / duration; // Calculate progress, max 1
+      const progress = easeInOutCubic(rawProgress); // Apply easing
+        setDisplayValueFromType(Math.floor(progress * valueAsNumber), type);
+      if (rawProgress < 1) {
+        requestAnimationFrame(updateValue);
+      } else {
+        setDisplayValueFromType(valueAsNumber, type);
+      }
+    };
+    requestAnimationFrame(updateValue);
+  };
+    if(animationStart) {
+      animateCounter();
+    }
+  }, [animationStart, duration, type, valueAsNumber]);
+
+  return (
+      <span>{displayValue}</span>
+  )
+}
+function convertToNumber(value: number | string) {
+    if (typeof value === "string") {
+        return Number(value.replace(/[^0-9.-]+/g, ""));
+    }
+    return value;
+}
+const easeOutCubic = (t: number) => {
+  return 1 - Math.pow(1 - t, 3);
+};
+const easeInOutCubic = (t: number) => {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+};
+
 export default BudgetBreakdown;
+

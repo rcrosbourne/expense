@@ -29,7 +29,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
-import { useImmer, useImmerReducer } from "use-immer";
+import { useImmerReducer } from "use-immer";
 import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
 import BudgetBreakdown from "@/app/wallet/[id]/components/budgetBreakdown";
 
