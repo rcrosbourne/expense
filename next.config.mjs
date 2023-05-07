@@ -1,3 +1,4 @@
+import "./lib/env.mjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -5,8 +6,8 @@ const nextConfig = {
   },
   images: {
      dangerouslyAllowSVG: true,
-    domains: ['tailwindui.com', "images.unsplash.com"],
+    domains: ['tailwindui.com', "images.unsplash.com", "lh3.googleusercontent.com"],
   },
 }
 
-module.exports = nextConfig
+export default nextConfig;

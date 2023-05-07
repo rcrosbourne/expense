@@ -1,20 +1,23 @@
 "use client";
 import React, { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
-import {Bars3Icon, BellIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { classNames } from "@/app/utils";
-import {Navigation, User} from "@/app/types";
-import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
+import { Navigation, User } from "@/app/types";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { useSession } from "next-auth/react";
 const Header = ({
-  user,
   userNavigation,
   navigation,
 }: {
-  user: User;
   userNavigation: Navigation[];
-    navigation: Navigation[];
+  navigation: Navigation[];
 }) => {
+  const { data: session, status } = useSession();
+  if (!session) return null;
+  if (status === "loading") return null;
+  const user = session.user as User;
   return (
     <Popover
       as="header"
@@ -55,7 +58,7 @@ const Header = ({
                       <span className="sr-only">Open user menu</span>
                       <Image
                         className="h-8 w-8 rounded-full object-cover"
-                        src={user.imageUrl}
+                        src={user.image}
                         alt=""
                         width={32}
                         height={32}

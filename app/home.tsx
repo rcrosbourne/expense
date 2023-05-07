@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import {PortfolioStat, User, Wallet, WalletWidgetProps} from "@/app/types";
+import { PortfolioStat, User, Wallet, WalletWidgetProps } from "@/app/types";
 import Image from "next/image";
 
 import AddWalletButton from "@/app/addWalletButton";
@@ -10,7 +10,9 @@ import WalletWidget from "@/app/walletWidget";
 import ConfirmDialog from "@/app/components/confirmDialog";
 import UserInfo from "@/app/userInfo";
 import PortfolioStats from "@/app/PortfolioStats";
-import {useImmerReducer} from "use-immer";
+import { useImmerReducer } from "use-immer";
+import { useSession } from "next-auth/react";
+import {stat} from "fs";
 const recentHires = [
   {
     name: "Leonard Krasner",
@@ -66,22 +68,22 @@ const announcements = [
 ];
 
 type State = {
-  editWallet: Wallet | undefined,
-  deleteWallet: Wallet | undefined,
-  openConfirm: boolean
-}
+  editWallet: Wallet | undefined;
+  deleteWallet: Wallet | undefined;
+  openConfirm: boolean;
+};
 type HomeActions = {
   type: "cancel-edit" | "edit-wallet" | "delete-wallet";
-  wallet?: Wallet
-  isOpen?: boolean
-}
+  wallet?: Wallet;
+  isOpen?: boolean;
+};
 let INITIAL_STATE: State = {
   editWallet: undefined,
   deleteWallet: undefined,
-  openConfirm: false
-}
-function reducer (draft: State, action: HomeActions) {
-  switch(action.type) {
+  openConfirm: false,
+};
+function reducer(draft: State, action: HomeActions) {
+  switch (action.type) {
     case "delete-wallet": {
       draft.deleteWallet = action.wallet;
       draft.openConfirm = action.isOpen || false;
@@ -97,145 +99,161 @@ function reducer (draft: State, action: HomeActions) {
     }
   }
 }
-const Home = ({wallets, user, stats}:{wallets: WalletWidgetProps[], user: User, stats: PortfolioStat[]}) => {
-  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE)
+const Home = ({
+  wallets,
+  user,
+  stats,
+}: {
+  wallets: WalletWidgetProps[];
+  user: User;
+  stats: PortfolioStat[];
+}) => {
+  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
+  const { data:session, status} = useSession();
+  if (status === "loading") return null;
+  if (status === "unauthenticated") return "Not authenticated";
   return (
-      <main className="-mt-24 pb-8">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="sr-only">Profile</h1>
-          {/* Main 3 column grid */}
-          <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
-            {/* Left column */}
-            <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-              {/* Welcome panel */}
-              <section aria-labelledby="profile-overview-title">
-                <div className="overflow-hidden rounded-lg bg-white shadow">
-                  <h2 className="sr-only" id="profile-overview-title">
-                    Profile Overview
-                  </h2>
-                  <div className="bg-white p-6">
-                    <div className="sm:flex sm:items-center sm:justify-between">
-                      <UserInfo user={user} />
-                      <div className="mt-5 flex justify-center sm:mt-0">
-                        <AddWalletButton
-                          editWallet={state.editWallet}
-                          onCancel={() => dispatch({type: "cancel-edit"})}
-                          onSave={() => dispatch({type: "cancel-edit"})}
-                        />
-                      </div>
+    <main className="-mt-24 pb-8">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h1 className="sr-only">Profile</h1>
+        {/* Main 3 column grid */}
+        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
+          {/* Left column */}
+          <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+            {/* Welcome panel */}
+            <section aria-labelledby="profile-overview-title">
+              <div className="overflow-hidden rounded-lg bg-white shadow">
+                <h2 className="sr-only" id="profile-overview-title">
+                  Profile Overview
+                </h2>
+                <div className="bg-white p-6">
+                  <div className="sm:flex sm:items-center sm:justify-between">
+                    <UserInfo user={session?.user || user} />
+                    <div className="mt-5 flex justify-center sm:mt-0">
+                      <AddWalletButton
+                        editWallet={state.editWallet}
+                        onCancel={() => dispatch({ type: "cancel-edit" })}
+                        onSave={() => dispatch({ type: "cancel-edit" })}
+                      />
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 bg-gray-50 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
-                     <PortfolioStats stats={stats}/>
-                  </div>
                 </div>
-              </section>
-              {/* Actions panel */}
-              <section aria-labelledby="quick-links-title">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 divide-y divide-gray-200 rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
-                  <h2 className="sr-only" id="quick-links-title">
-                    Quick links
-                  </h2>
-                  {wallets.map((wallet) => (
-                    <WalletWidget
-                      key={wallet.name}
-                      id={wallet.id}
-                      name={wallet.name}
-                      href={wallet.href}
-                      category={wallet.category}
-                      budget={wallet.budget}
-                      currentBalance={wallet.currentBalance}
-                      iconForeground={wallet.iconForeground}
-                      iconBackground={wallet.iconBackground}
-                      onEdit={(wallet) => dispatch({type: "edit-wallet", wallet})}
-                      onCancel={() => dispatch({type: "cancel-edit"})}
-                      onDelete={() => dispatch({type: "delete-wallet", wallet, isOpen: true})}
-                      editMode={state.editWallet?.id === wallet.id}
-                    />
-                  ))}
+                <div className="grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 bg-gray-50 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+                  <PortfolioStats stats={stats} />
                 </div>
-              </section>
-            </div>
+              </div>
+            </section>
+            {/* Actions panel */}
+            <section aria-labelledby="quick-links-title">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 divide-y divide-gray-200 rounded-lg sm:grid sm:gap-4 sm:divide-y-0">
+                <h2 className="sr-only" id="quick-links-title">
+                  Quick links
+                </h2>
+                {wallets.map((wallet) => (
+                  <WalletWidget
+                    key={wallet.name}
+                    id={wallet.id}
+                    name={wallet.name}
+                    href={wallet.href}
+                    category={wallet.category}
+                    budget={wallet.budget}
+                    currentBalance={wallet.currentBalance}
+                    iconForeground={wallet.iconForeground}
+                    iconBackground={wallet.iconBackground}
+                    onEdit={(wallet) =>
+                      dispatch({ type: "edit-wallet", wallet })
+                    }
+                    onCancel={() => dispatch({ type: "cancel-edit" })}
+                    onDelete={() =>
+                      dispatch({ type: "delete-wallet", wallet, isOpen: true })
+                    }
+                    editMode={state.editWallet?.id === wallet.id}
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
 
-            {/* Right column */}
-            <div className="grid grid-cols-1 gap-4">
-              {/* Add Wallet */}
-              <AddWallet
-                editWallet={state.editWallet}
-                onSave={() => dispatch({type: "cancel-edit"})}
-              />
-              {/* Recent Hires */}
-              <section aria-labelledby="recent-hires-title">
-                <div className="overflow-hidden rounded-lg bg-white shadow">
-                  <div className="p-6">
-                    <h2
-                      className="text-base font-medium text-gray-900"
-                      id="recent-hires-title"
-                    >
-                      Recent Hires
-                    </h2>
-                    <div className="mt-6 flow-root">
-                      <ul
-                        role="list"
-                        className="-my-5 divide-y divide-gray-200"
-                      >
-                        {recentHires.map((person) => (
-                          <li key={person.handle} className="py-4">
-                            <div className="flex items-center space-x-4">
-                              <div className="flex-shrink-0">
-                                <Image
-                                  className="h-8 w-8 rounded-full"
-                                  src={person.imageUrl}
-                                  alt=""
-                                  height={32}
-                                  width={32}
-                                />
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="truncate text-sm font-medium text-gray-900">
-                                  {person.name}
-                                </p>
-                                <p className="truncate text-sm text-gray-500">
-                                  {"@" + person.handle}
-                                </p>
-                              </div>
-                              <div>
-                                <a
-                                  href={person.href}
-                                  className="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                >
-                                  View
-                                </a>
-                              </div>
+          {/* Right column */}
+          <div className="grid grid-cols-1 gap-4">
+            {/* Add Wallet */}
+            <AddWallet
+              editWallet={state.editWallet}
+              onSave={() => dispatch({ type: "cancel-edit" })}
+            />
+            {/* Recent Hires */}
+            <section aria-labelledby="recent-hires-title">
+              <div className="overflow-hidden rounded-lg bg-white shadow">
+                <div className="p-6">
+                  <h2
+                    className="text-base font-medium text-gray-900"
+                    id="recent-hires-title"
+                  >
+                    Recent Hires
+                  </h2>
+                  <div className="mt-6 flow-root">
+                    <ul role="list" className="-my-5 divide-y divide-gray-200">
+                      {recentHires.map((person) => (
+                        <li key={person.handle} className="py-4">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <Image
+                                className="h-8 w-8 rounded-full"
+                                src={person.imageUrl}
+                                alt=""
+                                height={32}
+                                width={32}
+                              />
                             </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="mt-6">
-                      <a
-                        href="#"
-                        className="flex w-full items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        View all
-                      </a>
-                    </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-medium text-gray-900">
+                                {person.name}
+                              </p>
+                              <p className="truncate text-sm text-gray-500">
+                                {"@" + person.handle}
+                              </p>
+                            </div>
+                            <div>
+                              <a
+                                href={person.href}
+                                className="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                              >
+                                View
+                              </a>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="mt-6">
+                    <a
+                      href="#"
+                      className="flex w-full items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    >
+                      View all
+                    </a>
                   </div>
                 </div>
-              </section>
-            </div>
+              </div>
+            </section>
           </div>
         </div>
-        <ConfirmDialog
-          openConfirm={state.openConfirm}
-          setOpenConfirm={(isOpen) => dispatch({type: "delete-wallet", wallet: undefined, isOpen})}
-          title={"Delete Wallet"}
-          message={`You are about to delete "${state.deleteWallet?.name}"`}
-          confirmButtonText={"Delete"}
-          cancelButtonText={"Cancel"}
-          confirm={() => dispatch({type: "delete-wallet", wallet: undefined, isOpen: false})}
-        />
-      </main>
+      </div>
+      <ConfirmDialog
+        openConfirm={state.openConfirm}
+        setOpenConfirm={(isOpen) =>
+          dispatch({ type: "delete-wallet", wallet: undefined, isOpen })
+        }
+        title={"Delete Wallet"}
+        message={`You are about to delete "${state.deleteWallet?.name}"`}
+        confirmButtonText={"Delete"}
+        cancelButtonText={"Cancel"}
+        confirm={() =>
+          dispatch({ type: "delete-wallet", wallet: undefined, isOpen: false })
+        }
+      />
+    </main>
   );
 };
 export default Home;

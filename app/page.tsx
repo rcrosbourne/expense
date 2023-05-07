@@ -3,8 +3,10 @@ import {PortfolioStat, type WalletWidgetProps} from "@/app/types";
 import React from "react";
 import Home from "@/app/home";
 import { user } from "@/app/data/user";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {getServerSession} from "next-auth";
 
-export default function Page() {
+export default async function Page() {
   const wallets: WalletWidgetProps[] = [
     {
       id: 1,
@@ -33,6 +35,8 @@ export default function Page() {
   { label: "Last 7 days", value: "$75,000.00" },
 ];
   return (
-   <Home wallets={wallets} user={user} stats={stats}/>
+      <>
+        <Home wallets={wallets} user={user} stats={stats}/>
+      </>
   );
 }
