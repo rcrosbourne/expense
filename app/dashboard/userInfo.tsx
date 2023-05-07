@@ -8,7 +8,7 @@ const UserInfo = ({ user }: { user: User }) => {
       <div className="flex-shrink-0">
         <Image
           className="mx-auto h-20 w-20 rounded-full object-cover"
-          src={user.image}
+          src={user?.image}
           alt=""
           height={80}
           width={80}

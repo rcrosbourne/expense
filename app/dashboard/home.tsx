@@ -4,12 +4,12 @@ import React from "react";
 import { PortfolioStat, User, Wallet, WalletWidgetProps } from "@/app/types";
 import Image from "next/image";
 
-import AddWalletButton from "@/app/addWalletButton";
-import AddWallet from "@/app/addWallet";
-import WalletWidget from "@/app/walletWidget";
+import AddWalletButton from "@/app/dashboard/addWalletButton";
+import AddWallet from "@/app/dashboard/addWallet";
+import WalletWidget from "@/app/dashboard/walletWidget";
 import ConfirmDialog from "@/app/components/confirmDialog";
-import UserInfo from "@/app/userInfo";
-import PortfolioStats from "@/app/PortfolioStats";
+import UserInfo from "@/app/dashboard/userInfo";
+import PortfolioStats from "@/app/dashboard/PortfolioStats";
 import { useImmerReducer } from "use-immer";
 import { useSession } from "next-auth/react";
 import {stat} from "fs";
@@ -110,8 +110,8 @@ const Home = ({
 }) => {
   const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
   const { data:session, status} = useSession();
-  if (status === "loading") return null;
-  if (status === "unauthenticated") return "Not authenticated";
+  // if (status === "loading") return null;
+  // if (status === "unauthenticated") return "Not authenticated";
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -128,7 +128,7 @@ const Home = ({
                 </h2>
                 <div className="bg-white p-6">
                   <div className="sm:flex sm:items-center sm:justify-between">
-                    <UserInfo user={session?.user || user} />
+                    {session && session?.user && <UserInfo user={session?.user} /> }
                     <div className="mt-5 flex justify-center sm:mt-0">
                       <AddWalletButton
                         editWallet={state.editWallet}

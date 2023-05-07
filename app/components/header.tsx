@@ -15,9 +15,15 @@ const Header = ({
   navigation: Navigation[];
 }) => {
   const { data: session, status } = useSession();
-  if (!session) return null;
-  if (status === "loading") return null;
-  const user = session.user as User;
+  const [user, setUser] = React.useState<User | null>(null);
+  React.useEffect(() => {
+    if (session) {
+      setUser(session.user as User);
+    }
+  }, [session]);
+  // if (!session) return null;
+  // if (status === "loading") return null;
+  // const user = session.user as User;
   return (
     <Popover
       as="header"
@@ -32,14 +38,15 @@ const Header = ({
                 <a href="#">
                   <span className="sr-only">Your Company</span>
                   <Image
-                    className="h-8 w-auto"
+                    className=""
                     src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=200"
-                    alt=""
+                    alt="Company Logo"
                     width={32}
                     height={32}
                   />
                 </a>
               </div>
+
 
               {/* Right section on desktop */}
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
@@ -56,13 +63,13 @@ const Header = ({
                   <div>
                     <Menu.Button className="flex rounded-full bg-white text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
                       <span className="sr-only">Open user menu</span>
-                      <Image
+                      {user && <Image
                         className="h-8 w-8 rounded-full object-cover"
                         src={user.image}
                         alt=""
                         width={32}
                         height={32}
-                      />
+                      />}
                     </Menu.Button>
                   </div>
                   <Transition
@@ -216,18 +223,18 @@ const Header = ({
                         <div className="flex-shrink-0">
                           <Image
                             className="h-10 w-10 rounded-full object-cover"
-                            src={user.imageUrl}
+                            src={user?.image}
                             alt=""
                             width={(10 / 4) * 16}
                             height={(10 / 4) * 16}
                           />
                         </div>
                         <div className="ml-3 min-w-0 flex-1">
-                          <div className="truncate text-base font-medium text-gray-800">
-                            {user.name}
+                          <div className="truncate text-base font-medium text-gray-800 capitalize">
+                            {user?.name}
                           </div>
                           <div className="truncate text-sm font-medium text-gray-500">
-                            {user.email}
+                            {user?.email}
                           </div>
                         </div>
                         <button

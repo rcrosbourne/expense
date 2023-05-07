@@ -1,9 +1,13 @@
 import NextAuth from "next-auth";
-import { env } from "../../../lib/env.mjs";
+import { env } from "@/lib/env.mjs";
 import prisma from "../../../lib/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 export const authOptions = {
+  pages: {
+    signIn: "/signin",
+    signOut: "/signout",
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
