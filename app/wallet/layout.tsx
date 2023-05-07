@@ -6,15 +6,22 @@ import Footer from "@/app/components/footer";
 import { user } from "@/app/data/user";
 import { navigation, userNavigation } from "@/app/data/navigation";
 import {wotfard} from "@/app/utils/constants";
+import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import {getServerSession} from "next-auth";
+import {redirect} from "next/navigation";
 export const metadata = {
   title: "Expense Tracker",
   description: "Simple free way to track your expenses",
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+  if(!session) {
+    redirect('/api/auth/signin?callbackUrl=/dashboard');
+  }
   return (
     <html lang="en" className={`h-full bg-gray-100 ${wotfard.variable}`}>
       <body className={`h-full`}>

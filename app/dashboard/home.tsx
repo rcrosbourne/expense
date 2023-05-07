@@ -109,7 +109,12 @@ const Home = ({
   stats: PortfolioStat[];
 }) => {
   const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
-  const { data:session, status} = useSession();
+  const { data:session, status} = useSession({
+    required: true,
+    onUnauthenticated() {
+        return { redirectTo: "/api/auth/signin" };
+    }
+  });
   // if (status === "loading") return null;
   // if (status === "unauthenticated") return "Not authenticated";
   return (

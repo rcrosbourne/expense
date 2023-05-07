@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import { env } from "@/lib/env.mjs";
-import prisma from "../../../lib/prisma";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import NextAuth from "next-auth"
+import {env} from "@/lib/env.mjs";
 import GoogleProvider from "next-auth/providers/google";
+import {PrismaAdapter} from "@next-auth/prisma-adapter";
+import prisma from "@/lib/prisma";
 export const authOptions = {
   pages: {
     signIn: "/signin",
@@ -23,4 +23,5 @@ export const authOptions = {
     }),
   ],
 };
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST }

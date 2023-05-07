@@ -1,5 +1,5 @@
 export const navigation = [
-    {name: "Home", href: "/", current: true},
+    {name: "Home", href: "/dashboard", current: true},
     {name: "Profile", href: "#", current: false},
     {name: "Settings", href: "#", current: false},
 ];
