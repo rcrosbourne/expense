@@ -54,7 +54,7 @@ const Header = ({
                   <div>
                     <Menu.Button className="flex rounded-full bg-white text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
                       <span className="sr-only">Open user menu</span>
-                      {user?.image && (
+                      {user?.image ? (
                         <Image
                           className="h-8 w-8 rounded-full object-cover"
                           src={user.image}
@@ -62,6 +62,10 @@ const Header = ({
                           width={32}
                           height={32}
                         />
+                      ) : (
+                        <div className="rounded-full h-8 w-8 bg-teal-500 text-slate-50 flex items-center justify-center">
+                          {user && user.name && user.name.charAt(0).toUpperCase()}
+                        </div>
                       )}
                     </Menu.Button>
                   </div>

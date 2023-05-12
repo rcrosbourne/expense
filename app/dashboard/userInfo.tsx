@@ -6,13 +6,19 @@ const UserInfo = ({ user }: { user: User }) => {
   return (
     <div className="sm:flex sm:space-x-5">
       <div className="flex-shrink-0">
-        <Image
-          className="mx-auto h-20 w-20 rounded-full object-cover"
-          src={user?.image}
-          alt=""
-          height={80}
-          width={80}
-        />
+        {user && user.image ? (
+          <Image
+            className="mx-auto h-20 w-20 rounded-full object-cover"
+            src={user?.image}
+            alt=""
+            height={80}
+            width={80}
+          />
+        ) : (
+          <div className="rounded-full h-20 w-20 bg-teal-400 text-4xl text-slate-50 flex items-center justify-center">
+            {user?.name.charAt(0).toUpperCase()}
+          </div>
+        )}
       </div>
       <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
         <p className="text-sm font-medium text-gray-600">Welcome back,</p>
