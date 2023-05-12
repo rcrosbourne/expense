@@ -4,26 +4,18 @@ import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { classNames } from "@/app/utils";
-import { Navigation, User } from "@/app/types";
+import { Navigation } from "@/app/types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { useSession } from "next-auth/react";
+import { User } from "next-auth";
 const Header = ({
   userNavigation,
   navigation,
+  user,
 }: {
   userNavigation: Navigation[];
   navigation: Navigation[];
+  user: User | null;
 }) => {
-  const { data: session, status } = useSession();
-  const [user, setUser] = React.useState<User | null>(null);
-  React.useEffect(() => {
-    if (session) {
-      setUser(session.user as User);
-    }
-  }, [session]);
-  // if (!session) return null;
-  // if (status === "loading") return null;
-  // const user = session.user as User;
   return (
     <Popover
       as="header"
@@ -47,7 +39,6 @@ const Header = ({
                 </a>
               </div>
 
-
               {/* Right section on desktop */}
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
                 <button
@@ -63,13 +54,15 @@ const Header = ({
                   <div>
                     <Menu.Button className="flex rounded-full bg-white text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
                       <span className="sr-only">Open user menu</span>
-                      {user && <Image
-                        className="h-8 w-8 rounded-full object-cover"
-                        src={user.image}
-                        alt=""
-                        width={32}
-                        height={32}
-                      />}
+                      {user?.image && (
+                        <Image
+                          className="h-8 w-8 rounded-full object-cover"
+                          src={user.image}
+                          alt=""
+                          width={32}
+                          height={32}
+                        />
+                      )}
                     </Menu.Button>
                   </div>
                   <Transition
@@ -221,13 +214,15 @@ const Header = ({
                     <div className="pt-4 pb-2">
                       <div className="flex items-center px-5">
                         <div className="flex-shrink-0">
-                          {user && <Image
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={user.image}
-                            alt=""
-                            width={(10 / 4) * 16}
-                            height={(10 / 4) * 16}
-                          />}
+                          {user?.image && (
+                            <Image
+                              className="h-10 w-10 rounded-full object-cover"
+                              src={user.image}
+                              alt=""
+                              width={(10 / 4) * 16}
+                              height={(10 / 4) * 16}
+                            />
+                          )}
                         </div>
                         <div className="ml-3 min-w-0 flex-1">
                           <div className="truncate text-base font-medium text-gray-800 capitalize">

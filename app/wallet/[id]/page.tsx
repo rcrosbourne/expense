@@ -31,8 +31,6 @@ import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
 import { useImmerReducer } from "use-immer";
 import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
 import BudgetBreakdown from "@/app/wallet/[id]/components/budgetBreakdown";
-import {redirect, useRouter} from "next/navigation";
-import {useSession} from "next-auth/react";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -168,12 +166,6 @@ const Wallet = () => {
   };
   // get route params
   const windowSize = useWindowSize();
-  const {data: session} = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect('/api/auth/signin?callbackUrl=/wallet/[id]')
-    }
-  });
 
   return (
     <main className="-mt-24 pb-8">

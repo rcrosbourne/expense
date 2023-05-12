@@ -3,11 +3,10 @@ import "../globals.css";
 import Providers from "@/app/providers";
 import Header from "@/app/components/header";
 import Footer from "@/app/components/footer";
-import { user } from "@/app/data/user";
 import { navigation, userNavigation } from "@/app/data/navigation";
 import {wotfard} from "@/app/utils/constants";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";
-import {getServerSession} from "next-auth";
+import {getServerSession, User} from "next-auth";
 import {redirect} from "next/navigation";
 export const metadata = {
   title: "Expense Tracker",
@@ -25,10 +24,11 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`h-full bg-gray-100 ${wotfard.variable}`}>
       <body className={`h-full`}>
-        <Providers>
+        <Providers session={session}>
           <Header
             userNavigation={userNavigation}
             navigation={navigation}
+            user={session.user as User}
           />
           <div className="min-h-full">{children}</div>
           <Footer />

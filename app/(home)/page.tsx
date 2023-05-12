@@ -18,6 +18,8 @@ import {
 } from "@heroicons/react/20/solid";
 import { classNames } from "@/app/utils";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -128,7 +130,7 @@ const footerNavigation = {
 
 export default function Page() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const { data: session } = useSession();
   return (
     <div className="bg-white">
       {/* Header */}
@@ -166,14 +168,35 @@ export default function Page() {
           {/*    </a>*/}
           {/*  ))}*/}
           {/*</div>*/}
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href="/api/auth/signin"
-              className="text-sm font-semibold leading-6 text-white"
-            >
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
-          </div>
+          {!session ? (
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              <Link
+                href="/signin"
+                className="text-sm font-semibold leading-6 text-white"
+              >
+                Log in <span aria-hidden="true">&rarr;</span>
+              </Link>
+            </div>
+          ) : (
+              <div className="flex gap-2">
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                  <Link
+                      href="/dashboard"
+                      className="text-sm font-semibold leading-6 text-white"
+                  >
+                    Dashboard
+                  </Link>
+                </div>
+                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                  <Link
+                      href="/signout"
+                      className="text-sm font-semibold leading-6 text-white"
+                  >
+                    Log out <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </div>
+              </div>
+          )}
         </nav>
         <Dialog
           as="div"
