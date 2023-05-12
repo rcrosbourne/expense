@@ -375,7 +375,7 @@ const Wallet = () => {
               </Tab.Panels>
             </Tab.Group>
           </div>
-          <div className="sm:grid grid-cols-1 gap-4 hidden">
+          <div className="sm:grid grid-cols-1 gap-4 hidden sm:sticky sm:top-[10%]">
             {/* Add Income and Expenses */}
             <AddTransaction
               transactionToBeEdited={state.transactionForEdit}

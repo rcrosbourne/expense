@@ -12,7 +12,6 @@ import UserInfo from "@/app/dashboard/userInfo";
 import PortfolioStats from "@/app/dashboard/PortfolioStats";
 import { useImmerReducer } from "use-immer";
 import { useSession } from "next-auth/react";
-import {stat} from "fs";
 const recentHires = [
   {
     name: "Leonard Krasner",
