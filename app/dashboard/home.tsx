@@ -12,7 +12,6 @@ import UserInfo from "@/app/dashboard/userInfo";
 import PortfolioStats from "@/app/dashboard/PortfolioStats";
 import { useImmerReducer } from "use-immer";
 import { useSession } from "next-auth/react";
-import {stat} from "fs";
 const recentHires = [
   {
     name: "Leonard Krasner",
@@ -179,7 +178,7 @@ const Home = ({
           </div>
 
           {/* Right column */}
-          <div className="grid grid-cols-1 gap-4">
+          <div className="sm:grid grid-cols-1 gap-4 sm:sticky sm:top-[10%]">
             {/* Add Wallet */}
             <AddWallet
               editWallet={state.editWallet}
