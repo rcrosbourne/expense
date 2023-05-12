@@ -63,7 +63,7 @@ const Header = ({
                           height={32}
                         />
                       ) : (
-                        <div className="rounded-full h-8 w-8 bg-teal-500 text-slate-50 flex items-center justify-center">
+                        <div className="rounded-full h-8 w-8 bg-purple-600 text-slate-50 flex items-center justify-center">
                           {user && user.name && user.name.charAt(0).toUpperCase()}
                         </div>
                       )}
