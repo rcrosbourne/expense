@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import AuthOptions from "@/app/(auth)/components/authOptions";
-
 const Page = () => {
   return (
     <>
