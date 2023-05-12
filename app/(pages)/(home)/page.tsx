@@ -8,7 +8,7 @@ import {
 import Image from "next/image";
 import logo from "@/app/assets/images/logo-indigo.svg";
 import screenshot from "@/app/assets/images/screenshot.png";
-import HomeHeader from "@/app/(home)/homeHeader";
+import HomeHeader from "@/app/(pages)/(home)/homeHeader";
 const features = [
   {
     name: "Easy Expense Tracking.",

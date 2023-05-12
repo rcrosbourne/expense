@@ -1,6 +1,6 @@
 import React from "react";
 import { walletStats } from "@/app/data/walletStatus";
-import {Actions} from "@/app/wallet/[id]/page";
+import {Actions} from "@/app/(pages)/wallet/[id]/page";
 import useWindowSize from "@/app/hooks/useWindowSize";
 
 const WalletOverview = ({dispatch}: {dispatch: React.Dispatch<Actions>}) => {

@@ -1,7 +1,7 @@
 import React from "react";
 import Providers from "@/app/providers";
 import {wotfard} from "@/app/utils/constants";
-import "../globals.css";
+import "../../globals.css";
 export default function RootLayout({
   children,
 }: {

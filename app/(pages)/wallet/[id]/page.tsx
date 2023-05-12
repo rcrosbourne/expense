@@ -4,13 +4,13 @@ import { classNames, formatNumberAsCurrency } from "@/app/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import WalletOverview from "@/app/wallet/[id]/components/walletOverview";
+import WalletOverview from "@/app/(pages)/wallet/[id]/components/walletOverview";
 import { transactions } from "@/app/data/transactions";
 import { FinancialTransaction } from "@/app/types/financialTransaction";
 import ConfirmDialog from "@/app/components/confirmDialog";
-import TransactionList from "@/app/wallet/[id]/components/transactionList";
+import TransactionList from "@/app/(pages)/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
-import BudgetCalendar from "@/app/wallet/[id]/components/budgetCalendar";
+import BudgetCalendar from "@/app/(pages)/wallet/[id]/components/budgetCalendar";
 import {
   BarChartIcon,
   CalendarIcon,
@@ -26,11 +26,11 @@ import {
   BarElement,
   Title,
 } from "chart.js";
-import TransactionBreakdown from "@/app/wallet/[id]/components/transactionBreakdown";
-import AddTransaction from "@/app/wallet/[id]/components/addTransaction";
+import TransactionBreakdown from "@/app/(pages)/wallet/[id]/components/transactionBreakdown";
+import AddTransaction from "@/app/(pages)/wallet/[id]/components/addTransaction";
 import { useImmerReducer } from "use-immer";
 import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
-import BudgetBreakdown from "@/app/wallet/[id]/components/budgetBreakdown";
+import BudgetBreakdown from "@/app/(pages)/wallet/[id]/components/budgetBreakdown";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);

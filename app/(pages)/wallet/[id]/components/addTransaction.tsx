@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
 import { classNames } from "@/app/utils";
 import { FinancialTransaction } from "@/app/types";
-import Switcher from "@/app/wallet/[id]/components/switcher";
-import InputAmount from "@/app/wallet/[id]/components/inputAmount";
+import Switcher from "@/app/(pages)/wallet/[id]/components/switcher";
+import InputAmount from "@/app/(pages)/wallet/[id]/components/inputAmount";
 import DatePicker from "@/app/components/datePicker";
-import Merchant from "@/app/wallet/[id]/components/merchant";
-import Notes from "@/app/wallet/[id]/components/notes";
-import PeriodicityDropdown from "@/app/wallet/[id]/components/periodicityDropdown";
-import ActionButtons from "@/app/wallet/[id]/components/actionButtons";
+import Merchant from "@/app/(pages)/wallet/[id]/components/merchant";
+import Notes from "@/app/(pages)/wallet/[id]/components/notes";
+import PeriodicityDropdown from "@/app/(pages)/wallet/[id]/components/periodicityDropdown";
+import ActionButtons from "@/app/(pages)/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/app/components/categoriesDialog";
-import { Actions } from "@/app/wallet/[id]/page";
+import { Actions } from "@/app/(pages)/wallet/[id]/page";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Dialog, Transition } from "@headlessui/react";
 

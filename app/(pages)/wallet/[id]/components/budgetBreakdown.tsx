@@ -1,6 +1,6 @@
 import React from "react";
 import { FinancialTransaction } from "@/app/types";
-import BarChart from "@/app/wallet/[id]/components/barChart";
+import BarChart from "@/app/(pages)/wallet/[id]/components/barChart";
 import { ChartData, ChartOptions } from "chart.js";
 import dayjs from "dayjs";
 import {classNames, formatNumberAsCurrency, formatNumberAsPercentage} from "@/app/utils";

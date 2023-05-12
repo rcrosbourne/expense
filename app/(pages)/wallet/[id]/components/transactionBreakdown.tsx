@@ -1,6 +1,6 @@
 import React from "react";
 import { FinancialTransaction } from "@/app/types";
-import PieChart from "@/app/wallet/[id]/components/pieChart";
+import PieChart from "@/app/(pages)/wallet/[id]/components/pieChart";
 import {
   ChartData,
   ChartOptions,
@@ -8,7 +8,7 @@ import {
   TooltipItem,
 } from "chart.js";
 import { addAlphaToHsl, formatNumberAsCurrency } from "@/app/utils";
-import BarChart from "@/app/wallet/[id]/components/barChart";
+import BarChart from "@/app/(pages)/wallet/[id]/components/barChart";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);

@@ -1,7 +1,7 @@
 
 import {PortfolioStat, type WalletWidgetProps} from "@/app/types";
 import React from "react";
-import Home from "@/app/dashboard/home";
+import Home from "@/app/(pages)/dashboard/home";
 import {getServerSession} from "next-auth";
 import {redirect} from "next/navigation";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";

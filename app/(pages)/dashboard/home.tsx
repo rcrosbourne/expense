@@ -4,12 +4,12 @@ import React from "react";
 import { PortfolioStat, User, Wallet, WalletWidgetProps } from "@/app/types";
 import Image from "next/image";
 
-import AddWalletButton from "@/app/dashboard/addWalletButton";
-import AddWallet from "@/app/dashboard/addWallet";
-import WalletWidget from "@/app/dashboard/walletWidget";
+import AddWalletButton from "@/app/(pages)/dashboard/addWalletButton";
+import AddWallet from "@/app/(pages)/dashboard/addWallet";
+import WalletWidget from "@/app/(pages)/dashboard/walletWidget";
 import ConfirmDialog from "@/app/components/confirmDialog";
-import UserInfo from "@/app/dashboard/userInfo";
-import PortfolioStats from "@/app/dashboard/PortfolioStats";
+import UserInfo from "@/app/(pages)/dashboard/userInfo";
+import PortfolioStats from "@/app/(pages)/dashboard/PortfolioStats";
 import { useImmerReducer } from "use-immer";
 import { useSession } from "next-auth/react";
 const recentHires = [
