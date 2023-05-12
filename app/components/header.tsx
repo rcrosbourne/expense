@@ -7,6 +7,8 @@ import { classNames } from "@/app/utils";
 import { Navigation } from "@/app/types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { User } from "next-auth";
+import logoCyan200 from "@/app/assets/images/logo-cyan-200.svg";
+import logoCyan600 from "@/app/assets/images/logo-cyan-600.svg";
 const Header = ({
   userNavigation,
   navigation,
@@ -31,7 +33,7 @@ const Header = ({
                   <span className="sr-only">Your Company</span>
                   <Image
                     className=""
-                    src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=200"
+                    src={logoCyan200}
                     alt="Company Logo"
                     width={32}
                     height={32}
@@ -192,7 +194,7 @@ const Header = ({
                         <div>
                           <Image
                             className="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=600"
+                            src={logoCyan600}
                             alt="Your Company"
                             height={32}
                             width={32}

@@ -3,21 +3,18 @@ import { useState } from "react";
 import { Dialog, Disclosure } from "@headlessui/react";
 import {
   Bars3Icon,
-  MinusSmallIcon,
-  PlusSmallIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArrowPathIcon,
-  CheckIcon,
   CloudArrowUpIcon,
   Cog6ToothIcon,
   FingerPrintIcon,
   LockClosedIcon,
-  ServerIcon,
 } from "@heroicons/react/20/solid";
 import { classNames } from "@/app/utils";
 import Image from "next/image";
+import logo from "@/app/assets/images/logo-indigo.svg";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -144,7 +141,7 @@ export default function Page() {
               <span className="sr-only">Your Company</span>
               <Image
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                src={logo}
                 alt="Company logo"
                 height={32}
                 width={32}
@@ -178,24 +175,24 @@ export default function Page() {
               </Link>
             </div>
           ) : (
-              <div className="flex gap-2">
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                  <Link
-                      href="/dashboard"
-                      className="text-sm font-semibold leading-6 text-white"
-                  >
-                    Dashboard
-                  </Link>
-                </div>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                  <Link
-                      href="/signout"
-                      className="text-sm font-semibold leading-6 text-white"
-                  >
-                    Log out <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                </div>
+            <div className="flex gap-2">
+              <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-semibold leading-6 text-white"
+                >
+                  Dashboard
+                </Link>
               </div>
+              <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                <Link
+                  href="/signout"
+                  className="text-sm font-semibold leading-6 text-white"
+                >
+                  Log out <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+            </div>
           )}
         </nav>
         <Dialog
@@ -211,7 +208,7 @@ export default function Page() {
                 <span className="sr-only">Your Company</span>
                 <Image
                   className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  src={logo}
                   alt=""
                   height={32}
                   width={32}
@@ -419,7 +416,7 @@ export default function Page() {
           <div className="xl:grid xl:grid-cols-3 xl:gap-8">
             <Image
               className="h-7"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+              src={logo}
               alt="Company name"
               width={160}
               height={40}

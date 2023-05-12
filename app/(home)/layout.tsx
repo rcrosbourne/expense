@@ -14,6 +14,7 @@ export default async function RootLayout({
     <html lang="en" className={`h-full bg-gray-100 ${wotfard.variable}`}>
       <body className={`h-full`}>
         <Providers session={session}>{children}</Providers>
+
       </body>
     </html>
   );
