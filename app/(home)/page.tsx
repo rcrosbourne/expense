@@ -15,6 +15,7 @@ import {
 import { classNames } from "@/app/utils";
 import Image from "next/image";
 import logo from "@/app/assets/images/logo-indigo.svg";
+import screenshot from "@/app/assets/images/screenshot.png";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -319,7 +320,7 @@ export default function Page() {
           <div className="relative overflow-hidden pt-16">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <Image
-                src="https://salient.tailwindui.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpayroll.517af4e7.png&w=2048&q=75"
+                src={screenshot}
                 alt="App screenshot"
                 className="mb-[-12%] rounded-xl shadow-2xl ring-1 ring-gray-900/10"
                 width={2432}
