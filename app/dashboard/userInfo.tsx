@@ -15,7 +15,7 @@ const UserInfo = ({ user }: { user: User }) => {
             width={80}
           />
         ) : (
-          <div className="rounded-full h-20 w-20 bg-teal-400 text-4xl text-slate-50 flex items-center justify-center">
+          <div className="pointer-events-none rounded-full h-20 w-20 bg-purple-500 ring-2 ring-purple-900 text-4xl text-slate-50 flex items-center justify-center">
             {user?.name.charAt(0).toUpperCase()}
           </div>
         )}
