@@ -178,7 +178,7 @@ const Home = ({
           </div>
 
           {/* Right column */}
-          <div className="grid grid-cols-1 gap-4">
+          <div className="sm:grid grid-cols-1 gap-4 sm:sticky sm:top-[10%]">
             {/* Add Wallet */}
             <AddWallet
               editWallet={state.editWallet}
