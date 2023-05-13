@@ -182,7 +182,6 @@ const Home = ({
             {/* Add Wallet */}
             <AddWallet
               editWallet={state.editWallet}
-              user={user}
               onSave={() => dispatch({ type: "cancel-edit" })}
             />
             {/* Recent Hires */}

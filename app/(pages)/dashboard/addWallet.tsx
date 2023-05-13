@@ -6,7 +6,6 @@ import { z } from "zod";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
-import { AddWalletAction } from "@/app/_actions";
 import { User } from "next-auth";
 const INITIAL_WALLET: Wallet = {
   id: 0,
@@ -29,11 +28,9 @@ const WalletValidator = z.object({
 });
 const AddWallet = ({
   editWallet,
-  user,
   onSave,
 }: {
   editWallet?: Wallet;
-  user: User;
   onSave: () => void;
 }) => {
   const [wallet, setWallet] = React.useState<Wallet>(INITIAL_WALLET);
@@ -61,11 +58,6 @@ const AddWallet = ({
   let [isPending, startTransition] = React.useTransition();
   function onSubmit(data: FieldValues) {
     console.log({ data });
-    data.user = user;
-    startTransition(() => {
-      const result = AddWalletAction(data as Wallet);
-      console.log({ result });
-    });
     // e.preventDefault();
     // setWallet({ id: 0, name: "", category: "personal", budget: "" });
     // setEditMode(false);
