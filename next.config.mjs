@@ -2,7 +2,7 @@ import "./lib/env.mjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
+    serverActions: true,
   },
   images: {
      dangerouslyAllowSVG: true,
