@@ -2,13 +2,28 @@
 import React from "react";
 import { NumericFormat } from "react-number-format";
 import { Wallet } from "@/app/types";
-
+import { z } from "zod";
+import { FieldValues, useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DevTool } from "@hookform/devtools";
 const INITIAL_WALLET: Wallet = {
   id: 0,
   name: "",
   category: "personal",
   budget: "",
 };
+
+const WalletValidator = z.object({
+  name: z.string().min(3, "Name must contain at least 3 characters(s)"),
+  category: z.enum(["personal", "business"]),
+  budget: z.preprocess((value) => {
+    // Remove thousandth separators and convert to float
+    if(typeof value === "number") return value;
+    if(typeof value === "string") {
+      return parseFloat(value.replace(/,/g, ""));
+    }
+  }, z.number().min(100))
+});
 const AddWallet = ({
   editWallet,
   onSave,
@@ -20,23 +35,28 @@ const AddWallet = ({
   const nameInput = React.useRef<HTMLInputElement>(null);
   const editMode = !!editWallet;
   React.useEffect(() => {
-    if(!editWallet) {
+    if (!editWallet) {
       setWallet(INITIAL_WALLET);
     } else {
       setWallet(editWallet);
-      if(!nameInput.current) return;
+      if (!nameInput.current) return;
       const inputControl = nameInput.current;
-      inputControl.focus()
+      inputControl.focus();
     }
   }, [editWallet]);
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setWallet((previousWallet) => {
-      return { ...previousWallet, budget: e.target.value };
-    });
-  }
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setWallet({ id: 0, name: "", category: "personal", budget: "" });
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(WalletValidator),
+    defaultValues: INITIAL_WALLET,
+  });
+  function onSubmit(data: FieldValues) {
+    console.log({ data });
+    // e.preventDefault();
+    // setWallet({ id: 0, name: "", category: "personal", budget: "" });
     // setEditMode(false);
     onSave();
   }
@@ -50,74 +70,81 @@ const AddWallet = ({
           >
             {editMode ? "Edit Wallet" : "Add Wallet"}
           </h2>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mt-6 flow-root">
               <div className="flex flex-col">
                 <label
-                  htmlFor="walletName"
+                  htmlFor="name"
                   className="text-sm font-medium text-slate-700"
                 >
                   Name
                 </label>
                 <input
-                  ref={nameInput}
                   type="text"
-                  name="walletName"
-                  id="walletName"
                   className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                  value={wallet?.name}
-                  onChange={(e) => {
-                    setWallet({ ...wallet, name: e.target.value });
-                  }}
+                  {...register("name")}
+                  aria-invalid={errors.name ? "true" : "false"}
                 />
+                {errors.name && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    {errors.name?.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col mt-4">
                 <label
-                  htmlFor="walletCategory"
+                  htmlFor="category"
                   className="text-sm font-medium text-slate-700"
                 >
                   Category
                 </label>
                 <select
-                  id="walletCategory"
-                  name="walletCategory"
                   className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                  value={wallet?.category}
-                  onChange={(e) => {
-                    setWallet({
-                      ...wallet,
-                      category:
-                        e.target.value === "personal" ? "personal" : "business",
-                    });
-                  }}
+                  {...register("category")}
+                  aria-invalid={errors.category ? "true" : "false"}
                 >
                   <option value="personal">Personal</option>
                   <option value="business">Business</option>
                 </select>
+                {errors.category && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    {errors.category?.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col mt-4">
                 <label
-                  htmlFor="walletBudget"
+                  htmlFor="budget"
                   className="text-sm font-medium text-slate-700"
                 >
                   Budget
                 </label>
-                <NumericFormat
-                  displayType="input"
-                  type="text"
+                <Controller
                   name="budget"
-                  id="budget"
-                  className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                  placeholder="0.00"
-                  thousandSeparator=","
-                  allowNegative={false}
-                  maxLength={18}
-                  decimalScale={2}
-                  fixedDecimalScale
-                  onChange={onChange}
-                  value={wallet ? wallet.budget : ""}
-                  autoComplete="off"
+                  control={control}
+                  render={({ field }) => (
+                    <NumericFormat
+                      {...field}
+                      displayType="input"
+                      type="text"
+                      id="budget"
+                      className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
+                      placeholder="0.00"
+                      thousandSeparator=","
+                      allowNegative={false}
+                      maxLength={18}
+                      decimalScale={2}
+                      fixedDecimalScale
+                      autoComplete="off"
+                    />
+                  )}
                 />
+
+                {errors.budget && (
+                  <p role="alert" className="text-red-500 text-sm">
+                    {errors.budget?.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="mt-6">
@@ -131,6 +158,7 @@ const AddWallet = ({
           </form>
         </div>
       </div>
+      <DevTool control={control} />
     </section>
   );
 };

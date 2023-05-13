@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
+    "@hookform/resolvers": "^3.1.0",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.11.0",
     "@radix-ui/react-popover": "^1.0.5",
@@ -31,6 +32,7 @@
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-number-format": "^5.1.4",
     "react-tailwindcss-datepicker": "^1.5.1",
     "sharp": "^0.32.1",
@@ -39,6 +41,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.3.1",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "prettier": "^2.8.6",
