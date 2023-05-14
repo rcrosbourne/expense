@@ -42,7 +42,7 @@ const AddWallet = ({
         setValue("name", wallet.name);
         setValue("category", wallet.category);
         setValue("budget", wallet.budget);
-        reset();
+        reset({...wallet});
         return wallet;
       });
       return;
@@ -71,7 +71,7 @@ const AddWallet = ({
   function onSubmit(data: FieldValues) {
     // e.preventDefault();
     setWallet(INITIAL_WALLET);
-    reset();
+    reset({...INITIAL_WALLET});
     // setEditMode(false);
     onSave();
   }
