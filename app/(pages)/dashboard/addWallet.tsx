@@ -34,32 +34,44 @@ const AddWallet = ({
   onSave: () => void;
 }) => {
   const [wallet, setWallet] = React.useState<Wallet>(INITIAL_WALLET);
-  const nameInput = React.useRef<HTMLInputElement>(null);
   const editMode = !!editWallet;
   React.useEffect(() => {
-    if (!editWallet) {
-      setWallet(INITIAL_WALLET);
-    } else {
-      setWallet(editWallet);
-      if (!nameInput.current) return;
-      const inputControl = nameInput.current;
-      inputControl.focus();
+    if (editWallet === undefined) {
+      setWallet(() => {
+        const wallet = {...INITIAL_WALLET};
+        setValue("name", wallet.name);
+        setValue("category", wallet.category);
+        setValue("budget", wallet.budget);
+        reset();
+        return wallet;
+      });
+      return;
     }
+      setWallet(() => {
+        const wallet = {...editWallet};
+        setValue("name", wallet.name);
+        setValue("category", wallet.category);
+        setValue("budget", wallet.budget);
+        return wallet;
+      });
+    setFocus("name");
   }, [editWallet]);
   const {
     register,
     handleSubmit,
     control,
+      setValue,
+      setFocus,
+      reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(WalletValidator),
-    defaultValues: INITIAL_WALLET,
+    defaultValues: {...wallet},
   });
-  let [isPending, startTransition] = React.useTransition();
   function onSubmit(data: FieldValues) {
-    console.log({ data });
     // e.preventDefault();
-    // setWallet({ id: 0, name: "", category: "personal", budget: "" });
+    setWallet(INITIAL_WALLET);
+    reset();
     // setEditMode(false);
     onSave();
   }
@@ -163,7 +175,7 @@ const AddWallet = ({
           </form>
         </div>
       </div>
-      {/*<DevTool control={control} />*/}
+      <DevTool control={control} />
     </section>
   );
 };
