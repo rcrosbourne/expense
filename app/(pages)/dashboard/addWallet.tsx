@@ -125,9 +125,8 @@ const AddWallet = ({
                 <Controller
                   name="budget"
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: { onChange, name, value } }) => (
                     <NumericFormat
-                      {...field}
                       displayType="input"
                       type="text"
                       id="budget"
@@ -139,6 +138,9 @@ const AddWallet = ({
                       decimalScale={2}
                       fixedDecimalScale
                       autoComplete="off"
+                      onChange={onChange}
+                      name={name}
+                      value={value}
                     />
                   )}
                 />
