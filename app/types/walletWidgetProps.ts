@@ -5,4 +5,8 @@ export interface WalletWidgetProps extends Wallet {
   iconForeground: string;
   iconBackground: string;
   currentBalance: string;
+  onEdit: (wallet: Wallet) => void;
+  onCancel: () => void;
+  onDelete: (wallet: Wallet) => void;
+  editMode: boolean;
 }

@@ -3,22 +3,9 @@ import React from "react";
 import { capitalize, classNames } from "@/app/utils";
 import Link from "next/link";
 import { CancelIcon, EditIcon, TrashCanIcon } from "@/app/components/icons";
-import { Wallet } from "@/app/types";
+import {WalletWidgetProps} from "@/app/types";
 
-type WalletWidgetProps = {
-  id: number;
-  name: string;
-  href: string;
-  budget: string | number | undefined;
-  iconForeground: string;
-  iconBackground: string;
-  currentBalance: string;
-  category: "personal" | "business";
-  onEdit: (wallet: Wallet) => void;
-  onCancel: () => void;
-  onDelete: (wallet: Wallet) => void;
-  editMode: boolean;
-};
+
 const WalletWidget = ({
   id = 0,
   name,

@@ -163,7 +163,7 @@ const AddWallet = ({
           </form>
         </div>
       </div>
-      <DevTool control={control} />
+      {/*<DevTool control={control} />*/}
     </section>
   );
 };
