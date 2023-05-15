@@ -1,10 +1,12 @@
 import { Wallet } from "@/app/types";
-import {addWallet, getWallets} from "@/lib/walletFunctions";
+import {addWallet, deleteWallet, getWallets} from "@/lib/walletFunctions";
 
-const RESPONSE_STATUS = {
+export const RESPONSE_STATUS = {
   SUCCESS: 200,
   ERROR: 500,
   CREATED: 201,
+  NO_CONTENT: 204,
+  UNPROCESSABLE_ENTITY: 422,
 };
 export type ApiResponse = {
   message: string;

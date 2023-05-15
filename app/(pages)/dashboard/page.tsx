@@ -43,6 +43,7 @@ export default async function Page() {
   const initWallets = walletsFromDb.map(wallet => {
     return {
       ...wallet,
+      budget: wallet.budget.toNumber(),
       href: `/wallet/${wallet.id}`,
       iconForeground: wallet.category === "business" ? "text-purple-700" : "text-teal-700",
       iconBackground: wallet.category === "business" ? "bg-purple-50" : "bg-teal-50",

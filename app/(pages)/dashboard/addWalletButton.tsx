@@ -5,6 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { NumericFormat } from "react-number-format";
 import { Wallet } from "@/app/types";
 import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
+import {Decimal} from "@prisma/client/runtime";
 
 const AddWalletButton = ({
   editWallet,
@@ -193,7 +194,7 @@ const AddWalletModal = ({
                               maxLength={18}
                               decimalScale={2}
                               fixedDecimalScale
-                              value={wallet?.budget}
+                              value={wallet?.budget?.toString()}
                               onChange={(e) =>
                                 setWallet((previousWallet) => {
                                   if (!previousWallet) return;

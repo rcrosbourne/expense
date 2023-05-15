@@ -1,17 +1,10 @@
 import { Wallet } from "@/app/types";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import currentUser from "@/lib/currentUser";
 
 export async function addWallet(wallet: Wallet) {
   //Wallet should already be validated
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) throw new Error("No session found");
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    }
-  });
+  const user = await currentUser();
   return await prisma.wallet.create({
     data: {
       name: wallet.name,
@@ -26,16 +19,29 @@ export async function addWallet(wallet: Wallet) {
   });
 }
 export async function getWallets() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) throw new Error("No session found");
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    }
-  });
+  const user = await currentUser();
   return await prisma.wallet.findMany({
     where: {
       userId: user?.id,
+    },
+  });
+}
+
+export async function deleteWallet(walletId: string) {
+  const user = await currentUser();
+  // get wallet
+  const wallet = await prisma.wallet.findFirst({
+    where: {
+      id: walletId,
+      userId: user?.id,
+    },
+  });
+  console.log({ wallet });
+  if (!wallet) return;
+  // delete wallet
+  await prisma.wallet.delete({
+    where: {
+      id: walletId,
     },
   });
 }

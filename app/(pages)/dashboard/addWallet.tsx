@@ -7,7 +7,8 @@ import { FieldValues, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
 import { User } from "next-auth";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Decimal } from "@prisma/client/runtime";
 const INITIAL_WALLET: Wallet = {
   id: 0,
   name: "",
@@ -37,53 +38,52 @@ const AddWallet = ({
   const [wallet, setWallet] = React.useState<Wallet>(INITIAL_WALLET);
   const editMode = !!editWallet;
   const router = useRouter();
-  React.useEffect(() => {
-    if (editWallet === undefined) {
-      setWallet(() => {
-        const wallet = {...INITIAL_WALLET};
-        setValue("name", wallet.name);
-        setValue("category", wallet.category);
-        setValue("budget", wallet.budget);
-        reset({...wallet});
-        return wallet;
-      });
-      return;
-    }
-      setWallet(() => {
-        const wallet = {...editWallet};
-        setValue("name", wallet.name);
-        setValue("category", wallet.category);
-        setValue("budget", wallet.budget);
-        return wallet;
-      });
-    setFocus("name");
-  }, [editWallet]);
   const {
     register,
     handleSubmit,
     control,
-      setValue,
-      setFocus,
-      reset,
+    setValue,
+    setFocus,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(WalletValidator),
-    defaultValues: {...wallet},
+    defaultValues: { ...wallet },
   });
+  React.useEffect(() => {
+    const setWalletAndResetForm = (wallet: Wallet) => {
+      setWallet(() => {
+        const initWallet = { ...wallet };
+        setValue("name", initWallet.name);
+        setValue("category", initWallet.category);
+        setValue("budget", initWallet.budget);
+        reset({ ...initWallet });
+        return initWallet;
+      });
+    };
+
+    if (editWallet === undefined) {
+      setWalletAndResetForm(INITIAL_WALLET);
+      return;
+    }
+    setWalletAndResetForm(editWallet);
+    setFocus("name");
+  }, [editWallet, setFocus, setValue, reset]);
+
   async function onSubmit(data: FieldValues) {
     // e.preventDefault();
     // store the wallet
     const response = await fetch("/api/wallets", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     });
     const wallet = await response.json();
     console.log({ wallet });
     setWallet(INITIAL_WALLET);
-    reset({...INITIAL_WALLET});
+    reset({ ...INITIAL_WALLET });
     // setEditMode(false);
     onSave();
     router.refresh();

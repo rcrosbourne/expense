@@ -4,6 +4,7 @@ import { capitalize, classNames } from "@/app/utils";
 import Link from "next/link";
 import { CancelIcon, EditIcon, TrashCanIcon } from "@/app/components/icons";
 import {WalletWidgetProps} from "@/app/types";
+import {Decimal} from "@prisma/client/runtime";
 
 
 const WalletWidget = ({
@@ -96,9 +97,9 @@ const WalletWidget = ({
             </svg>
           </span>
         </div>
-        <div className="flex divide-x divide-gray-200">
+        { onEdit && onCancel && onDelete && <div className="flex divide-x divide-gray-200">
           <div className="flex w-0 flex-1">
-            {!editMode ? (
+            {!editMode  ? (
               <button
                 type="button"
                 onClick={() => onEdit({ id, name, budget, category })}
@@ -128,7 +129,7 @@ const WalletWidget = ({
               Delete
             </button>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
