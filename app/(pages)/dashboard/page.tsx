@@ -5,6 +5,7 @@ import Home from "@/app/(pages)/dashboard/home";
 import {getServerSession} from "next-auth";
 import {redirect} from "next/navigation";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import {getWallets} from "@/lib/walletFunctions";
 
 export default async function Page() {
   const wallets: WalletWidgetProps[] = [
@@ -38,9 +39,19 @@ export default async function Page() {
   if(!session) {
     redirect('/api/auth/signin?callbackUrl=/dashboard');
   }
+  const walletsFromDb = await getWallets();
+  const initWallets = walletsFromDb.map(wallet => {
+    return {
+      ...wallet,
+      href: `/wallet/${wallet.id}`,
+      iconForeground: wallet.category === "business" ? "text-purple-700" : "text-teal-700",
+      iconBackground: wallet.category === "business" ? "bg-purple-50" : "bg-teal-50",
+      currentBalance: "0",
+    }
+  });
   return (
       <>
-        <Home wallets={wallets} stats={stats}/>
+        <Home wallets={initWallets} stats={stats}/>
       </>
   );
 }

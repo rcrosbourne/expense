@@ -7,6 +7,7 @@ import { FieldValues, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
 import { User } from "next-auth";
+import {useRouter} from "next/navigation";
 const INITIAL_WALLET: Wallet = {
   id: 0,
   name: "",
@@ -35,6 +36,7 @@ const AddWallet = ({
 }) => {
   const [wallet, setWallet] = React.useState<Wallet>(INITIAL_WALLET);
   const editMode = !!editWallet;
+  const router = useRouter();
   React.useEffect(() => {
     if (editWallet === undefined) {
       setWallet(() => {
@@ -68,12 +70,23 @@ const AddWallet = ({
     resolver: zodResolver(WalletValidator),
     defaultValues: {...wallet},
   });
-  function onSubmit(data: FieldValues) {
+  async function onSubmit(data: FieldValues) {
     // e.preventDefault();
+    // store the wallet
+    const response = await fetch("/api/wallets", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    const wallet = await response.json();
+    console.log({ wallet });
     setWallet(INITIAL_WALLET);
     reset({...INITIAL_WALLET});
     // setEditMode(false);
     onSave();
+    router.refresh();
   }
   return (
     <section aria-labelledby="add-wallet-title" className="hidden sm:block">
@@ -175,7 +188,7 @@ const AddWallet = ({
           </form>
         </div>
       </div>
-      <DevTool control={control} />
+      {/*<DevTool control={control} />*/}
     </section>
   );
 };

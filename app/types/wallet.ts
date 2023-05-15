@@ -1,6 +1,8 @@
+import {Decimal} from "@prisma/client/runtime";
+
 export type Wallet = {
-    id: number;
-    name: string;
+    budget?: number | string | undefined | Decimal;
     category: "personal" | "business";
-    budget?: number | string | undefined;
+    id: number | string | undefined;
+    name: string;
 };
