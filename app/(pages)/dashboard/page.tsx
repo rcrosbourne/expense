@@ -1,11 +1,9 @@
-
-import {PortfolioStat, type WalletWidgetProps} from "@/app/types";
+import {PortfolioStat } from "@/app/types";
 import React from "react";
 import Home from "@/app/(pages)/dashboard/home";
-import {getServerSession} from "next-auth";
 import {redirect} from "next/navigation";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
-import {getWallets} from "@/lib/walletFunctions";
+import {getWallets} from "@/lib/server/walletFunctions";
+import currentUser from "@/lib/server/currentUser";
 
 export default async function Page() {
   const stats: PortfolioStat[] = [
@@ -13,10 +11,11 @@ export default async function Page() {
   { label: "Last 30 days", value: "$300,000.00" },
   { label: "Last 7 days", value: "$75,000.00" },
 ];
-  const session = await getServerSession(authOptions)
-  if(!session) {
+  const user = await currentUser();
+  if(!user) {
     redirect('/api/auth/signin?callbackUrl=/dashboard');
   }
+
   const walletsFromDb = await getWallets();
   const initWallets = walletsFromDb.map(wallet => {
     return {

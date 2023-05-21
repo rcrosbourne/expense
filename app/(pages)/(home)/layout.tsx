@@ -1,6 +1,6 @@
 import React from "react";
 import Providers from "@/app/providers";
-import { wotfard } from "@/app/utils/constants";
+import { wotfard } from "@/app/utils/fonts";
 import "../../globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";

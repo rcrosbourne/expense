@@ -3,6 +3,12 @@ import React from "react";
 import { signIn, signOut } from "next-auth/react";
 
 const AuthOptions = ({ type }: { type: "signin" | "signout" }) => {
+  const handleSignOut = async () => {
+    void signOut({ callbackUrl: "/" });
+  }
+  const handleSignIn = async () => {
+   void signIn("google", { callbackUrl: "/dashboard" })
+  }
   if (type === "signin") {
     return (
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
@@ -10,7 +16,7 @@ const AuthOptions = ({ type }: { type: "signin" | "signout" }) => {
           <div>
             <div className="grid grid-cols-2 gap-4">
               <button
-                onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+                onClick={handleSignIn}
                 type="button"
                 className="flex w-full items-center justify-center gap-3 rounded-md bg-slate-100 px-3 py-1.5 text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9BF0] hover:bg-slate-200"
               >
@@ -79,7 +85,7 @@ const AuthOptions = ({ type }: { type: "signin" | "signout" }) => {
       <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
         <div>
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={handleSignOut}
             type="button"
             className="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >

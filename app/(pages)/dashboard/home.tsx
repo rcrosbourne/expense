@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PortfolioStat, User, WalletWidgetProps } from "@/app/types";
+import { PortfolioStat, WalletWidgetProps } from "@/app/types";
 import Image from "next/image";
 
 import AddWalletButton from "@/app/(pages)/dashboard/addWalletButton";
@@ -9,8 +9,7 @@ import AddWallet from "@/app/(pages)/dashboard/addWallet";
 import WalletWidget from "@/app/(pages)/dashboard/walletWidget";
 import UserInfo from "@/app/(pages)/dashboard/userInfo";
 import PortfolioStats from "@/app/(pages)/dashboard/PortfolioStats";
-import { useSession } from "next-auth/react";
-import DeleteWalletDialog from "@/app/(pages)/dashboard/deleteWalletDialog";
+import {useCurrentUser} from "@/lib/client/currentUser";
 const recentHires = [
   {
     name: "Leonard Krasner",
@@ -72,13 +71,7 @@ const Home = ({
   wallets: WalletWidgetProps[];
   stats: PortfolioStat[];
 }) => {
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      return { redirectTo: "/api/auth/signin" };
-    },
-  });
-  const user = session?.user as User;
+  const {user} = useCurrentUser();
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -182,7 +175,6 @@ const Home = ({
           </div>
         </div>
       </div>
-      <DeleteWalletDialog />
     </main>
   );
 };

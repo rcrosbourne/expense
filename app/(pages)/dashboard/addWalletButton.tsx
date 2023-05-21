@@ -4,8 +4,12 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { NumericFormat } from "react-number-format";
 import { Wallet } from "@/app/types";
-import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
-import {useEditWallet, useHandleCancelEdit} from "@/lib/walletStore";
+import useWindowSize from "@/app/hooks/useWindowSize";
+import {useEditWallet, useHandleCancelEdit} from "@/lib/store/walletStore";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {walletSchemaValidator} from "@/lib/validations/wallet";
+import WalletForm from "@/app/(pages)/dashboard/components/walletForm";
 
 const AddWalletButton = () => {
   const [addWalletOpen, setAddWalletOpen] = React.useState(false);
@@ -25,27 +29,22 @@ const AddWalletButton = () => {
   );
 };
 const AddWalletModal = ({open, setOpen,}: { open: boolean; setOpen: (open: boolean) => void; }) => {
-  const [wallet, setWallet] = React.useState<Wallet | undefined>(undefined);
   const windowSize = useWindowSize();
   const editWallet = useEditWallet();
+  const editMode = !!editWallet;
+
   const handleCancelEdit = useHandleCancelEdit();
 
   React.useEffect(() => {
     if (editWallet === undefined || windowSize.width > 640) return;
-    setWallet(editWallet);
     setOpen(true);
   }, [editWallet, setOpen, windowSize]);
   function onClose() {
-    setWallet(undefined);
     setOpen(false);
     handleCancelEdit();
   }
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    //   TODO: Persist wallet update
-    setWallet(undefined);
+  function onSubmitCallback() {
     setOpen(false);
-    handleCancelEdit();
   }
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -91,107 +90,10 @@ const AddWalletModal = ({open, setOpen,}: { open: boolean; setOpen: (open: boole
                       as="h3"
                       className="text-base font-semibold leading-6 text-slate-900"
                     >
-                      {wallet?.id ? "Edit Wallet" : "Add Wallet"}
+                      {editMode ? "Edit Wallet" : "Add Wallet"}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <form onSubmit={onSubmit}>
-                        <div className="mt-6 flow-root">
-                          <div className="flex flex-col">
-                            <label
-                              htmlFor="walletName"
-                              className="text-sm font-medium text-slate-700"
-                            >
-                              Name
-                            </label>
-                            <input
-                              autoFocus
-                              type="text"
-                              name="walletName"
-                              id="walletName"
-                              className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                              value={wallet?.name}
-                              onChange={(e) =>
-                                setWallet((previousWallet) => {
-                                  if (!previousWallet) return;
-                                  return {
-                                    ...previousWallet,
-                                    name: e.target.value,
-                                  };
-                                })
-                              }
-                            />
-                          </div>
-                          <div className="flex flex-col mt-4">
-                            <label
-                              htmlFor="walletCategory"
-                              className="text-sm font-medium text-slate-700"
-                            >
-                              Category
-                            </label>
-                            <select
-                              id="walletCategory"
-                              name="walletCategory"
-                              className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                              value={wallet?.category}
-                              onChange={(e) =>
-                                setWallet((previousWallet) => {
-                                  if (!previousWallet) return;
-                                  return {
-                                    ...previousWallet,
-                                    category:
-                                      e.target.value === "personal"
-                                        ? "personal"
-                                        : "business",
-                                  };
-                                })
-                              }
-                            >
-                              <option value="personal">Personal</option>
-                              <option value="business">Business</option>
-                            </select>
-                          </div>
-                          <div className="flex flex-col mt-4">
-                            <label
-                              htmlFor="walletBudget"
-                              className="text-sm font-medium text-slate-700"
-                            >
-                              Budget
-                            </label>
-                            <NumericFormat
-                              displayType="input"
-                              type="text"
-                              name="budget"
-                              id="budget"
-                              className="mt-1 focus:ring-teal-500 focus:border-teal-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md"
-                              placeholder="0.00"
-                              thousandSeparator=","
-                              allowNegative={false}
-                              maxLength={18}
-                              decimalScale={2}
-                              fixedDecimalScale
-                              value={wallet?.budget?.toString()}
-                              onChange={(e) =>
-                                setWallet((previousWallet) => {
-                                  if (!previousWallet) return;
-                                  return {
-                                    ...previousWallet,
-                                    budget: e.target.value,
-                                  };
-                                })
-                              }
-                              autoComplete="off"
-                            />
-                          </div>
-                        </div>
-                        <div className="mt-6">
-                          <button
-                            type="submit"
-                            className="flex w-full items-center justify-center rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500"
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </form>
+                     <WalletForm onSubmitCallback={() => onSubmitCallback()}/>
                     </div>
                   </div>
                 </div>
