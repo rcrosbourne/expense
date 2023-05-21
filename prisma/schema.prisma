@@ -46,6 +46,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  wallets       Wallet[]
 
   @@map("users")
 }
@@ -57,4 +58,23 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  name      String
+  category  Category
+  budget    Decimal  @default(0) @db.Money
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wallets")
+}
+
+enum Category {
+  personal
+  business
 }

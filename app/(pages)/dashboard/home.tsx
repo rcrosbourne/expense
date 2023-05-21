@@ -1,17 +1,16 @@
 "use client";
 
 import React from "react";
-import { PortfolioStat, User, Wallet, WalletWidgetProps } from "@/app/types";
+import { PortfolioStat, User, WalletWidgetProps } from "@/app/types";
 import Image from "next/image";
 
 import AddWalletButton from "@/app/(pages)/dashboard/addWalletButton";
 import AddWallet from "@/app/(pages)/dashboard/addWallet";
 import WalletWidget from "@/app/(pages)/dashboard/walletWidget";
-import ConfirmDialog from "@/app/components/confirmDialog";
 import UserInfo from "@/app/(pages)/dashboard/userInfo";
 import PortfolioStats from "@/app/(pages)/dashboard/PortfolioStats";
-import { useImmerReducer } from "use-immer";
 import { useSession } from "next-auth/react";
+import DeleteWalletDialog from "@/app/(pages)/dashboard/deleteWalletDialog";
 const recentHires = [
   {
     name: "Leonard Krasner",
@@ -66,38 +65,6 @@ const announcements = [
   },
 ];
 
-type State = {
-  editWallet: Wallet | undefined;
-  deleteWallet: Wallet | undefined;
-  openConfirm: boolean;
-};
-type HomeActions = {
-  type: "cancel-edit" | "edit-wallet" | "delete-wallet";
-  wallet?: Wallet;
-  isOpen?: boolean;
-};
-let INITIAL_STATE: State = {
-  editWallet: undefined,
-  deleteWallet: undefined,
-  openConfirm: false,
-};
-function reducer(draft: State, action: HomeActions) {
-  switch (action.type) {
-    case "delete-wallet": {
-      draft.deleteWallet = action.wallet;
-      draft.openConfirm = action.isOpen || false;
-      return;
-    }
-    case "cancel-edit": {
-      draft.editWallet = undefined;
-      return;
-    }
-    case "edit-wallet": {
-      draft.editWallet = action.wallet;
-      return;
-    }
-  }
-}
 const Home = ({
   wallets,
   stats,
@@ -105,16 +72,13 @@ const Home = ({
   wallets: WalletWidgetProps[];
   stats: PortfolioStat[];
 }) => {
-  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
-  const { data:session, status} = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-        return { redirectTo: "/api/auth/signin" };
-    }
+      return { redirectTo: "/api/auth/signin" };
+    },
   });
   const user = session?.user as User;
-  // if (status === "loading") return null;
-  // if (status === "unauthenticated") return "Not authenticated";
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -131,13 +95,9 @@ const Home = ({
                 </h2>
                 <div className="bg-white p-6">
                   <div className="sm:flex sm:items-center sm:justify-between">
-                    {user && <UserInfo user={user} /> }
+                    {user && <UserInfo user={user} />}
                     <div className="mt-5 flex justify-center sm:mt-0">
-                      <AddWalletButton
-                        editWallet={state.editWallet}
-                        onCancel={() => dispatch({ type: "cancel-edit" })}
-                        onSave={() => dispatch({ type: "cancel-edit" })}
-                      />
+                      <AddWalletButton/>
                     </div>
                   </div>
                 </div>
@@ -153,25 +113,7 @@ const Home = ({
                   Quick links
                 </h2>
                 {wallets.map((wallet) => (
-                  <WalletWidget
-                    key={wallet.name}
-                    id={wallet.id}
-                    name={wallet.name}
-                    href={wallet.href}
-                    category={wallet.category}
-                    budget={wallet.budget}
-                    currentBalance={wallet.currentBalance}
-                    iconForeground={wallet.iconForeground}
-                    iconBackground={wallet.iconBackground}
-                    onEdit={(wallet) =>
-                      dispatch({ type: "edit-wallet", wallet })
-                    }
-                    onCancel={() => dispatch({ type: "cancel-edit" })}
-                    onDelete={() =>
-                      dispatch({ type: "delete-wallet", wallet, isOpen: true })
-                    }
-                    editMode={state.editWallet?.id === wallet.id}
-                  />
+                  <WalletWidget wallet={wallet} key={wallet.id}/>
                 ))}
               </div>
             </section>
@@ -180,10 +122,7 @@ const Home = ({
           {/* Right column */}
           <div className="sm:grid grid-cols-1 gap-4 sm:sticky sm:top-[10%]">
             {/* Add Wallet */}
-            <AddWallet
-              editWallet={state.editWallet}
-              onSave={() => dispatch({ type: "cancel-edit" })}
-            />
+            <AddWallet/>
             {/* Recent Hires */}
             <section aria-labelledby="recent-hires-title">
               <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -243,19 +182,7 @@ const Home = ({
           </div>
         </div>
       </div>
-      <ConfirmDialog
-        openConfirm={state.openConfirm}
-        setOpenConfirm={(isOpen) =>
-          dispatch({ type: "delete-wallet", wallet: undefined, isOpen })
-        }
-        title={"Delete Wallet"}
-        message={`You are about to delete "${state.deleteWallet?.name}"`}
-        confirmButtonText={"Delete"}
-        cancelButtonText={"Cancel"}
-        confirm={() =>
-          dispatch({ type: "delete-wallet", wallet: undefined, isOpen: false })
-        }
-      />
+      <DeleteWalletDialog />
     </main>
   );
 };

@@ -2,14 +2,23 @@
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
 const Providers = ({
-    session,
+  session,
   children,
 }: {
   session?: Session | null;
   children: React.ReactNode;
 }) => {
-  return <SessionProvider session={session}>{children}</SessionProvider>;
+  const queryClient = new QueryClient();
+  return (
+    <SessionProvider session={session}>
+      <QueryClientProvider client={queryClient}>{children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </SessionProvider>
+  );
 };
 export default Providers;

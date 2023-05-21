@@ -1,6 +1,6 @@
 export type Wallet = {
-    id: number;
-    name: string;
-    category: "personal" | "business";
     budget?: number | string | undefined;
+    category: "personal" | "business";
+    id:  string;
+    name: string;
 };

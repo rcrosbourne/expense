@@ -5,19 +5,10 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { NumericFormat } from "react-number-format";
 import { Wallet } from "@/app/types";
 import useWindowSize, { WindowSize } from "@/app/hooks/useWindowSize";
+import {useEditWallet, useHandleCancelEdit} from "@/lib/walletStore";
 
-const AddWalletButton = ({
-  editWallet,
-  onCancel,
-  onSave,
-}: {
-  editWallet?: Wallet;
-  onCancel: () => void;
-  onSave: () => void;
-}) => {
+const AddWalletButton = () => {
   const [addWalletOpen, setAddWalletOpen] = React.useState(false);
-  const windowSize = useWindowSize();
-
   return (
     <>
       <button
@@ -29,31 +20,16 @@ const AddWalletButton = ({
       <AddWalletModal
         open={addWalletOpen}
         setOpen={setAddWalletOpen}
-        editWallet={editWallet}
-        onCancel={onCancel}
-        onSave={onSave}
-        windowSize={windowSize}
       />
     </>
   );
 };
-const AddWalletModal = ({
-  open,
-  setOpen,
-  editWallet,
-  onCancel,
-  onSave,
-  windowSize,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  editWallet?: Wallet;
-  onCancel: () => void;
-  onSave: () => void;
-  windowSize: WindowSize;
-}) => {
+const AddWalletModal = ({open, setOpen,}: { open: boolean; setOpen: (open: boolean) => void; }) => {
   const [wallet, setWallet] = React.useState<Wallet | undefined>(undefined);
-  const nameInput = React.useRef();
+  const windowSize = useWindowSize();
+  const editWallet = useEditWallet();
+  const handleCancelEdit = useHandleCancelEdit();
+
   React.useEffect(() => {
     if (editWallet === undefined || windowSize.width > 640) return;
     setWallet(editWallet);
@@ -62,14 +38,14 @@ const AddWalletModal = ({
   function onClose() {
     setWallet(undefined);
     setOpen(false);
-    onCancel();
+    handleCancelEdit();
   }
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     //   TODO: Persist wallet update
     setWallet(undefined);
     setOpen(false);
-    onSave();
+    handleCancelEdit();
   }
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -193,7 +169,7 @@ const AddWalletModal = ({
                               maxLength={18}
                               decimalScale={2}
                               fixedDecimalScale
-                              value={wallet?.budget}
+                              value={wallet?.budget?.toString()}
                               onChange={(e) =>
                                 setWallet((previousWallet) => {
                                   if (!previousWallet) return;
