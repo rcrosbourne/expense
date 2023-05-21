@@ -13,6 +13,7 @@ const ConfirmDialog = ({
   confirmButtonText,
   cancelButtonText,
   confirm,
+  disableButtons = false,
 }: {
   openConfirm: boolean;
   setOpenConfirm: (openConfirmDelete: boolean) => void;
@@ -21,8 +22,8 @@ const ConfirmDialog = ({
   confirmButtonText: string;
   cancelButtonText: string;
   confirm: (status: boolean) => void;
+  disableButtons?: boolean;
 }) => {
-
   return (
     <Transition.Root show={openConfirm} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -83,6 +84,7 @@ const ConfirmDialog = ({
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
+                    disabled={disableButtons}
                     className="inline-flex w-full justify-center rounded-md bg-rose-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500 sm:ml-3 sm:w-auto"
                     onClick={() => confirm(true)}
                   >
@@ -90,8 +92,9 @@ const ConfirmDialog = ({
                   </button>
                   <button
                     type="button"
+                    disabled={disableButtons}
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={ () => confirm(false)}
+                    onClick={() => confirm(false)}
                   >
                     {cancelButtonText}
                   </button>

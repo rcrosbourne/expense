@@ -1,18 +1,8 @@
 import { Wallet } from "@/app/types";
-import {addWallet, deleteWallet, getWallets} from "@/lib/walletFunctions";
+import {addWallet, getWallets} from "@/lib/server/walletFunctions";
+import {ApiResponse} from "@/app/types/apiResponse";
+import {RESPONSE_STATUS} from "@/app/utils/constants";
 
-export const RESPONSE_STATUS = {
-  SUCCESS: 200,
-  ERROR: 500,
-  CREATED: 201,
-  NO_CONTENT: 204,
-  UNPROCESSABLE_ENTITY: 422,
-};
-export type ApiResponse = {
-  message: string;
-  data?: unknown;
-  error?: Error;
-};
 export async function POST(request: Request) {
   try {
     const wallet = (await request.json()) as Wallet;

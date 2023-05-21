@@ -4,7 +4,7 @@ import Providers from "@/app/providers";
 import Header from "@/app/components/header";
 import Footer from "@/app/components/footer";
 import { navigation, userNavigation } from "@/app/data/navigation";
-import { wotfard } from "@/app/utils/constants";
+import { wotfard } from "@/app/utils/fonts";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import {getServerSession, User} from "next-auth";
