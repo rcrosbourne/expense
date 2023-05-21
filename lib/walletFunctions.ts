@@ -36,12 +36,14 @@ export async function deleteWallet(walletId: string) {
       userId: user?.id,
     },
   });
-  console.log({ wallet });
-  if (!wallet) return;
+  if (!wallet) {
+    console.log("no wallet found");
+    return;
+  }
   // delete wallet
-  await prisma.wallet.delete({
+  return await prisma.wallet.delete({
     where: {
-      id: walletId,
+      id: wallet.id,
     },
   });
 }

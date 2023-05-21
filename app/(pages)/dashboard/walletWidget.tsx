@@ -3,24 +3,21 @@ import React from "react";
 import { capitalize, classNames } from "@/app/utils";
 import Link from "next/link";
 import { CancelIcon, EditIcon, TrashCanIcon } from "@/app/components/icons";
-import {WalletWidgetProps} from "@/app/types";
-import {Decimal} from "@prisma/client/runtime";
+import { WalletWidgetProps } from "@/app/types";
+import {
+  useEditWallet,
+  useHandleCancelEdit,
+  useHandleDeleteWallet,
+  useHandleEditWallet,
+} from "@/lib/walletStore";
 
+const WalletWidget = ({wallet}: {wallet: WalletWidgetProps}) => {
+  const handleEditWallet = useHandleEditWallet();
+  const handleCancelEdit = useHandleCancelEdit();
+  const handleDeleteWallet = useHandleDeleteWallet();
+  const editWallet = useEditWallet();
+  const editMode = editWallet?.id === wallet.id;
 
-const WalletWidget = ({
-  id = 0,
-  name,
-  href,
-  iconForeground,
-  iconBackground,
-  currentBalance,
-  category,
-  budget,
-  onEdit,
-  onCancel,
-  onDelete,
-  editMode,
-}: WalletWidgetProps) => {
   return (
     <div className="group rounded-lg relative bg-slate-50 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-cyan-500">
       <div className="divide-y divide-slate-200">
@@ -28,33 +25,33 @@ const WalletWidget = ({
           <div>
             <span
               className={classNames(
-                iconBackground,
-                iconForeground,
+                wallet.iconBackground,
+                wallet.iconForeground,
                 "inline-flex rounded-lg p-3 ring-4 ring-slate-50"
               )}
             >
-              {name}
+              {wallet.name}
             </span>
           </div>
           <div className="mt-8">
             <h3 className="text-lg font-medium">
               <Link
-                href={href}
+                href={wallet.href}
                 className="focus:outline-none text-lg text-slate-900"
               >
                 {/* Extend touch target to entire panel */}
                 <span className="absolute inset-0" aria-hidden="true" />
-                {currentBalance}
+                {wallet.currentBalance}
               </Link>
             </h3>
             <div className="mt-2 text-xs text-gray-500 grid grid-cols-2">
               <div className="flex flex-col w-full">
                 <span>Budget</span>
-                <span className="text-lg">{budget}</span>
+                <span className="text-lg">{wallet.budget}</span>
               </div>
               <div className={"flex flex-col"}>
                 <span>Category</span>
-                <span className="text-lg">{capitalize(category)}</span>
+                <span className="text-lg">{capitalize(wallet.category)}</span>
               </div>
             </div>
           </div>
@@ -97,12 +94,12 @@ const WalletWidget = ({
             </svg>
           </span>
         </div>
-        { onEdit && onCancel && onDelete && <div className="flex divide-x divide-gray-200">
+        <div className="flex divide-x divide-gray-200">
           <div className="flex w-0 flex-1">
-            {!editMode  ? (
+            {!editMode ? (
               <button
                 type="button"
-                onClick={() => onEdit({ id, name, budget, category })}
+                onClick={() => handleEditWallet({ id: wallet.id, name: wallet.name, budget: wallet.budget, category: wallet.category })}
                 className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
               >
                 <EditIcon className="h-5 w-5 text-gray-400" />
@@ -111,7 +108,7 @@ const WalletWidget = ({
             ) : (
               <button
                 type="button"
-                onClick={() => onCancel()}
+                onClick={handleCancelEdit}
                 className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
               >
                 <CancelIcon className="h-5 w-5 fill-current" />
@@ -122,14 +119,16 @@ const WalletWidget = ({
           <div className="-ml-px flex w-0 flex-1">
             <button
               type="button"
-              onClick={() => onDelete({id, budget, name, category})}
+              onClick={() =>
+                handleDeleteWallet(true, { id: wallet.id, name: wallet.name, budget: wallet.budget, category: wallet.category })
+              }
               className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
             >
               <TrashCanIcon className="h-5 w-5 text-gray-400" />
               Delete
             </button>
           </div>
-        </div>}
+        </div>
       </div>
     </div>
   );

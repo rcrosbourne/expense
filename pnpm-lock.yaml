@@ -11,7 +11,7 @@ specifiers:
   '@t3-oss/env-nextjs': ^0.3.1
   '@tailwindcss/container-queries': ^0.1.0
   '@tailwindcss/forms': ^0.5.3
-  '@tanstack/react-query': ^4.29.5
+  '@tanstack/react-query': ^4.29.7
   '@tanstack/react-query-devtools': ^4.29.7
   '@types/node': 18.15.5
   '@types/react': 18.0.28
@@ -40,6 +40,7 @@ specifiers:
   typescript: 5.0.2
   use-immer: ^0.9.0
   zod: ^3.21.4
+  zustand: ^4.3.8
 
 dependencies:
   '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
@@ -51,8 +52,8 @@ dependencies:
   '@t3-oss/env-nextjs': 0.3.1_3njcnrxeck5p7fwt4qrur37zvy
   '@tailwindcss/container-queries': 0.1.0_tailwindcss@3.3.0
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.3.0
-  '@tanstack/react-query': 4.29.5_biqbaboplfbrettd7655fr4n2y
-  '@tanstack/react-query-devtools': 4.29.7_6ufraba7zs65ngvban5jjen7be
+  '@tanstack/react-query': 4.29.7_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-query-devtools': 4.29.7_rj5w6kms7jpdvm2o5bkb5pclni
   '@types/node': 18.15.5
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
@@ -74,6 +75,7 @@ dependencies:
   typescript: 5.0.2
   use-immer: 0.9.0_immer@10.0.1+react@18.2.0
   zod: 3.21.4
+  zustand: 4.3.8_immer@10.0.1+react@18.2.0
 
 devDependencies:
   '@hookform/devtools': 4.3.1_zula6vjvt3wdocc4mwcxqa6nzi
@@ -849,11 +851,11 @@ packages:
       remove-accents: 0.4.2
     dev: false
 
-  /@tanstack/query-core/4.29.5:
-    resolution: {integrity: sha512-xXIiyQ/4r9KfaJ3k6kejqcaqFXXBTzN2aOJ5H1J6aTJE9hl/nbgAdfF6oiIu0CD5xowejJEJ6bBg8TO7BN4NuQ==}
+  /@tanstack/query-core/4.29.7:
+    resolution: {integrity: sha512-GXG4b5hV2Loir+h2G+RXhJdoZhJLnrBWsuLB2r0qBRyhWuXq9w/dWxzvpP89H0UARlH6Mr9DiVj4SMtpkF/aUA==}
     dev: false
 
-  /@tanstack/react-query-devtools/4.29.7_6ufraba7zs65ngvban5jjen7be:
+  /@tanstack/react-query-devtools/4.29.7_rj5w6kms7jpdvm2o5bkb5pclni:
     resolution: {integrity: sha512-fckNnBV6Kfbtq6EJqQen8oBjPqGFcOPS9SJmNKLbFLQgd7OpNIlA4M0r37iJYUY9m14/ESKc1wzKd36VfeiPjg==}
     peerDependencies:
       '@tanstack/react-query': 4.29.7
@@ -861,15 +863,15 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       '@tanstack/match-sorter-utils': 8.8.4
-      '@tanstack/react-query': 4.29.5_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/react-query': 4.29.7_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       superjson: 1.12.3
       use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
-  /@tanstack/react-query/4.29.5_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-F87cibC3s3eG0Q90g2O+hqntpCrudKFnR8P24qkH9uccEhXErnJxBC/AAI4cJRV2bfMO8IeGZQYf3WyYgmSg0w==}
+  /@tanstack/react-query/4.29.7_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-ijBWEzAIo09fB1yd22slRZzprrZ5zMdWYzBnCg5qiXuFbH78uGN1qtGz8+Ed4MuhaPaYSD+hykn+QEKtQviEtg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -880,7 +882,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 4.29.5
+      '@tanstack/query-core': 4.29.7
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
@@ -4037,4 +4039,21 @@ packages:
 
   /zod/3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zustand/4.3.8_immer@10.0.1+react@18.2.0:
+    resolution: {integrity: sha512-4h28KCkHg5ii/wcFFJ5Fp+k1J3gJoasaIbppdgZFO4BPJnsNxL0mQXBSFgOgAdCdBj35aDTPvdAJReTMntFPGg==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      immer: 10.0.1
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false

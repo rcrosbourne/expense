@@ -6,11 +6,12 @@ import { z } from "zod";
 import { FieldValues, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
-import { User } from "next-auth";
 import { useRouter } from "next/navigation";
-import { Decimal } from "@prisma/client/runtime";
+
+import { useEditWallet, useHandleCancelEdit } from "@/lib/walletStore";
+import { useMutation } from "@tanstack/react-query";
 const INITIAL_WALLET: Wallet = {
-  id: 0,
+  id: "0",
   name: "",
   category: "personal",
   budget: "",
@@ -28,14 +29,10 @@ const WalletValidator = z.object({
     }
   }, z.number().min(100)),
 });
-const AddWallet = ({
-  editWallet,
-  onSave,
-}: {
-  editWallet?: Wallet;
-  onSave: () => void;
-}) => {
+const AddWallet = () => {
   const [wallet, setWallet] = React.useState<Wallet>(INITIAL_WALLET);
+  const editWallet = useEditWallet();
+  const handleCancelEdit = useHandleCancelEdit();
   const editMode = !!editWallet;
   const router = useRouter();
   const {
@@ -50,6 +47,28 @@ const AddWallet = ({
     resolver: zodResolver(WalletValidator),
     defaultValues: { ...wallet },
   });
+
+  const { mutate, isLoading } = useMutation(["wallets", wallet.name], {
+    mutationFn: (data: FieldValues) => {
+      return fetch("/api/wallets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    },
+    onSuccess: () => {
+      setWallet(INITIAL_WALLET);
+      reset({ ...INITIAL_WALLET });
+      handleCancelEdit();
+      router.refresh();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   React.useEffect(() => {
     const setWalletAndResetForm = (wallet: Wallet) => {
       setWallet(() => {
@@ -71,22 +90,7 @@ const AddWallet = ({
   }, [editWallet, setFocus, setValue, reset]);
 
   async function onSubmit(data: FieldValues) {
-    // e.preventDefault();
-    // store the wallet
-    const response = await fetch("/api/wallets", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const wallet = await response.json();
-    console.log({ wallet });
-    setWallet(INITIAL_WALLET);
-    reset({ ...INITIAL_WALLET });
-    // setEditMode(false);
-    onSave();
-    router.refresh();
+    mutate(data);
   }
   return (
     <section aria-labelledby="add-wallet-title" className="hidden sm:block">
@@ -179,10 +183,17 @@ const AddWallet = ({
             </div>
             <div className="mt-6">
               <button
+                disabled={isLoading}
                 type="submit"
                 className="flex w-full items-center justify-center rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500"
               >
-                {editMode ? "Save" : "Create"}
+                {editMode
+                  ? isLoading
+                    ? "Saving"
+                    : "Save"
+                  : isLoading
+                  ? "Creating"
+                  : "Create"}
               </button>
             </div>
           </form>
