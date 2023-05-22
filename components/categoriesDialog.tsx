@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { expenseCategories, incomeCategories } from "@/app/data/categories";
 import { Dialog, Transition } from "@headlessui/react";
-import { classNames } from "@/app/utils";
+import { classNames } from "../../lib/utils";
 import {AnyCategory, Category} from "@/app/types";
 const CategoriesDialog = ({
   isOpen,
