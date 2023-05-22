@@ -10,9 +10,8 @@ import { useEditWallet, useHandleCancelEdit } from "@/lib/store/walletStore";
 import { NumericFormat } from "react-number-format";
 import { useRouter } from "next/navigation";
 import useWindowSize from "@/hooks/useWindowSize";
-import { useToast } from "@/hooks/useToast";
 import { Wallet } from "@/types";
-import { ToastAction } from "@/components/toast/toast";
+import {useToast} from "@/hooks/useToast";
 
 const WalletForm = ({
   onSubmitCallback,

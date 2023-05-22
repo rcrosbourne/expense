@@ -35,7 +35,7 @@ const DeleteWalletDialog = () => {
         toast({
           title: "Wallet deleted",
           description: "Wallet deleted successfully",
-          variant: "destructive",
+          variant: "default",
         });
       },
     }
