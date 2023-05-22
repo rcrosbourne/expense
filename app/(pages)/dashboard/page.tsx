@@ -1,4 +1,4 @@
-import {PortfolioStat } from "@/app/types";
+import {PortfolioStat } from "../../../types";
 import React from "react";
 import Home from "@/app/(pages)/dashboard/home";
 import {redirect} from "next/navigation";

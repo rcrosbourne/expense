@@ -1,9 +1,9 @@
 import React, {Fragment} from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { recurringPeriodicity } from "@/app/data/recurringPeriodicity";
-import { classNames } from "@/app/utils";
-import {Periodicity} from "@/app/types";
-import {RecurringIcon, TickIcon} from "@/app/components/icons";
+import { recurringPeriodicity } from "@/data/recurringPeriodicity";
+import { classNames } from "../../../../../lib/utils";
+import {Periodicity} from "../../../../../types";
+import {RecurringIcon, TickIcon} from "@/components/icons";
 
 const PeriodicityDropdown = ({
   value,

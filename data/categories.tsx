@@ -1,4 +1,4 @@
-import {AnyCategory, Category} from "@/app/types/category";
+import {AnyCategory, Category} from "@/types/category";
 import {
   BankTransferIcon,
   BusinessIcon,
@@ -27,7 +27,7 @@ import {
   TransportIcon,
   TravelIcon,
   UtilityIcon,
-} from "@/app/components/icons";
+} from "@/components/icons";
 
 export const incomeCategories: AnyCategory[] = [
   {

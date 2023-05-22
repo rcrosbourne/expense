@@ -1,7 +1,7 @@
 // Sever-side functions for wallet CRUD operations.
 import "server-only";
 
-import { Wallet } from "@/app/types";
+import { Wallet } from "../../types";
 import prisma from "@/lib/prisma";
 import currentUser from "@/lib/server/currentUser";
 

@@ -1,4 +1,4 @@
-import {Wallet} from "@/app/types/wallet";
+import {Wallet} from "@/types/wallet";
 
 export type DashboardStore = {
   editWallet: Wallet | undefined;

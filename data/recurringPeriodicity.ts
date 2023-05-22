@@ -1,4 +1,4 @@
-import { Periodicity } from "@/app/types";
+import { Periodicity } from "../types";
 
 export const recurringPeriodicity: Periodicity[] = [
   "One-time payment",

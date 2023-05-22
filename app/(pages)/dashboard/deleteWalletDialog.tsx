@@ -1,5 +1,5 @@
 import React from "react";
-import ConfirmDialog from "@/app/components/confirmDialog";
+import ConfirmDialog from "@/components/confirmDialog";
 import {
   useDeleteWallet,
   useHandleDeleteWallet,
@@ -7,24 +7,39 @@ import {
 } from "@/lib/store/walletStore";
 import { useMutation } from "@tanstack/react-query";
 import { WalletFunctions } from "@/lib/client/walletFunctions";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/useToast";
 
 const DeleteWalletDialog = () => {
   const handleDeleteWallet = useHandleDeleteWallet();
   const deleteWallet = useDeleteWallet();
   const openConfirm = useOpenConfirm();
   const router = useRouter();
-  const {mutateAsync, isLoading} = useMutation(["wallets", deleteWallet?.id], {
-    mutationFn: WalletFunctions.Destroy,
-    onError: (error) => {
-      // TODO: Add logging.
-      console.error(error);
-    },
-    onSuccess: async () => {
-      handleDeleteWallet(false, undefined);
-      router.refresh();
-    },
-  });
+  const { toast } = useToast();
+  const { mutateAsync, isLoading } = useMutation(
+    ["wallets", deleteWallet?.id],
+    {
+      mutationFn: WalletFunctions.Destroy,
+      onError: (error) => {
+        // TODO: Add logging.
+        console.error(error);
+        toast({
+          title: "An error occurred",
+          description: "This action cannot be completed as this time.",
+          variant: "destructive",
+        });
+      },
+      onSuccess: async () => {
+        handleDeleteWallet(false, undefined);
+        router.refresh();
+        toast({
+          title: "Wallet deleted",
+          description: "Wallet deleted successfully",
+          variant: "destructive",
+        });
+      },
+    }
+  );
   const onConfirm = async (deleteConfirmed: boolean) => {
     if (deleteConfirmed && deleteWallet) {
       void mutateAsync(deleteWallet.id);

@@ -1,5 +1,5 @@
 import React from "react";
-import {TodoListIcon} from "@/app/components/icons";
+import {TodoListIcon} from "@/components/icons";
 
 const Notes = ({notes, onNotesChanged}: {notes: string, onNotesChanged: (event: React.ChangeEvent<HTMLInputElement>) => void}) => {
   return (

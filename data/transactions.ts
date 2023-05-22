@@ -1,8 +1,8 @@
-import { FinancialTransaction } from "@/app/types";
+import { FinancialTransaction } from "../types";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { expenseCategories, incomeCategories } from "@/app/data/categories";
+import { expenseCategories, incomeCategories } from "@/data/categories";
 dayjs.extend(timezone);
 dayjs.extend(utc);
 export const transactions: FinancialTransaction[] = [

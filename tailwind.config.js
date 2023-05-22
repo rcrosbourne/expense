@@ -8,9 +8,16 @@ module.exports = {
   ],
   darkMode: "class",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1440px",
+      },
+    },
     extend: {
       fontFamily: {
-       sans: ['var(--font-wotfard)']
+        sans: ["var(--font-wotfard)"],
       },
       keyframes: {
         slideUpAndFade: {
@@ -39,10 +46,16 @@ module.exports = {
         slideLeftAndFade:
           "slideLeftAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
       },
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`,
+        sm: "calc(var(--radius) - 4px)",
+      },
     },
   },
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/container-queries"),
+    require("tailwindcss-animate"),
   ],
 };

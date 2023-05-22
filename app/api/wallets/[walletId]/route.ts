@@ -1,9 +1,9 @@
 import {deleteWallet, updateWallet} from "@/lib/server/walletFunctions";
 import { z } from "zod";
-import {ApiResponse} from "@/app/types/apiResponse";
-import {RESPONSE_STATUS} from "@/app/utils/constants";
+import {ApiResponse} from "@/types/apiResponse";
+import {RESPONSE_STATUS} from "@/lib/utils/constants";
 import {walletSchemaValidator} from "@/lib/validations/wallet";
-import {Wallet} from "@/app/types";
+import {Wallet} from "../../../../types";
 
 const routeContextSchema = z.object({
   params: z.object({

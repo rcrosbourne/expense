@@ -1,6 +1,6 @@
 import "client-only";
 import {FieldValues} from "react-hook-form";
-import {Wallet} from "@/app/types";
+import {Wallet} from "../../types";
 const WALLET_API_URL: string = "/api/wallets";
 
 async function Index() {
