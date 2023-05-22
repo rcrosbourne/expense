@@ -1,5 +1,5 @@
 import React from "react";
-import { classNames } from "@/app/utils";
+import { classNames } from "../../../lib/utils";
 type IconProps = {
   className?: string;
 };
