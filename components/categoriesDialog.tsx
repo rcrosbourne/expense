@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { expenseCategories, incomeCategories } from "@/data/categories";
 import { Dialog, Transition } from "@headlessui/react";
 import { classNames } from "../lib/utils";
-import {AnyCategory, Category} from "../types";
+import { AnyCategory, Category } from "../types";
 const CategoriesDialog = ({
   isOpen,
   close,
@@ -20,7 +20,7 @@ const CategoriesDialog = ({
   const handleSelection = (category: AnyCategory) => {
     setSelectedCategory(category);
     close();
-  }
+  };
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={close}>
@@ -60,8 +60,18 @@ const CategoriesDialog = ({
                     className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
                   >
                     {categories.map((category) => (
-                      <button key={category.name} className="group" onClick={() => handleSelection(category)}>
-                        <li className={`col-span-1 flex rounded-md shadow-sm ${selectedCategory?.name === category.name ? "ring-2 ring-offset-1 ring-teal-800" : ""}`}>
+                      <button
+                        key={category.name}
+                        className="group"
+                        onClick={() => handleSelection(category)}
+                      >
+                        <li
+                          className={`col-span-1 flex rounded-md shadow-sm ${
+                            selectedCategory?.name === category.name
+                              ? "ring-2 ring-offset-1 ring-teal-800"
+                              : ""
+                          }`}
+                        >
                           <div
                             className={classNames(
                               category.backgroundColor,
