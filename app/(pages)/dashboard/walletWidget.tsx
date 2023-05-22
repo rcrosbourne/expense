@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { capitalize, classNames } from "@/app/utils";
+import {capitalize, classNames, formatNumberAsCurrency} from "@/app/utils";
 import Link from "next/link";
 import { CancelIcon, EditIcon, TrashCanIcon } from "@/app/components/icons";
 import { WalletWidgetProps } from "@/app/types";
@@ -66,13 +66,13 @@ const WalletWidget = ({ wallet }: { wallet: WalletWidgetProps }) => {
                 >
                   {/* Extend touch target to entire panel */}
                   <span className="absolute inset-0" aria-hidden="true" />
-                  {wallet.currentBalance}
+                  ${formatNumberAsCurrency(wallet.currentBalance)}
                 </Link>
               </h3>
               <div className="mt-2 text-xs text-gray-500 grid grid-cols-2">
                 <div className="flex flex-col w-full">
                   <span>Budget</span>
-                  <span className="text-lg">{wallet.budget}</span>
+                  <span className="text-lg">${formatNumberAsCurrency(wallet.budget)}</span>
                 </div>
                 <div className={"flex flex-col"}>
                   <span>Category</span>
