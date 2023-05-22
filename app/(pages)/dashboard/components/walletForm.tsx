@@ -175,6 +175,7 @@ const WalletForm = ({
                 onChange={onChange}
                 name={name}
                 value={value}
+                inputMode="numeric"
               />
             )}
           />
