@@ -1,19 +1,18 @@
 "use client";
-import React, { FormEvent } from "react";
-import { Wallet } from "@/app/types";
+import React from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { walletSchemaValidator } from "@/lib/validations/wallet";
 import { useMutation } from "@tanstack/react-query";
 import { WalletFunctions } from "@/lib/client/walletFunctions";
-import { INITIAL_WALLET } from "@/app/utils/constants";
-import {
-  useEditWallet,
-  useHandleCancelEdit,
-} from "@/lib/store/walletStore";
+import { INITIAL_WALLET } from "@/lib/utils/constants";
+import { useEditWallet, useHandleCancelEdit } from "@/lib/store/walletStore";
 import { NumericFormat } from "react-number-format";
 import { useRouter } from "next/navigation";
-import useWindowSize from "@/app/hooks/useWindowSize";
+import useWindowSize from "@/hooks/useWindowSize";
+import { useToast } from "@/hooks/useToast";
+import { Wallet } from "@/types";
+import { ToastAction } from "@/components/toast/toast";
 
 const WalletForm = ({
   onSubmitCallback,
@@ -26,6 +25,7 @@ const WalletForm = ({
   const editMode = !!editWallet;
   const router = useRouter();
   const windowSize = useWindowSize();
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -44,32 +44,49 @@ const WalletForm = ({
       setWallet(INITIAL_WALLET);
       reset({ ...INITIAL_WALLET });
       handleCancelEdit();
+      toast({
+        title: "Wallet added",
+        description: "Wallet has been added successfully",
+      });
       router.refresh();
     },
     onError: (error) => {
       console.error(error);
     },
   });
-  const { mutate:update, isLoading: updateIsLoading } = useMutation(["wallets", wallet.name], {
-    mutationFn: WalletFunctions.Update,
-    onSuccess: async () => {
-      setWallet(INITIAL_WALLET);
-      reset({ ...INITIAL_WALLET });
-      handleCancelEdit();
-      router.refresh();
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { mutate: update, isLoading: updateIsLoading } = useMutation(
+    ["wallets", wallet.name],
+    {
+      mutationFn: WalletFunctions.Update,
+      onSuccess: async () => {
+        setWallet(INITIAL_WALLET);
+        reset({ ...INITIAL_WALLET });
+        handleCancelEdit();
+        toast({
+          title: "Wallet updated",
+          description: "Wallet has been added successfully",
+          variant: "default",
+        });
+        router.refresh();
+      },
+      onError: (error) => {
+        console.error(error);
+        toast({
+          title: "An error occurred",
+          description: "This action cannot be completed at this time.",
+          variant: "destructive",
+        });
+      },
+    }
+  );
   async function onSubmit(data: FieldValues | Wallet) {
-    if(editMode) {
+    if (editMode) {
       await update(data as Wallet);
     } else {
       await mutate(data as FieldValues);
     }
     if (onSubmitCallback) {
-        onSubmitCallback();
+      onSubmitCallback();
     }
   }
   React.useEffect(() => {

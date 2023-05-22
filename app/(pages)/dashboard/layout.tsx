@@ -1,13 +1,14 @@
 import React from "react";
 import "../../globals.css";
 import Providers from "@/app/providers";
-import Header from "@/app/components/header";
-import Footer from "@/app/components/footer";
-import { navigation, userNavigation } from "@/app/data/navigation";
-import { wotfard } from "@/app/utils/fonts";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import { navigation, userNavigation } from "@/data/navigation";
+import { wotfard } from "@/lib/utils/fonts";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import {getServerSession, User} from "next-auth";
+import {Toaster} from "@/components/toast/toaster";
 export const metadata = {
   title: "Expense Tracker",
   description: "Simple free way to track your expenses",
@@ -33,6 +34,7 @@ export default async function RootLayout({
           />
           <div className="min-h-full">{children}</div>
           <Footer />
+           <Toaster />
         </Providers>
       </body>
     </html>

@@ -3,12 +3,12 @@ import React, { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { classNames } from "../../lib/utils";
-import { Navigation } from "@/app/types";
+import { classNames } from "../lib/utils";
+import { Navigation } from "../types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { User } from "next-auth";
-import logoCyan200 from "@/app/assets/images/logo-cyan-200.svg";
-import logoCyan600 from "@/app/assets/images/logo-cyan-600.svg";
+import logoCyan200 from "@/assets/images/logo-cyan-200.svg";
+import logoCyan600 from "@/assets/images/logo-cyan-600.svg";
 const Header = ({
   userNavigation,
   navigation,

@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import {capitalize, classNames, formatNumberAsCurrency} from "@/app/utils";
+import {capitalize, classNames, formatNumberAsCurrency} from "../../../lib/utils";
 import Link from "next/link";
-import { CancelIcon, EditIcon, TrashCanIcon } from "@/app/components/icons";
-import { WalletWidgetProps } from "@/app/types";
+import { CancelIcon, EditIcon, TrashCanIcon } from "@/components/icons";
+import { WalletWidgetProps } from "../../../types";
 import {
   useEditWallet,
   useHandleCancelEdit,
@@ -11,9 +11,6 @@ import {
   useHandleEditWallet,
 } from "@/lib/store/walletStore";
 import DeleteWalletDialog from "@/app/(pages)/dashboard/deleteWalletDialog";
-import { useMutation } from "@tanstack/react-query";
-import { WalletFunctions } from "@/lib/client/walletFunctions";
-import { useRouter } from "next/navigation";
 
 const WalletWidget = ({ wallet }: { wallet: WalletWidgetProps }) => {
   const handleEditWallet = useHandleEditWallet();
@@ -44,7 +41,7 @@ const WalletWidget = ({ wallet }: { wallet: WalletWidgetProps }) => {
 
   return (
     <>
-      <div className="group rounded-lg relative bg-slate-50 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-cyan-500">
+      <div className="animate-in fade-in zoom-in group rounded-lg relative bg-slate-50 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-cyan-500">
         <div className="divide-y divide-slate-200">
           <div className="p-6 pb-2">
             <div>

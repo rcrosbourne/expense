@@ -1,7 +1,7 @@
 import "client-only";
 import { create } from "zustand";
-import { Wallet } from "@/app/types";
-import {DashboardStore} from "@/app/types/dashboardStore";
+import { Wallet } from "../../types";
+import {DashboardStore} from "@/types/dashboardStore";
 
 const useStore = create<DashboardStore>()((set) => ({
   editWallet: undefined,

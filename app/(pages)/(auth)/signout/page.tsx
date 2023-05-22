@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import AuthOptions from "@/app/(pages)/(auth)/components/authOptions";
-import logo from "@/app/assets/images/logo-indigo.svg";
+import logo from "@/assets/images/logo-indigo.svg";
 const Page = () => {
   return (
     <>

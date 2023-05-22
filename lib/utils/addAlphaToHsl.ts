@@ -1,4 +1,4 @@
-import {CategoryBackgroundColorsAsHsl} from "@/app/types";
+import {CategoryBackgroundColorsAsHsl} from "../../types";
 
 export const addAlphaToHsl = <T extends keyof CategoryBackgroundColorsAsHsl>(
   color: CategoryBackgroundColorsAsHsl[T],

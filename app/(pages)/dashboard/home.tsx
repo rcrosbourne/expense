@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PortfolioStat, WalletWidgetProps } from "@/app/types";
+import { PortfolioStat, WalletWidgetProps } from "../../../types";
 import Image from "next/image";
 
 import AddWalletButton from "@/app/(pages)/dashboard/addWalletButton";

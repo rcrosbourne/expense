@@ -1,4 +1,4 @@
-import {AnyCategory, Periodicity} from "@/app/types";
+import {AnyCategory, Periodicity} from "@/types/index";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 export type FinancialTransaction = {
     id: number;

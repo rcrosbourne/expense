@@ -6,8 +6,8 @@ import {
   LockClosedIcon,
 } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import logo from "@/app/assets/images/logo-indigo.svg";
-import screenshot from "@/app/assets/images/screenshot.png";
+import logo from "@/assets/images/logo-indigo.svg";
+import screenshot from "@/assets/images/screenshot.png";
 import HomeHeader from "@/app/(pages)/(home)/homeHeader";
 const features = [
   {

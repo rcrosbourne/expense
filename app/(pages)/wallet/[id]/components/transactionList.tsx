@@ -2,15 +2,15 @@ import React from "react";
 import {
   classNames,
   formatNumberAsCurrency,
-} from "@/app/utils";
-import { FinancialTransaction } from "@/app/types";
+} from "../../../../../lib/utils";
+import { FinancialTransaction } from "../../../../../types";
 import {
   CancelIcon,
   EditIcon,
   RecurringIcon,
   TrashCanIcon,
-} from "@/app/components/icons";
-import formatDateOrReturnDefault from "@/app/utils/formatDateOrReturnDefault";
+} from "@/components/icons";
+import formatDateOrReturnDefault from "@/lib/utils/formatDateOrReturnDefault";
 
 const TransactionList = ({
   transactions,

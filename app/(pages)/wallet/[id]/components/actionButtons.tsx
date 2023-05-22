@@ -1,6 +1,6 @@
-import { classNames } from "@/app/utils";
+import { classNames } from "../../../../../lib/utils";
 import React from "react";
-import { TickIcon, XIcon } from "@/app/components/icons";
+import { TickIcon, XIcon } from "@/components/icons";
 
 const ActionButtons = ({
   isIncome,

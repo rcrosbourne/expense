@@ -12,7 +12,7 @@ import {
   BarElement,
   Plugin,
 } from "chart.js";
-import { formatNumberAsCurrency } from "@/app/utils";
+import { formatNumberAsCurrency } from "../../../../../lib/utils";
 
 ChartJS.register(
   CategoryScale,

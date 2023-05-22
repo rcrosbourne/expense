@@ -1,4 +1,4 @@
-import {WalletStats} from "@/app/types";
+import {WalletStats} from "../types";
 
 export const walletStats: WalletStats = {
   total: "$100,000.00",

@@ -2,11 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 @layer base {
-    html,
+  html,
     body,
     #__next, /* for Next.js */
-    main
-    {
-        height: 100%;
-    }
+    main {
+    height: 100%;
+  }
+  :root {
+    --border: 214.3 31.8% 91.4%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --border: 216 34% 17%;
+    --radius: 0.5rem;
+  }
 }

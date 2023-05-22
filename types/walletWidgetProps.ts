@@ -1,4 +1,4 @@
-import {Wallet} from "@/app/types/wallet";
+import {Wallet} from "@/types/wallet";
 
 export interface WalletWidgetProps extends Wallet {
   href: string;

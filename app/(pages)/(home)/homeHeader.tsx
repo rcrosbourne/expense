@@ -4,7 +4,7 @@ import { Dialog } from "@headlessui/react";
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import logo from "@/app/assets/images/logo-indigo.svg";
+import logo from "@/assets/images/logo-indigo.svg";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 

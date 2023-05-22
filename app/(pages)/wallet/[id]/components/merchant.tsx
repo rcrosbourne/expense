@@ -1,5 +1,5 @@
 import React from "react";
-import {ShopIcon} from "@/app/components/icons";
+import {ShopIcon} from "@/components/icons";
 const Merchant = ({
   merchant,
   onMerchantChanged,
