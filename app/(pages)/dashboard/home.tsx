@@ -74,11 +74,7 @@ const Home = ({
   stats: PortfolioStat[];
 }) => {
   const { user } = useCurrentUser();
-  const {data: {data: walletData}}= useQuery({
-    queryKey: ["wallets"],
-    queryFn: WalletFunctions.Index,
-    initialData: {message: "Loading", data: wallets}
-  });
+
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -112,7 +108,7 @@ const Home = ({
                 <h2 className="sr-only" id="quick-links-title">
                   Quick links
                 </h2>
-                {walletData.map((wallet) => (
+                {wallets.map((wallet) => (
                   <WalletWidget wallet={wallet} key={wallet.id} />
                 ))}
               </div>

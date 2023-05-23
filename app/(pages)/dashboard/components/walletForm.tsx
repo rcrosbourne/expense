@@ -50,8 +50,7 @@ const WalletForm = ({
         title: "Wallet added",
         description: "Wallet has been added successfully",
       });
-      // router.refresh();
-      await client.invalidateQueries(["wallets"])
+      router.refresh();
     },
     onError: (error) => {
       console.error(error);
@@ -70,8 +69,7 @@ const WalletForm = ({
           description: "Wallet has been added successfully",
           variant: "default",
         });
-        await client.invalidateQueries(["wallets"])
-        // router.refresh();
+        router.refresh();
       },
       onError: (error) => {
         console.error(error);
