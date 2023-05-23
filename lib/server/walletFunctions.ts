@@ -23,7 +23,7 @@ export async function addWallet(wallet: Wallet) {
 }
 export async function getWallets() {
   const user = await currentUser();
-  const wallets = await prisma.wallet.findMany({
+   return await prisma.wallet.findMany({
     where: {
       userId: user?.id,
     },
@@ -31,19 +31,7 @@ export async function getWallets() {
       createdAt: "desc",
     },
   });
-  const initWallets: WalletWidgetProps[] = wallets.map((wallet) => {
-    return {
-      ...wallet,
-      budget: wallet.budget.toNumber(),
-      href: `/wallet/${wallet.id}`,
-      iconForeground:
-        wallet.category === "business" ? "text-purple-700" : "text-teal-700",
-      iconBackground:
-        wallet.category === "business" ? "bg-purple-50" : "bg-teal-50",
-      currentBalance: "0",
-    };
-  });
-  return initWallets;
+
 }
 export async function deleteWallet(walletId: string) {
   const user = await currentUser();

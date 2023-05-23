@@ -10,8 +10,6 @@ import WalletWidget from "@/app/(pages)/dashboard/walletWidget";
 import UserInfo from "@/app/(pages)/dashboard/userInfo";
 import PortfolioStats from "@/app/(pages)/dashboard/PortfolioStats";
 import { useCurrentUser } from "@/lib/client/currentUser";
-import { useQuery } from "@tanstack/react-query";
-import { WalletFunctions } from "@/lib/client/walletFunctions";
 const recentHires = [
   {
     name: "Leonard Krasner",
