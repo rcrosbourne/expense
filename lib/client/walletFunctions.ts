@@ -1,10 +1,13 @@
 import "client-only";
 import {FieldValues} from "react-hook-form";
-import {Wallet} from "../../types";
+import {Wallet, WalletWidgetProps} from "@/types";
 const WALLET_API_URL: string = "/api/wallets";
 
 async function Index() {
-  return await fetch(WALLET_API_URL);
+  const response =  await fetch(WALLET_API_URL, {
+    method: "GET",
+  });
+    return await response.json() as WalletWidgetProps[];
 }
 async function Store(wallet: FieldValues) {
   return await fetch(WALLET_API_URL, {

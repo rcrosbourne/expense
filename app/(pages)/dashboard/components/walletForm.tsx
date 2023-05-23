@@ -187,7 +187,7 @@ const WalletForm = ({
       </div>
       <div className="mt-6">
         <button
-          disabled={isLoading}
+          disabled={isLoading || updateIsLoading}
           type="submit"
           className="flex w-full items-center justify-center rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-300 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed"
         >

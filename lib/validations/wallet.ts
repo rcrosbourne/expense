@@ -10,5 +10,5 @@ export const walletSchemaValidator = z.object({
       if (value === "") return 0;
       return parseFloat(value.replace(/,/g, ""));
     }
-  }, z.number().min(0, "Budget must be a positive number")),
+  }, z.number().min(0.01, "Budget must be at least 0.01")),
 });

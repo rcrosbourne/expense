@@ -1,4 +1,4 @@
-import { Wallet } from "../../../types";
+import { Wallet } from "@/types";
 import {addWallet, getWallets} from "@/lib/server/walletFunctions";
 import {ApiResponse} from "@/types/apiResponse";
 import {RESPONSE_STATUS} from "@/lib/utils/constants";

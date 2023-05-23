@@ -1,7 +1,7 @@
 // Sever-side functions for wallet CRUD operations.
 import "server-only";
 
-import { Wallet } from "../../types";
+import { Wallet, WalletWidgetProps } from "../../types";
 import prisma from "@/lib/prisma";
 import currentUser from "@/lib/server/currentUser";
 
@@ -23,11 +23,27 @@ export async function addWallet(wallet: Wallet) {
 }
 export async function getWallets() {
   const user = await currentUser();
-  return await prisma.wallet.findMany({
+  const wallets = await prisma.wallet.findMany({
     where: {
       userId: user?.id,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
+  const initWallets: WalletWidgetProps[] = wallets.map((wallet) => {
+    return {
+      ...wallet,
+      budget: wallet.budget.toNumber(),
+      href: `/wallet/${wallet.id}`,
+      iconForeground:
+        wallet.category === "business" ? "text-purple-700" : "text-teal-700",
+      iconBackground:
+        wallet.category === "business" ? "bg-purple-50" : "bg-teal-50",
+      currentBalance: "0",
+    };
+  });
+  return initWallets;
 }
 export async function deleteWallet(walletId: string) {
   const user = await currentUser();
@@ -50,27 +66,27 @@ export async function deleteWallet(walletId: string) {
   });
 }
 export async function updateWallet(wallet: Wallet) {
-    const user = await currentUser();
-    // get wallet
-    const walletToUpdate = await prisma.wallet.findFirst({
-        where: {
-        id: wallet.id,
-        userId: user?.id,
-        },
-    });
-    if (!walletToUpdate) {
-        console.log("no wallet found");
-        return;
-    }
-    // update wallet
-    return await prisma.wallet.update({
-      where: {
-        id: wallet.id,
-      },
-      data: {
-        name: wallet.name,
-        budget: wallet.budget,
-        category: wallet.category,
-      },
-    });
+  const user = await currentUser();
+  // get wallet
+  const walletToUpdate = await prisma.wallet.findFirst({
+    where: {
+      id: wallet.id,
+      userId: user?.id,
+    },
+  });
+  if (!walletToUpdate) {
+    console.log("no wallet found");
+    return;
+  }
+  // update wallet
+  return await prisma.wallet.update({
+    where: {
+      id: wallet.id,
+    },
+    data: {
+      name: wallet.name,
+      budget: wallet.budget,
+      category: wallet.category,
+    },
+  });
 }

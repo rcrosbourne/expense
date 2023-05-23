@@ -9,7 +9,9 @@ import AddWallet from "@/app/(pages)/dashboard/addWallet";
 import WalletWidget from "@/app/(pages)/dashboard/walletWidget";
 import UserInfo from "@/app/(pages)/dashboard/userInfo";
 import PortfolioStats from "@/app/(pages)/dashboard/PortfolioStats";
-import {useCurrentUser} from "@/lib/client/currentUser";
+import { useCurrentUser } from "@/lib/client/currentUser";
+import { useQuery } from "@tanstack/react-query";
+import { WalletFunctions } from "@/lib/client/walletFunctions";
 const recentHires = [
   {
     name: "Leonard Krasner",
@@ -71,7 +73,7 @@ const Home = ({
   wallets: WalletWidgetProps[];
   stats: PortfolioStat[];
 }) => {
-  const {user} = useCurrentUser();
+  const { user } = useCurrentUser();
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -90,7 +92,7 @@ const Home = ({
                   <div className="sm:flex sm:items-center sm:justify-between">
                     {user && <UserInfo user={user} />}
                     <div className="mt-5 flex justify-center sm:mt-0">
-                      <AddWalletButton/>
+                      <AddWalletButton />
                     </div>
                   </div>
                 </div>
@@ -106,7 +108,7 @@ const Home = ({
                   Quick links
                 </h2>
                 {wallets.map((wallet) => (
-                  <WalletWidget wallet={wallet} key={wallet.id}/>
+                  <WalletWidget wallet={wallet} key={wallet.id} />
                 ))}
               </div>
             </section>
@@ -115,7 +117,7 @@ const Home = ({
           {/* Right column */}
           <div className="sm:grid grid-cols-1 gap-4 sm:sticky sm:top-[10%]">
             {/* Add Wallet */}
-            <AddWallet/>
+            <AddWallet />
             {/* Recent Hires */}
             <section aria-labelledby="recent-hires-title">
               <div className="overflow-hidden rounded-lg bg-white shadow">

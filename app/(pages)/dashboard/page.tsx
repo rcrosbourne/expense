@@ -1,9 +1,10 @@
-import {PortfolioStat } from "../../../types";
-import React from "react";
+import {PortfolioStat } from "@/types";
+import React, {Suspense} from "react";
 import Home from "@/app/(pages)/dashboard/home";
 import {redirect} from "next/navigation";
 import {getWallets} from "@/lib/server/walletFunctions";
 import currentUser from "@/lib/server/currentUser";
+import {LucideLoader2} from "lucide-react";
 
 export default async function Page() {
   const stats: PortfolioStat[] = [
@@ -17,19 +18,11 @@ export default async function Page() {
   }
 
   const walletsFromDb = await getWallets();
-  const initWallets = walletsFromDb.map(wallet => {
-    return {
-      ...wallet,
-      budget: wallet.budget.toNumber(),
-      href: `/wallet/${wallet.id}`,
-      iconForeground: wallet.category === "business" ? "text-purple-700" : "text-teal-700",
-      iconBackground: wallet.category === "business" ? "bg-purple-50" : "bg-teal-50",
-      currentBalance: "0",
-    }
-  });
   return (
       <>
-        <Home wallets={initWallets} stats={stats}/>
+        <Suspense fallback={<LucideLoader2 className="animate-spin"/>}>
+          <Home wallets={walletsFromDb} stats={stats}/>
+        </Suspense>
       </>
   );
 }
