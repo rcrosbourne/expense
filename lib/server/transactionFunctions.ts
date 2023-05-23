@@ -41,6 +41,9 @@ export async function getTransactions(wallet: Wallet) {
     where: {
       walletId: wallet?.id,
     },
+    include: {
+      category: true,
+    },
     orderBy: {
       createdAt: "desc",
     },

@@ -21,9 +21,21 @@ export async function addWallet(wallet: Wallet) {
     },
   });
 }
+export async function getWallet(walletId: string) {
+  const user = await currentUser();
+  return await prisma.wallet.findFirst({
+    where: {
+      userId: user?.id,
+      id: walletId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
 export async function getWallets() {
   const user = await currentUser();
-   return await prisma.wallet.findMany({
+  return await prisma.wallet.findMany({
     where: {
       userId: user?.id,
     },
@@ -31,7 +43,6 @@ export async function getWallets() {
       createdAt: "desc",
     },
   });
-
 }
 export async function deleteWallet(walletId: string) {
   const user = await currentUser();
