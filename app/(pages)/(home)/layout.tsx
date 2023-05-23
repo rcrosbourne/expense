@@ -5,6 +5,7 @@ import "../../globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Toaster } from "@/components/toast/toaster";
+import { Analytics } from '@vercel/analytics/react';
 export default async function RootLayout({
   children,
 }: {
@@ -18,6 +19,7 @@ export default async function RootLayout({
           {children}
           <Toaster />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

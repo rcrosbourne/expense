@@ -7,8 +7,9 @@ import { navigation, userNavigation } from "@/data/navigation";
 import { wotfard } from "@/lib/utils/fonts";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import {getServerSession, User} from "next-auth";
-import {Toaster} from "@/components/toast/toaster";
+import { getServerSession, User } from "next-auth";
+import { Toaster } from "@/components/toast/toaster";
+import { Analytics } from "@vercel/analytics/react";
 export const metadata = {
   title: "Expense Tracker",
   description: "Simple free way to track your expenses",
@@ -34,8 +35,9 @@ export default async function RootLayout({
           />
           <div className="min-h-full">{children}</div>
           <Footer />
-           <Toaster />
+          <Toaster />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

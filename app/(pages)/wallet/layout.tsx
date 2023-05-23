@@ -4,11 +4,12 @@ import Providers from "@/app/providers";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { navigation, userNavigation } from "@/data/navigation";
-import {wotfard} from "@/lib/utils/fonts";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
-import {getServerSession, User} from "next-auth";
-import {redirect} from "next/navigation";
-import {Toaster} from "@/components/toast/toaster";
+import { wotfard } from "@/lib/utils/fonts";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession, User } from "next-auth";
+import { redirect } from "next/navigation";
+import { Toaster } from "@/components/toast/toaster";
+import { Analytics } from "@vercel/analytics/react";
 export const metadata = {
   title: "Expense Tracker",
   description: "Simple free way to track your expenses",
@@ -19,8 +20,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  if(!session) {
-    redirect('/api/auth/signin?callbackUrl=/dashboard');
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/dashboard");
   }
   return (
     <html lang="en" className={`h-full bg-gray-100 ${wotfard.variable}`}>
@@ -35,6 +36,7 @@ export default async function RootLayout({
           <Footer />
           <Toaster />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

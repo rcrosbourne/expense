@@ -3,6 +3,7 @@ import Providers from "@/app/providers";
 import { wotfard } from "@/lib/utils/fonts";
 import "../../globals.css";
 import { Toaster } from "@/components/toast/toaster";
+import { Analytics } from "@vercel/analytics/react";
 export default function RootLayout({
   children,
 }: {
@@ -15,6 +16,7 @@ export default function RootLayout({
           {children}
           <Toaster />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
