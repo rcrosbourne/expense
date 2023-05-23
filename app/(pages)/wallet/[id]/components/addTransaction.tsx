@@ -14,7 +14,7 @@ import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Dialog, Transition } from "@headlessui/react";
 
 const INITIAL_STATE: FinancialTransaction = {
-  id: 0,
+  id: "0",
   type: "expense",
   amount: undefined,
   date: { startDate: null, endDate: null },

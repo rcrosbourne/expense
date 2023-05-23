@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
@@ -13,7 +14,6 @@ async function main() {
       type: "income",
     },
   });
-
   const extraIncome = await prisma.transactionCategory.upsert({
     where: { name_type: {name: "Extra Income", type: "income" }},
     update: {
@@ -371,8 +371,7 @@ async function main() {
     customExpense,
   });
 }
-main()
-  .then(async () => {
+main().then(async () => {
     await prisma.$disconnect();
   })
   .catch(async (e) => {

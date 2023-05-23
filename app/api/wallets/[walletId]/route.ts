@@ -3,7 +3,7 @@ import { z } from "zod";
 import {ApiResponse} from "@/types/apiResponse";
 import {RESPONSE_STATUS} from "@/lib/utils/constants";
 import {walletSchemaValidator} from "@/lib/validations/wallet";
-import {Wallet} from "../../../../types";
+import {Wallet} from "@/types";
 
 const routeContextSchema = z.object({
   params: z.object({

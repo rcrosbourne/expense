@@ -1,3 +1,4 @@
+
 export const formatNumberAsCurrency = (
   amount: string | number | bigint | null | undefined
 ): string => {

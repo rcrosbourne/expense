@@ -1,7 +1,7 @@
 import {AnyCategory, Periodicity} from "@/types/index";
 import {DateValueType} from "react-tailwindcss-datepicker/dist/types";
 export type FinancialTransaction = {
-    id: number;
+    id: string;
     type: "income" | "expense";
     amount: number | string | undefined;
     periodicity: Periodicity;
