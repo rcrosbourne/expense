@@ -3,7 +3,7 @@ import React from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { walletSchemaValidator } from "@/lib/validations/wallet";
-import { useMutation } from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import { WalletFunctions } from "@/lib/client/walletFunctions";
 import { INITIAL_WALLET } from "@/lib/utils/constants";
 import { useEditWallet, useHandleCancelEdit } from "@/lib/store/walletStore";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import useWindowSize from "@/hooks/useWindowSize";
 import { Wallet } from "@/types";
 import {useToast} from "@/hooks/useToast";
+import {useCurrentUser} from "@/lib/client/currentUser";
 
 const WalletForm = ({
   onSubmitCallback,
@@ -23,8 +24,10 @@ const WalletForm = ({
   const editWallet = useEditWallet();
   const editMode = !!editWallet;
   const router = useRouter();
+  const {user} = useCurrentUser();
   const windowSize = useWindowSize();
   const { toast } = useToast();
+  const client = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -47,7 +50,8 @@ const WalletForm = ({
         title: "Wallet added",
         description: "Wallet has been added successfully",
       });
-      router.refresh();
+      // router.refresh();
+      await client.invalidateQueries(["wallets"])
     },
     onError: (error) => {
       console.error(error);
@@ -66,7 +70,8 @@ const WalletForm = ({
           description: "Wallet has been added successfully",
           variant: "default",
         });
-        router.refresh();
+        await client.invalidateQueries(["wallets"])
+        // router.refresh();
       },
       onError: (error) => {
         console.error(error);
