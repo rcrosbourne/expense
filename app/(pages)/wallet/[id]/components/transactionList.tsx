@@ -2,8 +2,8 @@ import React from "react";
 import {
   classNames,
   formatNumberAsCurrency,
-} from "../../../../../lib/utils";
-import { FinancialTransaction } from "../../../../../types";
+} from "@/lib/utils";
+import { FinancialTransaction } from "@/types";
 import {
   CancelIcon,
   EditIcon,
