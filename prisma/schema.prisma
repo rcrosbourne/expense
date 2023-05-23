@@ -69,9 +69,44 @@ model Wallet {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions FinancialTransaction[]
 
   @@map("wallets")
+}
+
+model FinancialTransaction {
+  id          String              @id @default(cuid())
+  amount      Decimal             @db.Money
+  category    TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
+  type        TransactionType
+  date        DateTime            @default(now())
+  notes       String?
+  merchant    String?
+  periodicity String              @default("One-time payment")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+
+  walletId              String @map("wallet_id")
+  wallet                Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  transactionCategoryId String @map("transaction_category_id")
+
+  @@map("financial_transactions")
+}
+
+model TransactionCategory {
+  id                   String                 @id @default(cuid())
+  name                 String
+  type                 TransactionType
+  FinancialTransaction FinancialTransaction[]
+
+  @@unique([name, type])
+  @@map("transaction_categories")
+}
+
+enum TransactionType {
+  income
+  expense
 }
 
 enum Category {

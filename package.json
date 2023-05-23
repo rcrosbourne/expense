@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.16",
@@ -21,7 +24,6 @@
     "@tailwindcss/forms": "^0.5.3",
     "@tanstack/react-query": "^4.29.7",
     "@tanstack/react-query-devtools": "^4.29.7",
-    "@types/node": "18.15.5",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@vercel/analytics": "^1.0.1",
@@ -47,18 +49,20 @@
     "sharp": "^0.32.1",
     "tailwind-merge": "^1.12.0",
     "tailwindcss-animate": "^1.0.5",
-    "typescript": "5.0.2",
     "use-immer": "^0.9.0",
     "zod": "^3.21.4",
     "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
+    "@types/node": "18.15.5",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "prettier": "^2.8.6",
     "prettier-plugin-tailwindcss": "^0.2.5",
     "prisma": "^4.11.0",
-    "tailwindcss": "^3.3.0"
+    "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.1",
+    "typescript": "5.0.2"
   }
 }

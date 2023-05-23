@@ -113,7 +113,7 @@ export const expenseCategories: AnyCategory[] = [
     icon: <ShoppingIcon />,
   },
   {
-    name: "Transport",
+    name: "Transportation",
     foregroundColor: "text-slate-900",
     backgroundColor: "bg-neutral-300",
     backgroundColorAsHsl: "hsl(0,0%,83.1%)",
