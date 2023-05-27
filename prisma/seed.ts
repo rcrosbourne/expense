@@ -1,10 +1,9 @@
-// @ts-nocheck
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
   // Income Categories
   const business = await prisma.transactionCategory.upsert({
-    where: { name_type: {name: "Business", type: "income"}},
+    where: { name_type: { name: "Business", type: "income" } },
     update: {
       name: "Business",
       type: "income",
@@ -15,7 +14,7 @@ async function main() {
     },
   });
   const extraIncome = await prisma.transactionCategory.upsert({
-    where: { name_type: {name: "Extra Income", type: "income" }},
+    where: { name_type: { name: "Extra Income", type: "income" } },
     update: {
       name: "Extra Income",
       type: "income",
@@ -26,7 +25,7 @@ async function main() {
     },
   });
   const gift = await prisma.transactionCategory.upsert({
-    where: { name_type:{name: "Gift", type: "income" }},
+    where: { name_type: { name: "Gift", type: "income" } },
     update: {
       name: "Gift",
       type: "income",
@@ -37,7 +36,7 @@ async function main() {
     },
   });
   const interestDividend = await prisma.transactionCategory.upsert({
-    where: {  name_type:{ name: "Interest, Dividend", type: "income" }},
+    where: { name_type: { name: "Interest, Dividend", type: "income" } },
     update: {
       name: "Interest, Dividend",
       type: "income",
@@ -48,7 +47,7 @@ async function main() {
     },
   });
   const salary = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Salary", type: "income" }},
+    where: { name_type: { name: "Salary", type: "income" } },
     update: {
       name: "Salary",
       type: "income",
@@ -59,7 +58,7 @@ async function main() {
     },
   });
   const other = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Other", type: "income" }},
+    where: { name_type: { name: "Other", type: "income" } },
     update: {
       name: "Other",
       type: "income",
@@ -70,7 +69,7 @@ async function main() {
     },
   });
   const custom = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Custom", type: "income" }},
+    where: { name_type: { name: "Custom", type: "income" } },
     update: {
       name: "Custom",
       type: "income",
@@ -82,7 +81,7 @@ async function main() {
   });
   // Expense Categories
   const meal = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Meal", type: "expense" }},
+    where: { name_type: { name: "Meal", type: "expense" } },
     update: {
       name: "Meal",
       type: "expense",
@@ -93,7 +92,7 @@ async function main() {
     },
   });
   const grocery = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Grocery", type: "expense" }},
+    where: { name_type: { name: "Grocery", type: "expense" } },
     update: {
       name: "Grocery",
       type: "expense",
@@ -104,7 +103,7 @@ async function main() {
     },
   });
   const shopping = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Shopping", type: "expense" }},
+    where: { name_type: { name: "Shopping", type: "expense" } },
     update: {
       name: "Shopping",
       type: "expense",
@@ -115,7 +114,7 @@ async function main() {
     },
   });
   const transportation = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Transportation", type: "expense" }},
+    where: { name_type: { name: "Transportation", type: "expense" } },
     update: {
       name: "Transportation",
       type: "expense",
@@ -126,7 +125,7 @@ async function main() {
     },
   });
   const bankTransfer = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Bank Transfer", type: "expense" }},
+    where: { name_type: { name: "Bank Transfer", type: "expense" } },
     update: {
       name: "Bank Transfer",
       type: "expense",
@@ -137,7 +136,7 @@ async function main() {
     },
   });
   const entertainment = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Entertainment", type: "expense" }},
+    where: { name_type: { name: "Entertainment", type: "expense" } },
     update: {
       name: "Entertainment",
       type: "expense",
@@ -148,7 +147,7 @@ async function main() {
     },
   });
   const housing = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Housing", type: "expense" }},
+    where: { name_type: { name: "Housing", type: "expense" } },
     update: {
       name: "Housing",
       type: "expense",
@@ -159,7 +158,7 @@ async function main() {
     },
   });
   const travel = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Travel", type: "expense" }},
+    where: { name_type: { name: "Travel", type: "expense" } },
     update: {
       name: "Travel",
       type: "expense",
@@ -170,7 +169,7 @@ async function main() {
     },
   });
   const phoneAndInternet = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Phone & Internet", type: "expense" }},
+    where: { name_type: { name: "Phone & Internet", type: "expense" } },
     update: {
       name: "Phone & Internet",
       type: "expense",
@@ -181,7 +180,7 @@ async function main() {
     },
   });
   const personalCare = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Personal Care", type: "expense" }},
+    where: { name_type: { name: "Personal Care", type: "expense" } },
     update: {
       name: "Personal Care",
       type: "expense",
@@ -192,7 +191,7 @@ async function main() {
     },
   });
   const healthCare = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Health Care", type: "expense" }},
+    where: { name_type: { name: "Health Care", type: "expense" } },
     update: {
       name: "Health Care",
       type: "expense",
@@ -203,7 +202,7 @@ async function main() {
     },
   });
   const education = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Education", type: "expense" }},
+    where: { name_type: { name: "Education", type: "expense" } },
     update: {
       name: "Education",
       type: "expense",
@@ -214,7 +213,7 @@ async function main() {
     },
   });
   const expenseGift = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Gift", type: "expense" }},
+    where: { name_type: { name: "Gift", type: "expense" } },
     update: {
       name: "Gift",
       type: "expense",
@@ -225,7 +224,7 @@ async function main() {
     },
   });
   const pet = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Pet", type: "expense" }},
+    where: { name_type: { name: "Pet", type: "expense" } },
     update: {
       name: "Pet",
       type: "expense",
@@ -236,7 +235,7 @@ async function main() {
     },
   });
   const insurance = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Insurance", type: "expense" }},
+    where: { name_type: { name: "Insurance", type: "expense" } },
     update: {
       name: "Insurance",
       type: "expense",
@@ -247,7 +246,7 @@ async function main() {
     },
   });
   const children = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Children", type: "expense" }},
+    where: { name_type: { name: "Children", type: "expense" } },
     update: {
       name: "Children",
       type: "expense",
@@ -258,7 +257,7 @@ async function main() {
     },
   });
   const debt = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Debt", type: "expense" }},
+    where: { name_type: { name: "Debt", type: "expense" } },
     update: {
       name: "Debt",
       type: "expense",
@@ -269,7 +268,7 @@ async function main() {
     },
   });
   const utility = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Utility", type: "expense" }},
+    where: { name_type: { name: "Utility", type: "expense" } },
     update: {
       name: "Utility",
       type: "expense",
@@ -280,7 +279,7 @@ async function main() {
     },
   });
   const retirement = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Retirement", type: "expense" }},
+    where: { name_type: { name: "Retirement", type: "expense" } },
     update: {
       name: "Retirement",
       type: "expense",
@@ -291,7 +290,7 @@ async function main() {
     },
   });
   const tithe = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Tithe", type: "expense" }},
+    where: { name_type: { name: "Tithe", type: "expense" } },
     update: {
       name: "Tithe",
       type: "expense",
@@ -302,7 +301,7 @@ async function main() {
     },
   });
   const tax = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Tax", type: "expense" }},
+    where: { name_type: { name: "Tax", type: "expense" } },
     update: {
       name: "Tax",
       type: "expense",
@@ -314,7 +313,7 @@ async function main() {
   });
 
   const otherExpense = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Other", type: "expense" }},
+    where: { name_type: { name: "Other", type: "expense" } },
     update: {
       name: "Other",
       type: "expense",
@@ -325,7 +324,7 @@ async function main() {
     },
   });
   const customExpense = await prisma.transactionCategory.upsert({
-    where: {  name_type:{name: "Custom", type: "expense" }},
+    where: { name_type: { name: "Custom", type: "expense" } },
     update: {
       name: "Custom Expense",
       type: "expense",
@@ -371,7 +370,8 @@ async function main() {
     customExpense,
   });
 }
-main().then(async () => {
+main()
+  .then(async () => {
     await prisma.$disconnect();
   })
   .catch(async (e) => {

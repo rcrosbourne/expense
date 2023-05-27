@@ -4,8 +4,14 @@ import { getTransactions } from "@/lib/server/transactionFunctions";
 import { getWallet, getWallets } from "@/lib/server/walletFunctions";
 import { z } from "zod";
 // import { transactions } from "@/data/transactions";
-import { AnyCategory, Category, Periodicity } from "@/types";
+import {
+  AnyCategory,
+  Category,
+  FinancialTransaction,
+  Periodicity,
+} from "@/types";
 import { MealIcon } from "@/components/icons";
+import { convertDBTxnToWidget } from "@/lib/utils/convertDBTxnToWidget";
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -26,26 +32,11 @@ const Page = async (context: z.infer<typeof routeContextSchema>) => {
   });
   console.log(JSON.stringify(transactions, null, 2));
   const updatedTransactions = transactions.map((transaction) => {
-    return {
-      id: transaction.id,
-      type: transaction.type,
-      date: { startDate: transaction.date, endDate: null },
-      periodicity: transaction.periodicity as Periodicity,
-      amount: transaction.amount.toNumber(),
-      category: {
-        id: transaction.category.id,
-        name: transaction.category.name,
-        foregroundColor: "text-slate-900" as "text-slate-900",
-        backgroundColor: "bg-slate-300" as "bg-slate-300",
-        backgroundColorAsHsl: "hsl(212.7,26.8%,83.9%)" as "hsl(212.7,26.8%,83.9%)",
-        foregroundColorAsHsl: "hsl(222.2,47.4%,11.2%)" as "hsl(222.2,47.4%,11.2%)",
-        icon: <MealIcon />,
-      },
-    };
+    return convertDBTxnToWidget(transaction) as FinancialTransaction;
   });
   return (
     <>
-      <Transactions transactions={updatedTransactions}/>
+      <Transactions transactions={updatedTransactions} />
     </>
   );
 };
