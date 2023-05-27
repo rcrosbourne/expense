@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import { classNames } from "../../../../../lib/utils";
-import { FinancialTransaction } from "../../../../../types";
+import { classNames } from "@/lib/utils";
+import { FinancialTransaction } from "@/types";
 import Switcher from "@/app/(pages)/wallet/[id]/components/switcher";
 import InputAmount from "@/app/(pages)/wallet/[id]/components/inputAmount";
 import DatePicker from "@/components/datePicker";
@@ -9,9 +9,9 @@ import Notes from "@/app/(pages)/wallet/[id]/components/notes";
 import PeriodicityDropdown from "@/app/(pages)/wallet/[id]/components/periodicityDropdown";
 import ActionButtons from "@/app/(pages)/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/components/categoriesDialog";
-import { Actions } from "@/app/(pages)/wallet/[id]/page";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Dialog, Transition } from "@headlessui/react";
+import {Actions} from "@/app/(pages)/wallet/[id]/transactions";
 
 const INITIAL_STATE: FinancialTransaction = {
   id: "0",

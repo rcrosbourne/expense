@@ -1,7 +1,7 @@
 import React from "react";
 import { walletStats } from "@/data/walletStatus";
-import {Actions} from "@/app/(pages)/wallet/[id]/page";
 import useWindowSize from "@/hooks/useWindowSize";
+import {Actions} from "@/app/(pages)/wallet/[id]/transactions";
 
 const WalletOverview = ({dispatch}: {dispatch: React.Dispatch<Actions>}) => {
   const windowSize = useWindowSize();
