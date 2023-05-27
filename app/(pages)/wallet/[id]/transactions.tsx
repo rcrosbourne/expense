@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
-import { classNames, formatNumberAsCurrency } from "@/lib/utils";
+import { classNames } from "@/lib/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import WalletOverview from "@/app/(pages)/wallet/[id]/components/walletOverview";
-// import { transactions } from "@/data/transactions";
 import { FinancialTransaction } from "@/types/financialTransaction";
-import ConfirmDialog from "@/components/confirmDialog";
 import TransactionList from "@/app/(pages)/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
 import BudgetCalendar from "@/app/(pages)/wallet/[id]/components/budgetCalendar";
@@ -24,16 +22,7 @@ import {
 } from "chart.js";
 import TransactionBreakdown from "@/app/(pages)/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/(pages)/wallet/[id]/components/addTransaction";
-import useWindowSize, { WindowSize } from "@/hooks/useWindowSize";
 import BudgetBreakdown from "@/app/(pages)/wallet/[id]/components/budgetBreakdown";
-import {
-  useDeleteTransaction,
-  useOpenDeleteModal,
-  useSetOpenDeleteModal,
-  useSetTransaction,
-  useTransaction,
-} from "@/lib/store/financialTransactionStore";
-import { useImmerReducer } from "use-immer";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -46,138 +35,8 @@ ChartJS.register(
   BarElement,
   Title
 );
-const data = [50000, 250000];
-const barOptions = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart - Stacked",
-    },
-  },
-  responsive: true,
-  interaction: {
-    mode: "index" as const,
-    intersect: false,
-  },
-  scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-    },
-  },
-};
-const barData = {
-  labels: ["January", "February", "March", "April"],
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [100, 200, 300, 400],
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-    {
-      label: "Dataset 2",
-      data: [200, 300, 400, 500],
-      backgroundColor: "rgb(54, 162, 235)",
-    },
-  ],
-};
-const barExpenseData = {
-  labels: ["Groceries", "Shopping", "Mortgage", "Rent", "Utilities"],
-  datasets: [
-    {
-      label: "YTD Expense",
-      data: [100, 200, 300, 400, 440, 50, 900],
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-  ],
-};
-
-type State = {
-  openDeleteDialog?: boolean;
-  transactionForEdit?: FinancialTransaction;
-  transactionForDelete?: FinancialTransaction;
-  showDialog?: boolean;
-  showAsModal?: boolean;
-};
-const INITIAL_STATE: State = {
-  openDeleteDialog: false,
-  transactionForEdit: undefined,
-  transactionForDelete: undefined,
-  showAsModal: false,
-};
-export type Actions = {
-  type:
-    | "add-transaction"
-    | "edit-transaction"
-    | "save-transaction"
-    | "delete-transaction"
-    | "deleting-transaction"
-    | "deleted-transaction"
-    | "cancel";
-  editTransaction?: FinancialTransaction;
-  newTransaction?: FinancialTransaction;
-  deleteTransaction?: FinancialTransaction;
-  windowSize?: WindowSize;
-};
-function reducer(state: State, actions: Actions) {
-  switch (actions.type) {
-    case "add-transaction": {
-      state.transactionForEdit = undefined;
-      state.showAsModal =
-        actions && actions.windowSize && actions.windowSize.width < 640;
-      return;
-    }
-    case "cancel": {
-      state.transactionForEdit = undefined;
-      state.transactionForDelete = undefined;
-      state.openDeleteDialog = false;
-      state.showAsModal = false;
-      return;
-    }
-    case "edit-transaction": {
-      state.transactionForEdit = actions.editTransaction;
-      state.showAsModal =
-        actions && actions.windowSize && actions.windowSize.width < 640;
-      return;
-    }
-    case "save-transaction": {
-      state.transactionForEdit = undefined;
-      state.showAsModal = false;
-      return;
-    }
-    case "deleting-transaction": {
-      state.transactionForDelete = actions.deleteTransaction;
-      state.openDeleteDialog = true;
-      return;
-    }
-    case "deleted-transaction": {
-      state.transactionForDelete = actions.deleteTransaction;
-      state.openDeleteDialog = false;
-      return;
-    }
-  }
-}
-
-const Transactions = ({
-  transactions,
-}: {
-  transactions: FinancialTransaction[];
-}) => {
+const Transactions = ({transactions}: { transactions: FinancialTransaction[] }) => {
   const transactionRef = React.useRef(null);
-  // add reducer to manage the user action
-  const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
-  const handleDelete = (transaction: FinancialTransaction) => {
-    dispatch({ type: "deleting-transaction", deleteTransaction: transaction });
-  };
-  // get route params
-  const windowSize = useWindowSize();
-  const openDeleteModal = useOpenDeleteModal();
-  const deleteTransaction = useDeleteTransaction();
-  const setOpenedDeleteModal = useSetOpenDeleteModal();
-  const transaction = useTransaction();
-  const setTransaction = useSetTransaction();
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -185,7 +44,7 @@ const Transactions = ({
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-            <WalletOverview dispatch={dispatch} />
+            <WalletOverview />
             {/*Tabs go here */}
             <Tab.Group>
               <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">
@@ -252,7 +111,6 @@ const Transactions = ({
                       </h2>
                       <TransactionList
                         transactions={transactions}
-                        editingTransaction={transaction}
                         transactionRef={transactionRef}
                       />
                     </div>
@@ -371,48 +229,12 @@ const Transactions = ({
           </div>
           <div className="sm:grid grid-cols-1 gap-4 hidden sm:sticky sm:top-[10%]">
             {/* Add Income and Expenses */}
-            <AddTransaction
-              transactionToBeEdited={transaction}
-              showAsModal={state.showAsModal ?? false}
-              dispatch={dispatch}
-            />
+            <AddTransaction />
           </div>{" "}
         </div>
       </div>
 
-      <ConfirmDialog
-        openConfirm={openDeleteModal}
-        setOpenConfirm={setOpenedDeleteModal}
-        title={"Delete expense/income"}
-        message={`Are you sure you want to delete expense ${
-          deleteTransaction?.category?.name
-        } with amount $${formatNumberAsCurrency(deleteTransaction?.amount)} 
-          This action cannot be undone.`}
-        confirmButtonText={"Delete"}
-        cancelButtonText={"Cancel"}
-        confirm={(status) => {
-          if (status) {
-            console.log("delete", deleteTransaction);
-            setOpenedDeleteModal(false);
-            setTransaction({
-              id: "0",
-              type: "expense",
-              amount: undefined,
-              date: { startDate: null, endDate: null },
-              periodicity: "One-time payment",
-            });
-          } else {
-            setTransaction({
-              id: "0",
-              type: "expense",
-              amount: undefined,
-              date: { startDate: null, endDate: null },
-              periodicity: "One-time payment",
-            });
-            setOpenedDeleteModal(false);
-          }
-        }}
-      />
+
     </main>
   );
 };

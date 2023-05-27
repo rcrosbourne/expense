@@ -11,8 +11,17 @@ import ActionButtons from "@/app/(pages)/wallet/[id]/components/actionButtons";
 import CategoriesDialog from "@/components/categoriesDialog";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Dialog, Transition } from "@headlessui/react";
-import {Actions} from "@/app/(pages)/wallet/[id]/transactions";
-import {useOpenCategories, useSetOpenCategories, useSetShowAsModal, useSetTransaction, useShowAsModal, useTransaction} from "@/lib/store/financialTransactionStore";
+import {
+  useIsEditing,
+  useOpenCategories,
+  useSetIsEditing,
+  useSetOpenCategories,
+  useSetShowAsModal,
+  useSetTransaction,
+  useShowAsModal,
+  useTransaction,
+} from "@/lib/store/financialTransactionStore";
+import useWindowSize from "@/hooks/useWindowSize";
 
 export const INITIAL_STATE: FinancialTransaction = {
   id: "0",
@@ -21,29 +30,31 @@ export const INITIAL_STATE: FinancialTransaction = {
   date: { startDate: null, endDate: null },
   periodicity: "One-time payment",
 };
-const AddTransaction = ({
-}: {
-}) => {
+const AddTransaction = () => {
   // If we get an expense, and it is income type or if we have no expense the default type is income
   const transaction = useTransaction() || INITIAL_STATE;
   const setTransaction = useSetTransaction();
-  const isCategoriesOpen = useOpenCategories()
-  const setOpenCategories = useSetOpenCategories()
+  const isCategoriesOpen = useOpenCategories();
+  const setOpenCategories = useSetOpenCategories();
   const isIncome = transaction?.type === "income" ?? "expense";
   const showAsModal = useShowAsModal();
   const setShowAsModal = useSetShowAsModal();
-
+  const setIsEditing = useSetIsEditing();
   const amountInputRef = React.useRef<null | HTMLInputElement>(null);
-
+  const windowSize = useWindowSize();
   function cancel() {
     console.log("Cancelling!!!!");
+    setIsEditing(false);
     setTransaction(INITIAL_STATE);
     setShowAsModal(false);
   }
   function onAmountChanged(e: React.ChangeEvent<HTMLInputElement>) {
     if (!amountInputRef.current) return;
     const amountInputElement = amountInputRef.current as HTMLInputElement;
-    setTransaction({...transaction, amount: amountInputElement.valueAsNumber});
+    setTransaction({
+      ...transaction,
+      amount: amountInputElement.valueAsNumber,
+    });
   }
   function onDateChanged(date: DateValueType) {
     if (date === null) return;
@@ -52,7 +63,9 @@ const AddTransaction = ({
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("Submitted");
-    console.log({transaction});
+    console.log({ transaction });
+    setIsEditing(false);
+    setShowAsModal(!showAsModal);
     setTransaction(INITIAL_STATE);
   }
   return (
@@ -65,11 +78,12 @@ const AddTransaction = ({
         onDateChanged={onDateChanged}
         cancel={cancel}
       />
-      <Transition appear show={showAsModal ?? false} as={Fragment}>
+      <Transition appear show={showAsModal} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10  sm:hidden"
           onClose={() => {}}
+          unmount={false}
         >
           <Transition.Child
             as={Fragment}
@@ -115,7 +129,7 @@ const AddTransaction = ({
         type={isIncome ? "income" : "expense"}
         selectedCategory={transaction.category}
         setSelectedCategory={(category) =>
-          setTransaction({...transaction, category })
+          setTransaction({ ...transaction, category })
         }
       />
     </>
@@ -137,10 +151,10 @@ const AddTransactionForm = ({
   onDateChanged: (date: DateValueType) => void;
   cancel: () => void;
 }) => {
-    const transaction = useTransaction() || INITIAL_STATE;
-    const setTransaction = useSetTransaction();
-    const isCategoriesOpen = useOpenCategories();
-    const setOpenCategories = useSetOpenCategories();
+  const transaction = useTransaction() || INITIAL_STATE;
+  const setTransaction = useSetTransaction();
+  const setOpenCategories = useSetOpenCategories();
+  const isEditing = useIsEditing();
   return (
     <section aria-labelledby="" className="@container/section">
       <div
@@ -186,7 +200,7 @@ const AddTransactionForm = ({
               <Merchant
                 merchant={transaction.merchant ?? ""}
                 onMerchantChanged={(e) =>
-                  setTransaction({...transaction, merchant: e.target.value })
+                  setTransaction({ ...transaction, merchant: e.target.value })
                 }
               />
             </div>
@@ -209,7 +223,7 @@ const AddTransactionForm = ({
             <div className="mt-2">
               <ActionButtons
                 isIncome={isIncome}
-                isEditing={!!transaction}
+                isEditing={isEditing}
                 onCancel={cancel}
               />
             </div>
