@@ -12,8 +12,9 @@ import CategoriesDialog from "@/components/categoriesDialog";
 import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 import { Dialog, Transition } from "@headlessui/react";
 import {Actions} from "@/app/(pages)/wallet/[id]/transactions";
+import {useOpenCategories, useSetOpenCategories, useSetShowAsModal, useSetTransaction, useShowAsModal, useTransaction} from "@/lib/store/financialTransactionStore";
 
-const INITIAL_STATE: FinancialTransaction = {
+export const INITIAL_STATE: FinancialTransaction = {
   id: "0",
   type: "expense",
   amount: undefined,
@@ -21,80 +22,47 @@ const INITIAL_STATE: FinancialTransaction = {
   periodicity: "One-time payment",
 };
 const AddTransaction = ({
-  transactionToBeEdited,
-  dispatch,
-  showAsModal,
 }: {
-  transactionToBeEdited?: FinancialTransaction;
-  dispatch: React.Dispatch<Actions>;
-  showAsModal: boolean;
 }) => {
   // If we get an expense, and it is income type or if we have no expense the default type is income
-  const [transaction, setTransaction] =
-    React.useState<FinancialTransaction>(INITIAL_STATE);
-  const [isCategoriesOpen, setIsCategoriesOpen] =
-    React.useState<boolean>(false);
+  const transaction = useTransaction() || INITIAL_STATE;
+  const setTransaction = useSetTransaction();
+  const isCategoriesOpen = useOpenCategories()
+  const setOpenCategories = useSetOpenCategories()
   const isIncome = transaction?.type === "income" ?? "expense";
+  const showAsModal = useShowAsModal();
+  const setShowAsModal = useSetShowAsModal();
 
   const amountInputRef = React.useRef<null | HTMLInputElement>(null);
-  React.useEffect(() => {
-    if (!transactionToBeEdited) {
-      setTransaction(INITIAL_STATE);
-    } else {
-      setTransaction(transactionToBeEdited);
-    }
-  }, [transactionToBeEdited]);
 
   function cancel() {
     console.log("Cancelling!!!!");
-    dispatch({ type: "cancel" });
-    //set transaction to reset state
     setTransaction(INITIAL_STATE);
+    setShowAsModal(false);
   }
   function onAmountChanged(e: React.ChangeEvent<HTMLInputElement>) {
     if (!amountInputRef.current) return;
     const amountInputElement = amountInputRef.current as HTMLInputElement;
-    setTransaction((t) => ({ ...t, amount: amountInputElement.value }));
+    setTransaction({...transaction, amount: amountInputElement.valueAsNumber});
   }
   function onDateChanged(date: DateValueType) {
     if (date === null) return;
-    setTransaction((t) => ({ ...t, date }));
+    setTransaction({ ...transaction, date });
   }
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("Submitted");
-    // if we are adding a new transaction we dispatch
-    if (!transactionToBeEdited) {
-      // there was no transaction for edit
-      dispatch({
-        type: "add-transaction",
-        newTransaction: transaction,
-        editTransaction: undefined,
-      });
-      console.log("Add new txn");
-    } else {
-      // here we dispatch an edit-transaction
-      dispatch({
-        type: "save-transaction",
-        editTransaction: transaction,
-        newTransaction: undefined,
-      });
-      console.log("Editing txn");
-    }
+    console.log({transaction});
     setTransaction(INITIAL_STATE);
   }
   return (
     <>
       <AddTransactionForm
         isIncome={isIncome}
-        transaction={transaction}
-        setTransaction={setTransaction}
         submitHandler={submitHandler}
         amountInputRef={amountInputRef}
         onAmountChanged={onAmountChanged}
-        setIsCategoriesOpen={setIsCategoriesOpen}
         onDateChanged={onDateChanged}
-        transactionToBeEdited={transactionToBeEdited}
         cancel={cancel}
       />
       <Transition appear show={showAsModal ?? false} as={Fragment}>
@@ -129,14 +97,10 @@ const AddTransaction = ({
                 <Dialog.Panel className="w-full min-h-full max-w-md transform rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                   <AddTransactionForm
                     isIncome={isIncome}
-                    transaction={transaction}
-                    setTransaction={setTransaction}
                     submitHandler={submitHandler}
                     amountInputRef={amountInputRef}
                     onAmountChanged={onAmountChanged}
-                    setIsCategoriesOpen={setIsCategoriesOpen}
                     onDateChanged={onDateChanged}
-                    transactionToBeEdited={transactionToBeEdited}
                     cancel={cancel}
                   />
                 </Dialog.Panel>
@@ -147,11 +111,11 @@ const AddTransaction = ({
       </Transition>
       <CategoriesDialog
         isOpen={isCategoriesOpen}
-        close={() => setIsCategoriesOpen(false)}
+        close={() => setOpenCategories(false)}
         type={isIncome ? "income" : "expense"}
         selectedCategory={transaction.category}
         setSelectedCategory={(category) =>
-          setTransaction((t) => ({ ...t, category }))
+          setTransaction({...transaction, category })
         }
       />
     </>
@@ -160,27 +124,23 @@ const AddTransaction = ({
 
 const AddTransactionForm = ({
   isIncome,
-  transaction,
-  setTransaction,
   submitHandler,
   amountInputRef,
   onAmountChanged,
-  setIsCategoriesOpen,
   onDateChanged,
-  transactionToBeEdited,
   cancel,
 }: {
   isIncome: boolean;
-  transaction: FinancialTransaction;
-  setTransaction: React.Dispatch<React.SetStateAction<FinancialTransaction>>;
   submitHandler: (e: React.FormEvent<HTMLFormElement>) => void;
   amountInputRef: React.MutableRefObject<HTMLInputElement | null>;
   onAmountChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setIsCategoriesOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onDateChanged: (date: DateValueType) => void;
-  transactionToBeEdited: FinancialTransaction | undefined;
   cancel: () => void;
 }) => {
+    const transaction = useTransaction() || INITIAL_STATE;
+    const setTransaction = useSetTransaction();
+    const isCategoriesOpen = useOpenCategories();
+    const setOpenCategories = useSetOpenCategories();
   return (
     <section aria-labelledby="" className="@container/section">
       <div
@@ -193,10 +153,10 @@ const AddTransactionForm = ({
           <Switcher
             isIncome={transaction.type === "income"}
             setIsIncome={(isIncome) =>
-              setTransaction((t) => ({
-                ...t,
+              setTransaction({
+                ...transaction,
                 type: isIncome ? "income" : "expense",
-              }))
+              })
             }
           />
         </div>
@@ -209,7 +169,7 @@ const AddTransactionForm = ({
               value={(transaction.amount as string) ?? ""}
               onChange={onAmountChanged}
               isIncome={isIncome}
-              openCategories={() => setIsCategoriesOpen(true)}
+              openCategories={() => setOpenCategories(true)}
               category={transaction.category}
             />
           </div>
@@ -226,7 +186,7 @@ const AddTransactionForm = ({
               <Merchant
                 merchant={transaction.merchant ?? ""}
                 onMerchantChanged={(e) =>
-                  setTransaction((t) => ({ ...t, merchant: e.target.value }))
+                  setTransaction({...transaction, merchant: e.target.value })
                 }
               />
             </div>
@@ -234,7 +194,7 @@ const AddTransactionForm = ({
               <Notes
                 notes={transaction.notes ?? ""}
                 onNotesChanged={(e) =>
-                  setTransaction((t) => ({ ...t, notes: e.target.value }))
+                  setTransaction({ ...transaction, notes: e.target.value })
                 }
               />
             </div>
@@ -242,14 +202,14 @@ const AddTransactionForm = ({
               <PeriodicityDropdown
                 value={transaction.periodicity}
                 onChange={(periodicity) =>
-                  setTransaction((t) => ({ ...t, periodicity }))
+                  setTransaction({ ...transaction, periodicity })
                 }
               />
             </div>
             <div className="mt-2">
               <ActionButtons
                 isIncome={isIncome}
-                isEditing={!!transactionToBeEdited}
+                isEditing={!!transaction}
                 onCancel={cancel}
               />
             </div>

@@ -1,17 +1,16 @@
-import { AnyCategory, Periodicity } from "@/types";
-import { TransactionCategory, FinancialTransaction } from "@prisma/client";
-import { FinancialTransaction as FinancialTransactionType } from "@/types";
-import { getCategoryStyle } from "./getCategoryStyle";
-import { DateValueType } from "react-tailwindcss-datepicker/dist/types";
+import {AnyCategory, FinancialTransaction as FinancialTransactionType, Periodicity} from "@/types";
+import {FinancialTransaction, TransactionCategory} from "@prisma/client";
+import {getCategoryStyle} from "./getCategoryStyle";
+import dayjs from "dayjs";
 
 type DbTxn = FinancialTransaction & { category: TransactionCategory };
 export function convertDBTxnToWidget(
   transaction: DbTxn
 ): FinancialTransactionType {
-  const tt = {
+  return {
     id: transaction.id,
     type: transaction.type,
-    date: { startDate: transaction.date, endDate: null } as DateValueType,
+    date: {startDate: dayjs(transaction.date).toDate(), endDate: dayjs(transaction.date).toDate()},
     periodicity: transaction.periodicity as Periodicity,
     amount: transaction.amount.toNumber(),
     merchant: transaction.merchant,
@@ -20,6 +19,4 @@ export function convertDBTxnToWidget(
       ...getCategoryStyle(transaction.type, transaction.category),
     } as AnyCategory,
   };
-  console.log({ transaction, tt });
-  return tt;
 }

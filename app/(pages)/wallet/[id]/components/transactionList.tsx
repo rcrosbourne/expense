@@ -11,23 +11,28 @@ import {
   TrashCanIcon,
 } from "@/components/icons";
 import formatDateOrReturnDefault from "@/lib/utils/formatDateOrReturnDefault";
+import {useDeleteTransaction, useSetDeleteTransaction, useSetOpenDeleteModal, useSetShowAsModal, useSetTransaction, useTransaction} from "@/lib/store/financialTransactionStore";
+import {INITIAL_STATE} from "@/app/(pages)/wallet/[id]/components/addTransaction";
+import useWindowSize from "@/hooks/useWindowSize";
 
 const TransactionList = ({
   transactions,
   editingTransaction,
   transactionRef,
-  onEdit,
-  onCancel,
-  onDelete,
 }: {
   transactions: FinancialTransaction[];
   editingTransaction: FinancialTransaction | undefined;
   transactionRef: React.RefObject<HTMLLIElement>;
-  onEdit: (transaction: FinancialTransaction) => void;
-  onCancel: (transaction: FinancialTransaction) => void;
-  onDelete: (transaction: FinancialTransaction) => void;
 }) => {
+  const editTransaction = useTransaction();
+  const setEditTransaction = useSetTransaction();
+  const deleteTransaction = useDeleteTransaction();
+  const setDeleteTransaction = useSetDeleteTransaction();
+  const setOpenDeleteModal = useSetOpenDeleteModal();
+  const setShowAsModal = useSetShowAsModal();
+  const windowSize = useWindowSize();
   return (
+
     <ul role="list" className="grid grid-cols-1 gap-6 md:grid-cols-2">
       {transactions.map((transaction) => {
         return (
@@ -77,11 +82,11 @@ const TransactionList = ({
             <div>
               <div className="-mt-px flex divide-x divide-gray-200">
                 <div className="flex w-0 flex-1">
-                  {!editingTransaction ||
-                  editingTransaction.id !== transaction.id ? (
+                  {!editTransaction ||
+                  editTransaction.id !== transaction.id ? (
                     <button
                       type="button"
-                      onClick={() => onEdit(transaction)}
+                      onClick={() => {setEditTransaction(transaction); setShowAsModal(windowSize.width < 640)}}
                       className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                     >
                       <EditIcon className="h-5 w-5 text-gray-400" />
@@ -90,7 +95,7 @@ const TransactionList = ({
                   ) : (
                     <button
                       type="button"
-                      onClick={() => onCancel(transaction)}
+                      onClick={() => {setEditTransaction(INITIAL_STATE); setShowAsModal(windowSize.width < 640)}}
                       className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                     >
                       <CancelIcon className="h-5 w-5 fill-current" />
@@ -101,7 +106,7 @@ const TransactionList = ({
                 <div className="-ml-px flex w-0 flex-1">
                   <button
                     type="button"
-                    onClick={() => onDelete(transaction)}
+                    onClick={() => { setDeleteTransaction(transaction); setOpenDeleteModal(true)}}
                     className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900"
                   >
                     <TrashCanIcon className="h-5 w-5 text-gray-400" />

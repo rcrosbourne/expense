@@ -1,4 +1,4 @@
-import { classNames } from "../../../../../lib/utils";
+import { classNames } from "@/lib/utils";
 import React from "react";
 import { TickIcon, XIcon } from "@/components/icons";
 

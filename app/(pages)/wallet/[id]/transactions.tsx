@@ -11,11 +11,7 @@ import ConfirmDialog from "@/components/confirmDialog";
 import TransactionList from "@/app/(pages)/wallet/[id]/components/transactionList";
 import { Tab } from "@headlessui/react";
 import BudgetCalendar from "@/app/(pages)/wallet/[id]/components/budgetCalendar";
-import {
-  BarChartIcon,
-  CalendarIcon,
-  CheckListIcon,
-} from "@/components/icons";
+import { BarChartIcon, CalendarIcon, CheckListIcon } from "@/components/icons";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -28,9 +24,16 @@ import {
 } from "chart.js";
 import TransactionBreakdown from "@/app/(pages)/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/(pages)/wallet/[id]/components/addTransaction";
-import { useImmerReducer } from "use-immer";
 import useWindowSize, { WindowSize } from "@/hooks/useWindowSize";
 import BudgetBreakdown from "@/app/(pages)/wallet/[id]/components/budgetBreakdown";
+import {
+  useDeleteTransaction,
+  useOpenDeleteModal,
+  useSetOpenDeleteModal,
+  useSetTransaction,
+  useTransaction,
+} from "@/lib/store/financialTransactionStore";
+import { useImmerReducer } from "use-immer";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -157,7 +160,11 @@ function reducer(state: State, actions: Actions) {
   }
 }
 
-const Transactions = ({transactions}:{transactions: FinancialTransaction[]}) => {
+const Transactions = ({
+  transactions,
+}: {
+  transactions: FinancialTransaction[];
+}) => {
   const transactionRef = React.useRef(null);
   // add reducer to manage the user action
   const [state, dispatch] = useImmerReducer(reducer, INITIAL_STATE);
@@ -166,7 +173,11 @@ const Transactions = ({transactions}:{transactions: FinancialTransaction[]}) => 
   };
   // get route params
   const windowSize = useWindowSize();
-
+  const openDeleteModal = useOpenDeleteModal();
+  const deleteTransaction = useDeleteTransaction();
+  const setOpenedDeleteModal = useSetOpenDeleteModal();
+  const transaction = useTransaction();
+  const setTransaction = useSetTransaction();
   return (
     <main className="-mt-24 pb-8">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -241,17 +252,8 @@ const Transactions = ({transactions}:{transactions: FinancialTransaction[]}) => 
                       </h2>
                       <TransactionList
                         transactions={transactions}
-                        editingTransaction={state.transactionForEdit}
+                        editingTransaction={transaction}
                         transactionRef={transactionRef}
-                        onEdit={(transactionForEdit) =>
-                          dispatch({
-                            type: "edit-transaction",
-                            editTransaction: transactionForEdit,
-                            windowSize,
-                          })
-                        }
-                        onCancel={(t) => dispatch({ type: "cancel" })}
-                        onDelete={handleDelete}
                       />
                     </div>
                   </section>
@@ -370,7 +372,7 @@ const Transactions = ({transactions}:{transactions: FinancialTransaction[]}) => 
           <div className="sm:grid grid-cols-1 gap-4 hidden sm:sticky sm:top-[10%]">
             {/* Add Income and Expenses */}
             <AddTransaction
-              transactionToBeEdited={state.transactionForEdit}
+              transactionToBeEdited={transaction}
               showAsModal={state.showAsModal ?? false}
               dispatch={dispatch}
             />
@@ -379,29 +381,35 @@ const Transactions = ({transactions}:{transactions: FinancialTransaction[]}) => 
       </div>
 
       <ConfirmDialog
-        openConfirm={state.openDeleteDialog!}
-        setOpenConfirm={(isOpen) =>
-          !isOpen
-            ? dispatch({ type: "cancel" })
-            : dispatch({ type: "deleting-transaction" })
-        }
+        openConfirm={openDeleteModal}
+        setOpenConfirm={setOpenedDeleteModal}
         title={"Delete expense/income"}
         message={`Are you sure you want to delete expense ${
-          state.transactionForDelete?.category?.name
-        } with amount $${formatNumberAsCurrency(
-          state.transactionForDelete?.amount
-        )} 
+          deleteTransaction?.category?.name
+        } with amount $${formatNumberAsCurrency(deleteTransaction?.amount)} 
           This action cannot be undone.`}
         confirmButtonText={"Delete"}
         cancelButtonText={"Cancel"}
         confirm={(status) => {
           if (status) {
-            dispatch({
-              type: "deleted-transaction",
-              deleteTransaction: state.transactionForDelete,
+            console.log("delete", deleteTransaction);
+            setOpenedDeleteModal(false);
+            setTransaction({
+              id: "0",
+              type: "expense",
+              amount: undefined,
+              date: { startDate: null, endDate: null },
+              periodicity: "One-time payment",
             });
           } else {
-            dispatch({ type: "cancel", deleteTransaction: undefined });
+            setTransaction({
+              id: "0",
+              type: "expense",
+              amount: undefined,
+              date: { startDate: null, endDate: null },
+              periodicity: "One-time payment",
+            });
+            setOpenedDeleteModal(false);
           }
         }}
       />

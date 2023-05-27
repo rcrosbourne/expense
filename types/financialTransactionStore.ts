@@ -2,15 +2,13 @@ import {FinancialTransaction} from "@/types/financialTransaction";
 
 export type FinancialTransactionStore = {
   transaction: FinancialTransaction | undefined;
+  deleteTransaction: FinancialTransaction | undefined;
+  showAsModal: boolean;
   openCategories: boolean;
+  openDeleteModal: boolean;
   setOpenCategories: (openCategories: boolean) => void;
   setTransaction: (transaction: FinancialTransaction) => void;
- // editWallet: Wallet | undefined;
- //  deleteWallet: Wallet | undefined;
- //  openConfirm: boolean;
- //  confirmDelete: boolean;
- //  setConfirmDelete: (confirmDelete: boolean) => void;
- //  handleDeleteWallet: (openConfirm: boolean, wallet?: Wallet) => void;
- //  handleCancelEdit: () => void;
- //  handleEditWallet: (wallet: Wallet) => void;
+  setDeleteTransaction: (transaction: FinancialTransaction) => void;
+  setOpenDeleteModal: (openDeleteModal: boolean) => void;
+  setShowAsModal: (openAddTransactionAsModal: boolean) => void;
 };
