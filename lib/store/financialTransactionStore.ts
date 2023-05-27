@@ -1,29 +1,15 @@
 import "client-only";
 import { create } from "zustand";
-import { Wallet } from "../../types";
-import {DashboardStore} from "@/types/dashboardStore";
+import { FinancialTransaction } from "@/types";
+import {FinancialTransactionStore} from "@/types/financialTransactionStore";
 
-const useStore = create<DashboardStore>()((set) => ({
-  editWallet: undefined,
-  deleteWallet: undefined,
-  openConfirm: false,
-  confirmDelete: false,
-  setConfirmDelete: (confirmDelete: boolean) => set((state) => ({ ...state, confirmDelete })),
-  handleDeleteWallet: (openConfirm: boolean, wallet?: Wallet) =>
-    set((state) => ({ ...state, deleteWallet: wallet, openConfirm,})),
-  handleCancelEdit: () => set((state) => ({ ...state, editWallet: undefined })),
-  handleEditWallet: (wallet: Wallet) =>
-    set((state) => ({ ...state, editWallet: wallet })),
+const useStore = create<FinancialTransactionStore>()((set) => ({
+    transaction: undefined,
+    openCategories: false,
+    setOpenCategories: (openCategories: boolean) => set((state) => ({ ...state, openCategories })),
+    setTransaction: (transaction: FinancialTransaction) => set((state) => ({ ...state, transaction })),
 }));
-export const useEditWallet = () => useStore((state) => state.editWallet);
-export const useDeleteWallet = () => useStore((state) => state.deleteWallet);
-export const useOpenConfirm = () => useStore((state) => state.openConfirm);
-export const useConfirmDelete = () => useStore((state) => state.confirmDelete);
-export const useHandleDeleteWallet = () =>
-  useStore((state) => state.handleDeleteWallet);
-export const useHandleCancelEdit = () =>
-  useStore((state) => state.handleCancelEdit);
-export const useHandleEditWallet = () =>
-    useStore((state) => state.handleEditWallet);
-export const useSetConfirmDelete = () =>
-  useStore((state) => state.setConfirmDelete);
+export const useTransaction = () => useStore((state) => state.transaction);
+export const useOpenCategories = () => useStore((state) => state.openCategories);
+export const useSetOpenCategories = () => useStore((state) => state.setOpenCategories);
+export const useSetTransaction = () => useStore((state) => state.setTransaction);
