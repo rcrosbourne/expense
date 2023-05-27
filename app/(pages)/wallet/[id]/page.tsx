@@ -36,7 +36,7 @@ const Page = async (context: z.infer<typeof routeContextSchema>) => {
   });
   return (
     <>
-      <Transactions transactions={updatedTransactions} />
+      <Transactions transactions={updatedTransactions} walletBudget={wallet.budget.toNumber()}/>
     </>
   );
 };

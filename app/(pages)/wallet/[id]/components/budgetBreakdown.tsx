@@ -109,7 +109,7 @@ function generateMetrics({
 }) {
   const totalExpense = transactions
     .map((t) => t.amount! as number)
-    .reduce((acc, value) => value + acc);
+    .reduce((acc, value) => value + acc, 0);
   // get the total expenses for the month before and subtract from the current month
   // get the current month index
   const totalBudget = walletBudget;
@@ -130,11 +130,20 @@ function generateMetrics({
   });
   // compare the last two totals from the array to get the variance
   const lastTwoTotals = Object.values(totalExpensesByMonth).slice(-2);
+  if(lastTwoTotals.length < 2) {
+    return {
+        totalVariance,
+        totalVariancePercentageString,
+        totalVarianceString,
+        totalExpenseString,
+        totalBudgetString,
+        lastTwoTotalsVariance: 0,
+        lastTwoTotalsVarianceString: formatNumberAsCurrency(0),
+    }
+  }
   const lastTwoTotalsVariance =
     lastTwoTotals[1]["total_cost"] - lastTwoTotals[0]["total_cost"];
-  const lastTwoTotalsVarianceString = formatNumberAsCurrency(
-    lastTwoTotalsVariance
-  );
+  const lastTwoTotalsVarianceString = formatNumberAsCurrency(lastTwoTotalsVariance);
   return {
     totalVariance,
     totalVariancePercentageString,

@@ -35,7 +35,7 @@ ChartJS.register(
   BarElement,
   Title
 );
-const Transactions = ({transactions}: { transactions: FinancialTransaction[] }) => {
+const Transactions = ({transactions, walletBudget}: { transactions: FinancialTransaction[], walletBudget: number }) => {
   const transactionRef = React.useRef(null);
   return (
     <main className="-mt-24 pb-8">
@@ -214,7 +214,7 @@ const Transactions = ({transactions}: { transactions: FinancialTransaction[] }) 
                                   transactions={transactions.filter(
                                     (t) => t.type === "expense"
                                   )}
-                                  walletBudget={500_000}
+                                  walletBudget={walletBudget}
                                 />
                               </Tab.Panel>
                             </Tab.Panels>
