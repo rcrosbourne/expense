@@ -72,24 +72,24 @@ model Wallet {
   user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions FinancialTransaction[]
 
-  @@map("wallets")
+  @@map("wallet")
 }
 
 model FinancialTransaction {
-  id          String              @id @default(cuid())
-  amount      Decimal             @db.Money
-  category    TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
+  id          String               @id @default(cuid())
+  amount      Decimal              @db.Money
+  category    TransactionCategory? @relation(fields: [transactionCategoryId], references: [id])
   type        TransactionType
-  date        DateTime            @default(now())
+  date        DateTime             @default(now())
   notes       String?
   merchant    String?
-  periodicity String              @default("One-time payment")
-  createdAt   DateTime            @default(now()) @map("created_at")
-  updatedAt   DateTime            @updatedAt @map("updated_at")
+  periodicity String               @default("One-time payment")
+  createdAt   DateTime             @default(now()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
 
-  walletId              String @map("wallet_id")
-  wallet                Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  transactionCategoryId String @map("transaction_category_id")
+  walletId              String  @map("wallet_id")
+  wallet                Wallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  transactionCategoryId String? @map("transaction_category_id")
 
   @@map("financial_transactions")
 }

@@ -230,7 +230,7 @@ const Transactions = ({transactions, wallet}: { transactions: FinancialTransacti
           </div>
           <div className="sm:grid grid-cols-1 gap-4 hidden sm:sticky sm:top-[10%]">
             {/* Add Income and Expenses */}
-            <AddTransaction />
+            <AddTransaction wallet={wallet}/>
           </div>{" "}
         </div>
       </div>

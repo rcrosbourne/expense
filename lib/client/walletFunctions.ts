@@ -2,7 +2,7 @@ import "client-only";
 import {FieldValues} from "react-hook-form";
 import {Wallet, WalletWidgetProps} from "@/types";
 import {ApiResponse} from "@/types/apiResponse";
-const WALLET_API_URL: string = "/api/wallets";
+const WALLET_API_URL: string = "/api/wallet";
 
 async function Index() {
   const response =  await fetch(WALLET_API_URL, {

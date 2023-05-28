@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   } catch (e) {
     if(e instanceof Error) {
       const response: ApiResponse = {
-        message: "Error adding wallets",
+        message: "Error adding wallet",
         error: e,
       };
       return new Response(JSON.stringify(response), {
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
   } catch (error) {
     if(error instanceof Error) {
       const response: ApiResponse = {
-        message: "Error retrieving wallets",
+        message: "Error retrieving wallet",
         error
       }
       return new Response(JSON.stringify(response), {status: RESPONSE_STATUS.ERROR})

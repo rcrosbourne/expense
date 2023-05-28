@@ -12,17 +12,15 @@ type WalletWithTxn = RawWallet & {
 
 const walletHref = "/wallet/";
 export function convertFromRawToWallet(wallet: WalletWithTxn): Wallet {
+  const balance = calculateWalletBalance(wallet.budget.toNumber(), wallet.transactions);
   return {
     id: wallet.id,
     name: wallet.name,
     category: wallet.category,
     href: walletHref + wallet.id,
     budget: wallet.budget.toNumber(),
-    balance: calculateWalletBalance(
-      wallet.budget.toNumber(),
-      wallet.transactions
-    ),
-    transactions: wallet.transactions.map((txn) => convertDBTxnToWidget(txn)),
+    balance,
+    transactions: wallet.transactions.map((txn) => convertDBTxnToWidget(txn, wallet.id)),
   };
 }
 

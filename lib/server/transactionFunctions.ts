@@ -6,7 +6,7 @@ import currentUser from "@/lib/server/currentUser";
 import { FinancialTransaction, Wallet } from "@/types";
 
 export async function addTransaction(
-  wallet: Wallet,
+  walletId: string,
   financialTransaction: FinancialTransaction
 ) {
   //Wallet should already be validated
@@ -29,7 +29,7 @@ export async function addTransaction(
       },
       wallet: {
         connect: {
-          id: wallet.id,
+          id: walletId,
         },
       },
     },
@@ -115,3 +115,4 @@ export async function updateTransaction(
     },
   });
 }
+

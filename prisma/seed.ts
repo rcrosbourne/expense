@@ -1,6 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
+   const uncategorized = await prisma.transactionCategory.upsert({
+    where: { name_type: { name: "Uncategorized", type: "income" } },
+    update: {
+      name: "Uncategorized",
+      type: "income",
+    },
+    create: {
+      name: "Uncategorized",
+      type: "income",
+    },
+  });
   // Income Categories
   const business = await prisma.transactionCategory.upsert({
     where: { name_type: { name: "Business", type: "income" } },
@@ -80,6 +91,17 @@ async function main() {
     },
   });
   // Expense Categories
+  const uncategorizedExpenseCategory = await prisma.transactionCategory.upsert({
+    where: { name_type: { name: "Uncategorized", type: "expense" } },
+    update: {
+      name: "Uncategorized",
+      type: "expense",
+    },
+    create: {
+      name: "Uncategorized",
+      type: "expense",
+    },
+  });
   const meal = await prisma.transactionCategory.upsert({
     where: { name_type: { name: "Meal", type: "expense" } },
     update: {
@@ -343,6 +365,7 @@ async function main() {
     salary,
     other,
     custom,
+    uncategorized,
   });
   console.log({
     meal,
@@ -368,6 +391,7 @@ async function main() {
     tax,
     otherExpense,
     customExpense,
+    uncategorizedExpenseCategory,
   });
 }
 main()

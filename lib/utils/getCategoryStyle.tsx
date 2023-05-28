@@ -21,7 +21,7 @@ import {
   PhoneAndInternetIcon,
   RetirementIcon,
   SalaryIcon,
-  ShoppingIcon,
+  ShoppingIcon, SquaresIcon,
   TaxIcon,
   TitheIcon,
   TransportIcon,
@@ -40,6 +40,13 @@ export function getCategoryStyle(
   type: "income" | "expense",
   category: TransactionCategory
 ) {
+  if(!category) {
+    // return uncategorized category
+    return {
+        id: "uncategorized",
+      ...categoryMap[type]["Uncategorized"],
+    }
+  }
   return {
     id: category.id,
     ...categoryMap[type][category.name],
@@ -47,6 +54,14 @@ export function getCategoryStyle(
 }
 const categoryMap: CategoryStyle = {
   income: {
+    Uncategorized: {
+      name: "Uncategorized",
+      foregroundColor: "text-slate-900",
+      backgroundColor: "bg-slate-300",
+      backgroundColorAsHsl: "hsl(199.4,95.5%,73.9%)",
+      foregroundColorAsHsl: "hsl(222.2,47.4%,11.2%)",
+      icon: <SquaresIcon />,
+    },
     Business: {
       name: "Business",
       foregroundColor: "text-slate-900",
@@ -105,6 +120,14 @@ const categoryMap: CategoryStyle = {
     },
   },
   expense: {
+    Uncategorized: {
+      name: "Uncategorized",
+      foregroundColor: "text-slate-900",
+      backgroundColor: "bg-slate-300",
+      backgroundColorAsHsl: "hsl(199.4,95.5%,73.9%)",
+      foregroundColorAsHsl: "hsl(222.2,47.4%,11.2%)",
+      icon: <SquaresIcon />,
+    },
     Meal: {
       name: "Meal",
       foregroundColor: "text-slate-900",

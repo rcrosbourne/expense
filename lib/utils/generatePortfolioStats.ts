@@ -15,12 +15,12 @@ export function generatePortfolioStats(wallets: Wallet[]): PortfolioStat[] {
     }
     return best;
   }, wallets[0]);
-  // const worstPerformingWallet = wallets.reduce((worst, wallet) => {
+  // const worstPerformingWallet = wallet.reduce((worst, wallet) => {
   //   if (wallet.balance < worst.balance) {
   //     return wallet;
   //   }
   //   return worst;
-  // }, wallets[0]);
+  // }, wallet[0]);
   return [
     { label: "Total Balance", value: `$${formatNumberAsCurrency(totalBalance)}` },
     { label: "Total Budget", value: `$${formatNumberAsCurrency(totalBudget)}`},

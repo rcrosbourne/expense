@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { classNames } from "@/lib/utils";
-import { FinancialTransaction } from "@/types";
+import { FinancialTransaction, Wallet } from "@/types";
 import Switcher from "@/app/(pages)/wallet/[id]/components/switcher";
 import InputAmount from "@/app/(pages)/wallet/[id]/components/inputAmount";
 import DatePicker from "@/components/datePicker";
@@ -21,16 +21,20 @@ import {
   useShowAsModal,
   useTransaction,
 } from "@/lib/store/financialTransactionStore";
-import useWindowSize from "@/hooks/useWindowSize";
+import { useMutation } from "@tanstack/react-query";
+import { TransactionFunctions } from "@/lib/client/transactionFunctions";
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
-export const INITIAL_STATE: FinancialTransaction = {
-  id: "0",
-  type: "expense",
-  amount: undefined,
-  date: { startDate: null, endDate: null },
-  periodicity: "One-time payment",
-};
-const AddTransaction = () => {
+const AddTransaction = ({ wallet }: { wallet: Wallet }) => {
+  const INITIAL_STATE: FinancialTransaction = {
+    id: "0",
+    type: "expense",
+    amount: undefined,
+    date: { startDate: null, endDate: null },
+    periodicity: "One-time payment",
+    walletId: wallet.id,
+  };
   // If we get an expense, and it is income type or if we have no expense the default type is income
   const transaction = useTransaction() || INITIAL_STATE;
   const setTransaction = useSetTransaction();
@@ -40,10 +44,32 @@ const AddTransaction = () => {
   const showAsModal = useShowAsModal();
   const setShowAsModal = useSetShowAsModal();
   const setIsEditing = useSetIsEditing();
+  const { toast } = useToast();
+  const router = useRouter();
   const amountInputRef = React.useRef<null | HTMLInputElement>(null);
-  const windowSize = useWindowSize();
+  const { mutate, isLoading } = useMutation(["transaction", wallet.id], {
+    mutationFn: TransactionFunctions.Store,
+    onSuccess: async () => {
+    setIsEditing(false);
+    setTransaction(INITIAL_STATE);
+    setShowAsModal(false);
+      toast({
+        title: "Transaction added",
+        description: "Transaction has been added successfully",
+      });
+      router.refresh();
+    },
+    onError: (error) => {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        variant: "destructive"
+      })
+    },
+  });
   function cancel() {
-    console.log("Cancelling!!!!");
+    console.log("Cancelling!");
     setIsEditing(false);
     setTransaction(INITIAL_STATE);
     setShowAsModal(false);
@@ -53,7 +79,7 @@ const AddTransaction = () => {
     const amountInputElement = amountInputRef.current as HTMLInputElement;
     setTransaction({
       ...transaction,
-      amount: amountInputElement.valueAsNumber,
+      amount: Number(amountInputElement.value.replace(/,/g, "").trim()),
     });
   }
   function onDateChanged(date: DateValueType) {
@@ -62,11 +88,16 @@ const AddTransaction = () => {
   }
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Submitted");
-    console.log({ transaction });
-    setIsEditing(false);
-    setShowAsModal(!showAsModal);
-    setTransaction(INITIAL_STATE);
+    if (!transaction.amount) throw new Error("Amount is required");
+    // set defaults
+    if (!transaction.date) {
+      const today = new Date();
+      setTransaction({
+        ...transaction,
+        date: { startDate: today, endDate: today },
+      });
+    }
+    mutate(transaction);
   }
   return (
     <>
@@ -77,6 +108,8 @@ const AddTransaction = () => {
         onAmountChanged={onAmountChanged}
         onDateChanged={onDateChanged}
         cancel={cancel}
+        wallet={wallet}
+        isLoading={isLoading}
       />
       <Transition appear show={showAsModal} as={Fragment}>
         <Dialog
@@ -116,6 +149,8 @@ const AddTransaction = () => {
                     onAmountChanged={onAmountChanged}
                     onDateChanged={onDateChanged}
                     cancel={cancel}
+                    wallet={wallet}
+                    isLoading={isLoading}
                   />
                 </Dialog.Panel>
               </Transition.Child>
@@ -143,6 +178,8 @@ const AddTransactionForm = ({
   onAmountChanged,
   onDateChanged,
   cancel,
+  wallet,
+    isLoading,
 }: {
   isIncome: boolean;
   submitHandler: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -150,11 +187,22 @@ const AddTransactionForm = ({
   onAmountChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDateChanged: (date: DateValueType) => void;
   cancel: () => void;
+  wallet: Wallet;
+    isLoading: boolean;
 }) => {
+  const INITIAL_STATE: FinancialTransaction = {
+    id: "0",
+    type: "expense",
+    amount: undefined,
+    date: { startDate: null, endDate: null },
+    periodicity: "One-time payment",
+    walletId: wallet.id,
+  };
   const transaction = useTransaction() || INITIAL_STATE;
   const setTransaction = useSetTransaction();
   const setOpenCategories = useSetOpenCategories();
   const isEditing = useIsEditing();
+
   return (
     <section aria-labelledby="" className="@container/section">
       <div
@@ -169,6 +217,7 @@ const AddTransactionForm = ({
             setIsIncome={(isIncome) =>
               setTransaction({
                 ...transaction,
+                category: undefined,
                 type: isIncome ? "income" : "expense",
               })
             }
@@ -225,6 +274,7 @@ const AddTransactionForm = ({
                 isIncome={isIncome}
                 isEditing={isEditing}
                 onCancel={cancel}
+                canCreate={(transaction?.amount as number) > 0 && !isLoading}
               />
             </div>
           </div>

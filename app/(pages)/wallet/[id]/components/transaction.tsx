@@ -11,7 +11,6 @@ import {
   useTransaction,
 } from "@/lib/store/financialTransactionStore";
 import useWindowSize from "@/hooks/useWindowSize";
-import {INITIAL_STATE} from "@/app/(pages)/wallet/[id]/components/addTransaction";
 
 const Transaction = ({
   transaction,
@@ -27,6 +26,14 @@ const Transaction = ({
   const setOpenDeleteModal = useSetOpenDeleteModal();
   const setShowAsModal = useSetShowAsModal();
   const windowSize = useWindowSize();
+  const INITIAL_STATE = {
+    id: "0",
+    type: "expense",
+    amount: undefined,
+    date: { startDate: null, endDate: null },
+    periodicity: "One-time payment",
+    walletId: transaction.walletId,
+  }
   return (
     <li
       className={classNames(
