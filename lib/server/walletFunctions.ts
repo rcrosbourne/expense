@@ -28,6 +28,13 @@ export async function getWallet(walletId: string) {
       userId: user?.id,
       id: walletId,
     },
+    include: {
+      transactions: {
+        include: {
+            category: true,
+        }
+      },
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -38,6 +45,13 @@ export async function getWallets() {
   return await prisma.wallet.findMany({
     where: {
       userId: user?.id,
+    },
+    include: {
+      transactions: {
+        include: {
+            category: true,
+        }
+      },
     },
     orderBy: {
       createdAt: "desc",

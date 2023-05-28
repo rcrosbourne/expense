@@ -2,8 +2,9 @@ import React from "react";
 import { walletStats } from "@/data/walletStatus";
 import useWindowSize from "@/hooks/useWindowSize";
 import {useSetShowAsModal} from "@/lib/store/financialTransactionStore";
+import {Wallet} from "@/types";
 
-const WalletOverview = () => {
+const WalletOverview = ({wallet}: {wallet: Wallet}) => {
   const windowSize = useWindowSize();
   const setShowAsModal = useSetShowAsModal();
   return (

@@ -1,9 +1,13 @@
 "use client";
 import React from "react";
-import {capitalize, classNames, formatNumberAsCurrency} from "../../../lib/utils";
+import {
+  capitalize,
+  classNames,
+  formatNumberAsCurrency,
+} from "@/lib/utils";
 import Link from "next/link";
 import { CancelIcon, EditIcon, TrashCanIcon } from "@/components/icons";
-import { WalletWidgetProps } from "../../../types";
+import { WalletWidgetProps } from "@/types";
 import {
   useEditWallet,
   useHandleCancelEdit,
@@ -18,24 +22,33 @@ const WalletWidget = ({ wallet }: { wallet: WalletWidgetProps }) => {
   const handleDeleteWallet = useHandleDeleteWallet();
   const editWallet = useEditWallet();
   const editMode = editWallet?.id === wallet.id;
-
+  const iconForeground =
+    wallet.category === "business" ? "text-purple-700" : "text-teal-700";
+  const iconBackground =
+    wallet.category === "business" ? "bg-purple-50" : "bg-teal-50";
   const onDelete = () => {
     // Add the wallet to be deleted.
     handleDeleteWallet(true, {
+      balance: wallet.balance,
+      href: wallet.href,
       id: wallet.id,
       name: wallet.name,
       budget: wallet.budget,
       category: wallet.category,
+      transactions: wallet.transactions
     });
   };
 
   const onEdit = () => {
     // Add the wallet to be edited.
     handleEditWallet({
+      balance: wallet.balance,
+      href: wallet.href,
       id: wallet.id,
       name: wallet.name,
       budget: wallet.budget,
       category: wallet.category,
+      transactions: wallet.transactions,
     });
   };
 
@@ -47,8 +60,8 @@ const WalletWidget = ({ wallet }: { wallet: WalletWidgetProps }) => {
             <div>
               <span
                 className={classNames(
-                  wallet.iconBackground,
-                  wallet.iconForeground,
+                  iconBackground,
+                  iconForeground,
                   "inline-flex rounded-lg p-3 ring-4 ring-slate-50"
                 )}
               >
@@ -62,14 +75,16 @@ const WalletWidget = ({ wallet }: { wallet: WalletWidgetProps }) => {
                   className="focus:outline-none text-lg text-slate-900"
                 >
                   {/* Extend touch target to entire panel */}
-                  <span className="absolute inset-0" aria-hidden="true" />
-                  ${formatNumberAsCurrency(wallet.currentBalance)}
+                  <span className="absolute inset-0" aria-hidden="true" />$
+                  {formatNumberAsCurrency(wallet.balance)}
                 </Link>
               </h3>
               <div className="mt-2 text-xs text-gray-500 grid grid-cols-2">
                 <div className="flex flex-col w-full">
                   <span>Budget</span>
-                  <span className="text-lg">${formatNumberAsCurrency(wallet.budget)}</span>
+                  <span className="text-lg">
+                    ${formatNumberAsCurrency(wallet.budget)}
+                  </span>
                 </div>
                 <div className={"flex flex-col"}>
                   <span>Category</span>

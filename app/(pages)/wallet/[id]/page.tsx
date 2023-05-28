@@ -1,17 +1,8 @@
 import React from "react";
 import Transactions from "@/app/(pages)/wallet/[id]/transactions";
-import { getTransactions } from "@/lib/server/transactionFunctions";
-import { getWallet, getWallets } from "@/lib/server/walletFunctions";
+import {getWallet} from "@/lib/server/walletFunctions";
 import { z } from "zod";
-// import { transactions } from "@/data/transactions";
-import {
-  AnyCategory,
-  Category,
-  FinancialTransaction,
-  Periodicity,
-} from "@/types";
-import { MealIcon } from "@/components/icons";
-import { convertDBTxnToWidget } from "@/lib/utils/convertDBTxnToWidget";
+import {convertFromRawToWallet} from "@/lib/utils/convertDBWalletToWidget";
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -22,21 +13,15 @@ const Page = async (context: z.infer<typeof routeContextSchema>) => {
   const {
     params: { id },
   } = routeContextSchema.parse(context);
-  const wallet = await getWallet(id);
-  if (!wallet) {
+  const rawWallet = await getWallet(id);
+  if (!rawWallet) {
     throw new Error("Wallet not found");
   }
-  const transactions = await getTransactions({
-    ...wallet,
-    budget: wallet.budget.toNumber(),
-  });
-  console.log(JSON.stringify(transactions, null, 2));
-  const updatedTransactions = transactions.map((transaction) => {
-    return convertDBTxnToWidget(transaction) as FinancialTransaction;
-  });
+  const wallet = convertFromRawToWallet(rawWallet);
+
   return (
     <>
-      <Transactions transactions={updatedTransactions} walletBudget={wallet.budget.toNumber()}/>
+      <Transactions transactions={wallet.transactions} wallet={wallet}/>
     </>
   );
 };

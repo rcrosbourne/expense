@@ -1,16 +1,16 @@
 import React from "react";
-import { FinancialTransaction } from "../../../../../types";
+import { FinancialTransaction } from "@/types";
 import BarChart from "@/app/(pages)/wallet/[id]/components/barChart";
 import { ChartData, ChartOptions } from "chart.js";
 import dayjs from "dayjs";
-import {classNames, formatNumberAsCurrency, formatNumberAsPercentage} from "../../../../../lib/utils";
+import {classNames, formatNumberAsCurrency, formatNumberAsPercentage} from "@/lib/utils";
 
 const BudgetBreakdown = ({
   transactions,
-  walletBudget,
+  budget,
 }: {
   transactions: FinancialTransaction[];
-  walletBudget: number;
+  budget: number;
 }) => {
   function barChartConfiguration(): ChartData<"bar", number[], unknown> {
     const transactionsByMonth = getTransactionsGroupedByMonth({ transactions });
@@ -21,7 +21,7 @@ const BudgetBreakdown = ({
       transactionsByMonth[index] ? transactionsByMonth[index]["total_cost"] : 0
     );
 
-    const budget = labels.map((_, index) => walletBudget / labels.length);
+    const budgetBreakdown = labels.map((_, index) => budget / labels.length);
     const datasets = [
       {
         label: "Total Expense",
@@ -30,7 +30,7 @@ const BudgetBreakdown = ({
       },
       {
         label: "Budget",
-        data: budget,
+        data: budgetBreakdown,
         backgroundColor: "hsl(229.7,93.5%,81.8%)",
       },
     ];
@@ -58,7 +58,7 @@ const BudgetBreakdown = ({
     },
   };
   const stats = generateStatsFromMetrics(
-    generateMetrics({ transactions, walletBudget })
+    generateMetrics({ transactions, budget})
   );
 
   return (
@@ -102,17 +102,17 @@ function getTransactionsGroupedByMonth({
 }
 function generateMetrics({
   transactions,
-  walletBudget,
+  budget,
 }: {
   transactions: FinancialTransaction[];
-  walletBudget: number;
+  budget: number;
 }) {
   const totalExpense = transactions
     .map((t) => t.amount! as number)
     .reduce((acc, value) => value + acc, 0);
   // get the total expenses for the month before and subtract from the current month
   // get the current month index
-  const totalBudget = walletBudget;
+  const totalBudget = budget;
   const totalVariance = totalBudget - totalExpense;
   const totalVariancePercentage = totalVariance / totalBudget;
   const totalVariancePercentageString = totalVariancePercentage.toLocaleString(
