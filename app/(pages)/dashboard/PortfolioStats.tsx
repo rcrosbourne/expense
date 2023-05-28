@@ -1,4 +1,4 @@
-import {PortfolioStat} from "../../../types";
+import {PortfolioStat} from "@/types";
 
 const PortfolioStats = ({ stats }: { stats: PortfolioStat[] }) => {
   return (

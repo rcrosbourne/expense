@@ -5,6 +5,7 @@ import {
   FinancialTransaction as RawTransaction,
   TransactionCategory as RawTransactionCategory,
 } from "@prisma/client";
+
 type WalletWithTxn = RawWallet & {
   transactions: (RawTransaction & { category: RawTransactionCategory })[];
 };

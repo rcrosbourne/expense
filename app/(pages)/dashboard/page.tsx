@@ -6,13 +6,14 @@ import {getWallets} from "@/lib/server/walletFunctions";
 import currentUser from "@/lib/server/currentUser";
 import {LucideLoader2} from "lucide-react";
 import {convertFromRawToWallet} from "@/lib/utils/convertDBWalletToWidget";
+import {generatePortfolioStats} from "@/lib/utils/generatePortfolioStats";
 
 export default async function Page() {
-  const stats: PortfolioStat[] = [
-  { label: "Total", value: "$100,000.00" },
-  { label: "Last 30 days", value: "$300,000.00" },
-  { label: "Last 7 days", value: "$75,000.00" },
-];
+//   const stats: PortfolioStat[] = [
+//   { label: "Total", value: "$100,000.00" },
+//   { label: "Last 30 days", value: "$300,000.00" },
+//   { label: "Last 7 days", value: "$75,000.00" },
+// ];
   const user = await currentUser();
   if(!user) {
     redirect('/api/auth/signin?callbackUrl=/dashboard');
@@ -23,6 +24,7 @@ export default async function Page() {
     return convertFromRawToWallet(wallet);
   });
   console.log(JSON.stringify(wallets, null, 2));
+  const stats: PortfolioStat[] = generatePortfolioStats(wallets);
   return (
       <>
         <Suspense fallback={<LucideLoader2 className="animate-spin"/>}>
