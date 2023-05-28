@@ -52,6 +52,7 @@ const InputAmount = ({
             value={value}
             getInputRef={inputRef}
             autoComplete="off"
+             inputMode="numeric"
           />
           <div className="absolute inset-x-0 bottom-0 border-t border-gray-200 peer-focus:border-t-2 peer-focus:border-white" />
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">

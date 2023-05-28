@@ -38,7 +38,7 @@ type CategoryStyle = {
 
 export function getCategoryStyle(
   type: "income" | "expense",
-  category: TransactionCategory
+  category: TransactionCategory | null
 ) {
   if(!category) {
     // return uncategorized category

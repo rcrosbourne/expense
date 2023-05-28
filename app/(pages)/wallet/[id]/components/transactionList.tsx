@@ -10,6 +10,10 @@ import {
   useTransaction,
 } from "@/lib/store/financialTransactionStore";
 import { formatNumberAsCurrency } from "@/lib/utils";
+import { useToast } from "@/hooks/useToast";
+import { useMutation } from "@tanstack/react-query";
+import { TransactionFunctions } from "@/lib/client/transactionFunctions";
+import { useRouter } from "next/navigation";
 
 const TransactionList = ({
   transactions,
@@ -22,8 +26,34 @@ const TransactionList = ({
   const deleteTransaction = useDeleteTransaction();
   const setOpenedDeleteModal = useSetOpenDeleteModal();
   const setTransaction = useSetTransaction();
+  const { toast } = useToast();
+  const router = useRouter();
+  const { mutate, isLoading } = useMutation(
+    ["wallets", deleteTransaction?.id],
+    {
+      mutationFn: TransactionFunctions.Destroy,
+      onError: (error) => {
+        // TODO: Add logging.
+        console.error(error);
+        toast({
+          title: "An error occurred",
+          description: "This action cannot be completed as this time.",
+          variant: "destructive",
+        });
+      },
+      onSuccess: async () => {
+        setOpenedDeleteModal(!openDeleteModal);
+        toast({
+          title: "Wallet deleted",
+          description: "Wallet deleted successfully",
+          variant: "default",
+        });
+        router.refresh();
+      },
+    }
+  );
   const message = (transaction?: FinancialTransaction) => {
-    if(!transaction) return "";
+    if (!transaction) return "";
     return `Are you sure you want to delete expense ${
       transaction.category?.name
     } with amount $${formatNumberAsCurrency(transaction.amount)}
@@ -32,25 +62,11 @@ const TransactionList = ({
   const onConfirm = (status: boolean) => {
     if (status) {
       console.log("delete", deleteTransaction);
-      setOpenedDeleteModal(!openDeleteModal);
-      setTransaction({
-        id: "0",
-        type: "expense",
-        amount: undefined,
-        date: { startDate: null, endDate: null },
-        periodicity: "One-time payment",
-      });
-    } else {
-      setTransaction({
-        id: "0",
-        type: "expense",
-        amount: undefined,
-        date: { startDate: null, endDate: null },
-        periodicity: "One-time payment",
-      });
-      setOpenedDeleteModal(!openDeleteModal);
+      if (deleteTransaction) {
+        void mutate(deleteTransaction);
+      }
     }
-  }
+  };
   return (
     <>
       <ul role="list" className="grid grid-cols-1 gap-6 md:grid-cols-2">

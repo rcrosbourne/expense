@@ -7,7 +7,7 @@ import {
 } from "@prisma/client";
 
 type WalletWithTxn = RawWallet & {
-  transactions: (RawTransaction & { category: RawTransactionCategory })[];
+  transactions: (RawTransaction & { category: RawTransactionCategory|null })[];
 };
 
 const walletHref = "/wallet/";

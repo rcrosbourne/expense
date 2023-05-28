@@ -44,30 +44,59 @@ const AddTransaction = ({ wallet }: { wallet: Wallet }) => {
   const showAsModal = useShowAsModal();
   const setShowAsModal = useSetShowAsModal();
   const setIsEditing = useSetIsEditing();
+  const isEditing = useIsEditing();
   const { toast } = useToast();
   const router = useRouter();
   const amountInputRef = React.useRef<null | HTMLInputElement>(null);
-  const { mutate, isLoading } = useMutation(["transaction", wallet.id], {
-    mutationFn: TransactionFunctions.Store,
-    onSuccess: async () => {
-    setIsEditing(false);
-    setTransaction(INITIAL_STATE);
-    setShowAsModal(false);
-      toast({
-        title: "Transaction added",
-        description: "Transaction has been added successfully",
-      });
-      router.refresh();
-    },
-    onError: (error) => {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "Something went wrong",
-        variant: "destructive"
-      })
-    },
-  });
+  const { mutate, isLoading: createIsLoading } = useMutation(
+    ["transaction", wallet.id],
+    {
+      mutationFn: TransactionFunctions.Store,
+      onSuccess: async () => {
+        setIsEditing(false);
+        setTransaction(INITIAL_STATE);
+        setShowAsModal(false);
+        toast({
+          title: "Transaction added",
+          description: "Transaction has been added successfully",
+        });
+        router.refresh();
+      },
+      onError: (error) => {
+        console.error(error);
+        toast({
+          title: "Error",
+          description: "Something went wrong",
+          variant: "destructive",
+        });
+      },
+    }
+  );
+  const { mutate: updateTransaction, isLoading: updateIsLoading } = useMutation(
+    ["transaction", wallet.id],
+    {
+      mutationFn: TransactionFunctions.Update,
+      onSuccess: async () => {
+        setIsEditing(false);
+        setTransaction(INITIAL_STATE);
+        setShowAsModal(false);
+        toast({
+          title: "Transaction updated",
+          description: "Transaction has been updated successfully",
+        });
+        router.refresh();
+      },
+      onError: (error) => {
+        console.error(error);
+        toast({
+          title: "Error",
+          description: "Something went wrong",
+          variant: "destructive",
+        });
+      },
+    }
+  );
+  const isLoading = createIsLoading || updateIsLoading;
   function cancel() {
     console.log("Cancelling!");
     setIsEditing(false);
@@ -97,7 +126,11 @@ const AddTransaction = ({ wallet }: { wallet: Wallet }) => {
         date: { startDate: today, endDate: today },
       });
     }
-    mutate(transaction);
+    if (isEditing) {
+      updateTransaction(transaction);
+    } else {
+      mutate(transaction);
+    }
   }
   return (
     <>
@@ -179,7 +212,7 @@ const AddTransactionForm = ({
   onDateChanged,
   cancel,
   wallet,
-    isLoading,
+  isLoading,
 }: {
   isIncome: boolean;
   submitHandler: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -188,7 +221,7 @@ const AddTransactionForm = ({
   onDateChanged: (date: DateValueType) => void;
   cancel: () => void;
   wallet: Wallet;
-    isLoading: boolean;
+  isLoading: boolean;
 }) => {
   const INITIAL_STATE: FinancialTransaction = {
     id: "0",

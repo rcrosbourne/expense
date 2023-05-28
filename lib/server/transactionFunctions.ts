@@ -73,7 +73,7 @@ export async function deleteTransaction(
   });
 }
 export async function updateTransaction(
-  wallet: Wallet,
+  walletId: string,
   transaction: FinancialTransaction
 ) {
   const user = await currentUser();
@@ -109,7 +109,7 @@ export async function updateTransaction(
       },
       wallet: {
         connect: {
-          id: wallet.id,
+          id: walletId,
         },
       },
     },

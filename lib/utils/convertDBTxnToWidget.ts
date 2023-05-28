@@ -7,7 +7,7 @@ import { FinancialTransaction, TransactionCategory } from "@prisma/client";
 import { getCategoryStyle } from "./getCategoryStyle";
 import dayjs from "dayjs";
 
-type DbTxn = FinancialTransaction & { category: TransactionCategory };
+type DbTxn = FinancialTransaction & { category: TransactionCategory | null };
 export function convertDBTxnToWidget(
   transaction: DbTxn,
   walletId: string
