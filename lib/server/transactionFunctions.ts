@@ -22,7 +22,7 @@ export async function addTransaction(
       category: {
         connect: {
           name_type: {
-            name: financialTransaction?.category?.name || "Other",
+            name: financialTransaction?.category?.name || "Uncategorized",
             type: financialTransaction?.type,
           },
         },
@@ -102,7 +102,7 @@ export async function updateTransaction(
       category: {
         connect: {
           name_type: {
-            name: transaction?.category?.name || "Other",
+            name: transaction?.category?.name || "Uncategorized",
             type: transaction?.type,
           },
         },

@@ -26,7 +26,7 @@ const Transaction = ({
   const setOpenDeleteModal = useSetOpenDeleteModal();
   const setShowAsModal = useSetShowAsModal();
   const windowSize = useWindowSize();
-  const INITIAL_STATE = {
+  const INITIAL_STATE: FinancialTransaction = {
     id: "0",
     type: "expense",
     amount: undefined,
