@@ -1,4 +1,4 @@
-import { Wallet } from "../../types";
+import { Wallet } from "@/types";
 
 export const RESPONSE_STATUS = {
   SUCCESS: 200,

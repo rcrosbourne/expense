@@ -24,6 +24,6 @@ export function generatePortfolioStats(wallets: Wallet[]): PortfolioStat[] {
   return [
     { label: "Total Balance", value: `$${formatNumberAsCurrency(totalBalance)}` },
     { label: "Total Budget", value: `$${formatNumberAsCurrency(totalBudget)}`},
-    { label: "Best Performer", value: bestPerformingWallet.name },
+    { label: "Best Performer", value: bestPerformingWallet?.name || "N/A" },
   ];
 }
