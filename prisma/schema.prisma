@@ -72,7 +72,7 @@ model Wallet {
   user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions FinancialTransaction[]
 
-  @@map("wallet")
+  @@map("wallets")
 }
 
 model FinancialTransaction {
