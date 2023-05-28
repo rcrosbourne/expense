@@ -1,7 +1,7 @@
 // Sever-side functions for wallet CRUD operations.
 import "server-only";
 
-import { Wallet, WalletWidgetProps } from "../../types";
+import { Wallet} from "@/types";
 import prisma from "@/lib/prisma";
 import currentUser from "@/lib/server/currentUser";
 
@@ -21,17 +21,42 @@ export async function addWallet(wallet: Wallet) {
     },
   });
 }
-export async function getWallets() {
+export async function getWallet(walletId: string) {
   const user = await currentUser();
-   return await prisma.wallet.findMany({
+  return await prisma.wallet.findFirst({
     where: {
       userId: user?.id,
+      id: walletId,
+    },
+    include: {
+      transactions: {
+        include: {
+            category: true,
+        }
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
-
+}
+export async function getWallets() {
+  const user = await currentUser();
+  return await prisma.wallet.findMany({
+    where: {
+      userId: user?.id,
+    },
+    include: {
+      transactions: {
+        include: {
+            category: true,
+        }
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 }
 export async function deleteWallet(walletId: string) {
   const user = await currentUser();

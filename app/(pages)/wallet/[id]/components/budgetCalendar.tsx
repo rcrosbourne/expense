@@ -5,9 +5,9 @@ import {
   EllipsisHorizontalIcon,
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
-import { classNames, formatNumberAsCurrency } from "../../../../../lib/utils";
+import { classNames, formatNumberAsCurrency } from "@/lib/utils";
 import dayjs from "dayjs";
-import { FinancialTransaction } from "../../../../../types";
+import { FinancialTransaction } from "@/types";
 import * as Popover from "@radix-ui/react-popover";
 import formatDateOrReturnDefault from "@/lib/utils/formatDateOrReturnDefault";
 type CalendarDay = {

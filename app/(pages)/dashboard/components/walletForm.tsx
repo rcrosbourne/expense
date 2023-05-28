@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import useWindowSize from "@/hooks/useWindowSize";
 import { Wallet } from "@/types";
 import {useToast} from "@/hooks/useToast";
-import {useCurrentUser} from "@/lib/client/currentUser";
 
 const WalletForm = ({
   onSubmitCallback,
@@ -24,10 +23,8 @@ const WalletForm = ({
   const editWallet = useEditWallet();
   const editMode = !!editWallet;
   const router = useRouter();
-  const {user} = useCurrentUser();
   const windowSize = useWindowSize();
   const { toast } = useToast();
-  const client = useQueryClient();
   const {
     register,
     handleSubmit,

@@ -7,7 +7,7 @@ dayjs.extend(timezone);
 dayjs.extend(utc);
 export const transactions: FinancialTransaction[] = [
   {
-    id: 1,
+    id: "1",
     amount: 10003.45,
     type: "expense",
     date: {
@@ -21,7 +21,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 2,
+    id: "2",
     amount: 423.04,
     type: "expense",
     date: {
@@ -34,7 +34,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "Every month",
   },
   {
-    id: 3,
+    id: "3",
     amount: 10909.45,
     type: "expense",
     date: {
@@ -47,7 +47,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "Every 2 months",
   },
   {
-    id: 4,
+    id: "4",
     amount: 223030.45,
     type: "expense",
     date: {
@@ -60,7 +60,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 5,
+    id: "5",
     amount: 323030.45,
     type: "income",
     date: {
@@ -73,7 +73,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 6,
+    id: "6",
     amount: 223030.45,
     type: "income",
     date: {
@@ -86,7 +86,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 7,
+    id: "7",
     amount: 62923.45,
     type: "expense",
     date: {
@@ -99,7 +99,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 8,
+    id: "8",
     amount: 12000.45,
     type: "income",
     date: {
@@ -112,7 +112,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 9,
+    id: "9",
     amount: 120342.45,
     type: "income",
     date: {
@@ -125,7 +125,7 @@ export const transactions: FinancialTransaction[] = [
     periodicity: "One-time payment",
   },
   {
-    id: 10,
+    id: "10",
     amount: 120342.45,
     type: "expense",
     date: {

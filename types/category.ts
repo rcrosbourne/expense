@@ -54,6 +54,7 @@ export type CategoryBackgroundColorsAsHsl = {
 };
 
 export type Category<T extends keyof CategoryBackgroundColors> = {
+  id?: string;
   name: string;
   foregroundColor: keyof CategoryForegroundColors;
   backgroundColor: T;

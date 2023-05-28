@@ -5,7 +5,7 @@ import {
   useHandleDeleteWallet,
   useOpenConfirm,
 } from "@/lib/store/walletStore";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import { WalletFunctions } from "@/lib/client/walletFunctions";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
@@ -15,7 +15,6 @@ const DeleteWalletDialog = () => {
   const deleteWallet = useDeleteWallet();
   const openConfirm = useOpenConfirm();
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { toast } = useToast();
   const { mutateAsync, isLoading } = useMutation(
     ["wallets", deleteWallet?.id],
@@ -32,12 +31,12 @@ const DeleteWalletDialog = () => {
       },
       onSuccess: async () => {
         handleDeleteWallet(false, undefined);
-        await queryClient.invalidateQueries(["wallets"]);
         toast({
           title: "Wallet deleted",
           description: "Wallet deleted successfully",
           variant: "default",
         });
+        router.refresh();
       },
     }
   );

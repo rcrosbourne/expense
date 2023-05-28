@@ -1,6 +1,6 @@
 import "client-only";
 import { create } from "zustand";
-import { Wallet } from "../../types";
+import { Wallet } from "@/types";
 import {DashboardStore} from "@/types/dashboardStore";
 
 const useStore = create<DashboardStore>()((set) => ({

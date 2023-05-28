@@ -2,9 +2,7 @@ import {Wallet} from "@/types/wallet";
 
 export interface WalletWidgetProps extends Wallet {
   href: string;
-  iconForeground: string;
-  iconBackground: string;
-  currentBalance: string;
+  balance: number;
   // TODO: This feels wrong to have these here
   onEdit?: (wallet: Wallet) => void;
   onCancel?: () => void;

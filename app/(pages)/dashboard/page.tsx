@@ -5,35 +5,30 @@ import {redirect} from "next/navigation";
 import {getWallets} from "@/lib/server/walletFunctions";
 import currentUser from "@/lib/server/currentUser";
 import {LucideLoader2} from "lucide-react";
+import {convertFromRawToWallet} from "@/lib/utils/convertDBWalletToWidget";
+import {generatePortfolioStats} from "@/lib/utils/generatePortfolioStats";
 
 export default async function Page() {
-  const stats: PortfolioStat[] = [
-  { label: "Total", value: "$100,000.00" },
-  { label: "Last 30 days", value: "$300,000.00" },
-  { label: "Last 7 days", value: "$75,000.00" },
-];
+//   const stats: PortfolioStat[] = [
+//   { label: "Total", value: "$100,000.00" },
+//   { label: "Last 30 days", value: "$300,000.00" },
+//   { label: "Last 7 days", value: "$75,000.00" },
+// ];
   const user = await currentUser();
   if(!user) {
     redirect('/api/auth/signin?callbackUrl=/dashboard');
   }
 
-  const walletsFromDb = await getWallets();
-  const initWallets: WalletWidgetProps[] = walletsFromDb.map((wallet) => {
-    return {
-      ...wallet,
-      budget: wallet.budget.toNumber(),
-      href: `/wallet/${wallet.id}`,
-      iconForeground:
-        wallet.category === "business" ? "text-purple-700" : "text-teal-700",
-      iconBackground:
-        wallet.category === "business" ? "bg-purple-50" : "bg-teal-50",
-      currentBalance: "0",
-    };
+  const rawWallets = await getWallets();
+  const wallets: WalletWidgetProps[] = rawWallets.map((wallet) => {
+    return convertFromRawToWallet(wallet);
   });
+  console.log(JSON.stringify(wallets, null, 2));
+  const stats: PortfolioStat[] = generatePortfolioStats(wallets);
   return (
       <>
         <Suspense fallback={<LucideLoader2 className="animate-spin"/>}>
-          <Home wallets={initWallets} stats={stats}/>
+          <Home wallets={wallets} stats={stats}/>
         </Suspense>
       </>
   );
