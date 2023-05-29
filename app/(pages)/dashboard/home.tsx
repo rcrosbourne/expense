@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import { PortfolioStat, WalletWidgetProps } from "@/types";
+import { Stat, WalletWidgetProps } from "@/types";
 import Image from "next/image";
 
 import AddWalletButton from "@/app/(pages)/dashboard/addWalletButton";
 import AddWallet from "@/app/(pages)/dashboard/addWallet";
 import WalletWidget from "@/app/(pages)/dashboard/walletWidget";
 import UserInfo from "@/app/(pages)/dashboard/userInfo";
-import PortfolioStats from "@/app/(pages)/dashboard/PortfolioStats";
+import PortfolioStats from "@/app/(pages)/dashboard/portfolioStats";
 import { useCurrentUser } from "@/lib/client/currentUser";
 const recentHires = [
   {
@@ -69,7 +69,7 @@ const Home = ({
   stats,
 }: {
   wallets: WalletWidgetProps[];
-  stats: PortfolioStat[];
+  stats: Stat[];
 }) => {
   const { user } = useCurrentUser();
 
@@ -118,61 +118,61 @@ const Home = ({
             {/* Add Wallet */}
             <AddWallet />
             {/* Recent Hires */}
-            <section aria-labelledby="recent-hires-title">
-              <div className="overflow-hidden rounded-lg bg-white shadow">
-                <div className="p-6">
-                  <h2
-                    className="text-base font-medium text-gray-900"
-                    id="recent-hires-title"
-                  >
-                    Recent Hires
-                  </h2>
-                  <div className="mt-6 flow-root">
-                    <ul role="list" className="-my-5 divide-y divide-gray-200">
-                      {recentHires.map((person) => (
-                        <li key={person.handle} className="py-4">
-                          <div className="flex items-center space-x-4">
-                            <div className="flex-shrink-0">
-                              <Image
-                                className="h-8 w-8 rounded-full"
-                                src={person.imageUrl}
-                                alt=""
-                                height={32}
-                                width={32}
-                              />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="truncate text-sm font-medium text-gray-900">
-                                {person.name}
-                              </p>
-                              <p className="truncate text-sm text-gray-500">
-                                {"@" + person.handle}
-                              </p>
-                            </div>
-                            <div>
-                              <a
-                                href={person.href}
-                                className="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                              >
-                                View
-                              </a>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mt-6">
-                    <a
-                      href="#"
-                      className="flex w-full items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      View all
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </section>
+            {/*<section aria-labelledby="recent-hires-title">*/}
+            {/*  <div className="overflow-hidden rounded-lg bg-white shadow">*/}
+            {/*    <div className="p-6">*/}
+            {/*      <h2*/}
+            {/*        className="text-base font-medium text-gray-900"*/}
+            {/*        id="recent-hires-title"*/}
+            {/*      >*/}
+            {/*        Recent Hires*/}
+            {/*      </h2>*/}
+            {/*      <div className="mt-6 flow-root">*/}
+            {/*        <ul role="list" className="-my-5 divide-y divide-gray-200">*/}
+            {/*          {recentHires.map((person) => (*/}
+            {/*            <li key={person.handle} className="py-4">*/}
+            {/*              <div className="flex items-center space-x-4">*/}
+            {/*                <div className="flex-shrink-0">*/}
+            {/*                  <Image*/}
+            {/*                    className="h-8 w-8 rounded-full"*/}
+            {/*                    src={person.imageUrl}*/}
+            {/*                    alt=""*/}
+            {/*                    height={32}*/}
+            {/*                    width={32}*/}
+            {/*                  />*/}
+            {/*                </div>*/}
+            {/*                <div className="min-w-0 flex-1">*/}
+            {/*                  <p className="truncate text-sm font-medium text-gray-900">*/}
+            {/*                    {person.name}*/}
+            {/*                  </p>*/}
+            {/*                  <p className="truncate text-sm text-gray-500">*/}
+            {/*                    {"@" + person.handle}*/}
+            {/*                  </p>*/}
+            {/*                </div>*/}
+            {/*                <div>*/}
+            {/*                  <a*/}
+            {/*                    href={person.href}*/}
+            {/*                    className="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"*/}
+            {/*                  >*/}
+            {/*                    View*/}
+            {/*                  </a>*/}
+            {/*                </div>*/}
+            {/*              </div>*/}
+            {/*            </li>*/}
+            {/*          ))}*/}
+            {/*        </ul>*/}
+            {/*      </div>*/}
+            {/*      <div className="mt-6">*/}
+            {/*        <a*/}
+            {/*          href="#"*/}
+            {/*          className="flex w-full items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"*/}
+            {/*        >*/}
+            {/*          View all*/}
+            {/*        </a>*/}
+            {/*      </div>*/}
+            {/*    </div>*/}
+            {/*  </div>*/}
+            {/*</section>*/}
           </div>
         </div>
       </div>

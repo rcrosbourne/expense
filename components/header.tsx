@@ -3,8 +3,8 @@ import React, { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { classNames } from "../lib/utils";
-import { Navigation } from "../types";
+import { classNames } from "@/lib/utils";
+import { Navigation } from "@/types";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { User } from "next-auth";
 import logoCyan200 from "@/assets/images/logo-cyan-200.svg";
@@ -136,9 +136,10 @@ const Header = ({
                         <input
                           id="search"
                           className="block w-full rounded-md border-0 bg-white/20 py-1.5 pl-10 pr-3 text-white placeholder:text-white focus:bg-white focus:text-gray-900 focus:ring-0 focus:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                          placeholder="Search"
+                          placeholder="Search is disabled"
                           type="search"
                           name="search"
+                          disabled={true}
                         />
                       </div>
                     </div>

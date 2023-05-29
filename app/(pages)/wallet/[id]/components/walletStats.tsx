@@ -1,8 +1,10 @@
-import {PortfolioStat} from "@/types";
+import React from "react";
+import { Stat } from "@/types";
 
-const PortfolioStats = ({ stats }: { stats: PortfolioStat[] }) => {
+const WalletStats = ({ stats }: { stats: Stat[] }) => {
   return (
     <>
+      {" "}
       {stats.map((stat) => (
         <div
           key={stat.label}
@@ -15,4 +17,4 @@ const PortfolioStats = ({ stats }: { stats: PortfolioStat[] }) => {
     </>
   );
 };
-export default PortfolioStats;
+export default WalletStats;

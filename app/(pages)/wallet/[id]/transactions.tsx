@@ -23,7 +23,7 @@ import {
 import TransactionBreakdown from "@/app/(pages)/wallet/[id]/components/transactionBreakdown";
 import AddTransaction from "@/app/(pages)/wallet/[id]/components/addTransaction";
 import BudgetBreakdown from "@/app/(pages)/wallet/[id]/components/budgetBreakdown";
-import {Wallet} from "@/types";
+import {Stat, Wallet} from "@/types";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -36,7 +36,7 @@ ChartJS.register(
   BarElement,
   Title
 );
-const Transactions = ({transactions, wallet}: { transactions: FinancialTransaction[], wallet: Wallet }) => {
+const Transactions = ({transactions, wallet, stats}: { transactions: FinancialTransaction[], wallet: Wallet, stats: Stat[] }) => {
   const transactionRef = React.useRef(null);
   return (
     <main className="-mt-24 pb-8">
@@ -45,7 +45,7 @@ const Transactions = ({transactions, wallet}: { transactions: FinancialTransacti
         {/* Main 3 column grid */}
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-            <WalletOverview wallet={wallet}/>
+            <WalletOverview wallet={wallet} stats={stats}/>
             {/*Tabs go here */}
             <Tab.Group>
               <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">

@@ -1,10 +1,10 @@
 import React from "react";
-import { walletStats } from "@/data/walletStatus";
 import useWindowSize from "@/hooks/useWindowSize";
 import {useSetShowAsModal} from "@/lib/store/financialTransactionStore";
-import {Wallet} from "@/types";
+import {Stat, Wallet} from "@/types";
+import WalletStats from "@/app/(pages)/wallet/[id]/components/walletStats";
 
-const WalletOverview = ({wallet}: {wallet: Wallet}) => {
+const WalletOverview = ({wallet, stats}: {wallet: Wallet, stats: Stat[]}) => {
   const windowSize = useWindowSize();
   const setShowAsModal = useSetShowAsModal();
   return (
@@ -18,8 +18,8 @@ const WalletOverview = ({wallet}: {wallet: Wallet}) => {
             <div className="sm:flex sm:space-x-5">
               <div className="flex-shrink-0"></div>
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                <p className="text-sm font-medium text-gray-600">
-                  My Personal Wallet
+                <p className="text-xl font-medium text-slate-600">
+                  {wallet.name}
                 </p>
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl"></p>
                 <p className="text-sm font-medium text-gray-600"></p>
@@ -36,25 +36,8 @@ const WalletOverview = ({wallet}: {wallet: Wallet}) => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 bg-gray-50 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
-          <div className="px-6 py-5 text-center text-sm font-medium flex flex-col items-start">
-            <span className="text-gray-400 text-xs">Total</span>
-            <span className="text-gray-900 text-xl">
-              {walletStats.total}
-            </span>{" "}
-          </div>
-          <div className="px-6 py-5 text-center text-sm font-medium flex flex-col items-start">
-            <span className="text-gray-400 text-xs">Last 30 days</span>
-            <span className="text-gray-900 text-xl">
-              {walletStats.lastThirtyDays}
-            </span>{" "}
-          </div>
-          <div className="px-6 py-5 text-center text-sm font-medium flex flex-col items-start">
-            <span className="text-gray-400 text-xs">Last 7 days</span>
-            <span className="text-gray-900 text-xl">
-              {walletStats.lastSevenDays}
-            </span>{" "}
-          </div>
+        <div className="grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 bg-gray-50 sm:grid-cols-4 sm:divide-y-0 sm:divide-x">
+          <WalletStats stats={stats} />
         </div>
       </div>
     </section>

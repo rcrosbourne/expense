@@ -1,4 +1,4 @@
-export type PortfolioStat = {
+export type Stat = {
   label: string;
   value: string;
 };

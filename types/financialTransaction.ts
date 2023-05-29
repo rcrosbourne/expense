@@ -4,7 +4,7 @@ export type FinancialTransaction = {
   id: string;
   walletId: string;
   type: "income" | "expense";
-  amount: number | string | undefined;
+  amount: number | string;
   periodicity: Periodicity;
   date: DateValueType;
   merchant?: string | null;

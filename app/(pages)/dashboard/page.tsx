@@ -1,4 +1,4 @@
-import {PortfolioStat, WalletWidgetProps} from "@/types";
+import {Stat, WalletWidgetProps} from "@/types";
 import React, {Suspense} from "react";
 import Home from "@/app/(pages)/dashboard/home";
 import {redirect} from "next/navigation";
@@ -6,7 +6,7 @@ import {getWallets} from "@/lib/server/walletFunctions";
 import currentUser from "@/lib/server/currentUser";
 import {LucideLoader2} from "lucide-react";
 import {convertFromRawToWallet} from "@/lib/utils/convertDBWalletToWidget";
-import {generatePortfolioStats} from "@/lib/utils/generatePortfolioStats";
+import {generatePortfolioStats} from "@/lib/utils/generateStats";
 
 export default async function Page() {
 //   const stats: PortfolioStat[] = [
@@ -24,7 +24,7 @@ export default async function Page() {
     return convertFromRawToWallet(wallet);
   });
   console.log(JSON.stringify(wallets, null, 2));
-  const stats: PortfolioStat[] = generatePortfolioStats(wallets);
+  const stats: Stat[] = generatePortfolioStats(wallets);
   return (
       <>
         <Suspense fallback={<LucideLoader2 className="animate-spin"/>}>
