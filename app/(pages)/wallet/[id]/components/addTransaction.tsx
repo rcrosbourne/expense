@@ -30,7 +30,7 @@ const AddTransaction = ({ wallet }: { wallet: Wallet }) => {
   const INITIAL_STATE: FinancialTransaction = {
     id: "0",
     type: "expense",
-    amount: undefined,
+    amount: "",
     date: { startDate: null, endDate: null },
     periodicity: "One-time payment",
     walletId: wallet.id,
@@ -226,7 +226,7 @@ const AddTransactionForm = ({
   const INITIAL_STATE: FinancialTransaction = {
     id: "0",
     type: "expense",
-    amount: undefined,
+    amount: "",
     date: { startDate: null, endDate: null },
     periodicity: "One-time payment",
     walletId: wallet.id,

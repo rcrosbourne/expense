@@ -29,7 +29,7 @@ const Transaction = ({
   const INITIAL_STATE: FinancialTransaction = {
     id: "0",
     type: "expense",
-    amount: undefined,
+    amount: "",
     date: { startDate: null, endDate: null },
     periodicity: "One-time payment",
     walletId: transaction.walletId,
