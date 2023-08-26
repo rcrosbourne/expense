@@ -24,6 +24,7 @@ import TransactionBreakdown from "@/app/(pages)/wallet/[id]/components/transacti
 import AddTransaction from "@/app/(pages)/wallet/[id]/components/addTransaction";
 import BudgetBreakdown from "@/app/(pages)/wallet/[id]/components/budgetBreakdown";
 import {Stat, Wallet} from "@/types";
+import {motion} from "framer-motion";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
