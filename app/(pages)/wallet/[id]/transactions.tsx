@@ -24,6 +24,7 @@ import TransactionBreakdown from "@/app/(pages)/wallet/[id]/components/transacti
 import AddTransaction from "@/app/(pages)/wallet/[id]/components/addTransaction";
 import BudgetBreakdown from "@/app/(pages)/wallet/[id]/components/budgetBreakdown";
 import {Stat, Wallet} from "@/types";
+import {motion} from "framer-motion";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -48,61 +49,80 @@ const Transactions = ({transactions, wallet, stats}: { transactions: FinancialTr
             <WalletOverview wallet={wallet} stats={stats}/>
             {/*Tabs go here */}
             <Tab.Group>
-              <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">
+              <Tab.List className="isolate flex space-x-1 rounded-xl bg-slate-600/20 p-1">
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
-                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
-                      selected
-                        ? "bg-slate-100 shadow"
-                        : "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
+                      "relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none",
+                        "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
                   }
                 >
-                  <span>
-                    <CheckListIcon className="h-6 sm:h-8 aspect-square" />
-                  </span>
-                  <span className="hidden sm:inline-block">Details</span>
+                  {({selected}) => (
+                      <>
+                        <div className="flex items-center justify-center gap-3 z-20">
+                       <span>
+                         <CheckListIcon className="h-6 sm:h-8 aspect-square" />
+                       </span>
+                          <span className="hidden sm:inline-block">Details</span>
+
+                        </div>
+                        {selected && <motion.div layoutId="tab"  className={"z-10 absolute bg-slate-100 border-2 border-cyan-600 shadow inset-0 w-full rounded-lg ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:ring-2"}></motion.div>}
+                      </>
+                  )}
+
                 </Tab>
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
-                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
-                      selected
-                        ? "bg-slate-100 shadow"
-                        : "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
+                      "relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none",
+                        "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
                   }
                 >
-                  <span>
-                    <CalendarIcon className="h-6 sm:h-8 aspect-square" />
-                  </span>
-                  <span className="hidden sm:inline-block">Calendar</span>
+                  {({selected}) => (
+                      <>
+                        <div className="flex items-center justify-center gap-3 z-20">
+                        <span>
+                          <CalendarIcon className="h-6 sm:h-8 aspect-square" />
+                        </span>
+                        <span className="hidden sm:inline-block">Calendar</span>
+                        </div>
+                        {selected && <motion.div layoutId="tab" className={"z-10 absolute bg-slate-100 border-2 border-cyan-600  shadow inset-0 w-full rounded-lg ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:ring-2"}></motion.div>}
+                      </>
+                    )}
+
                 </Tab>
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
-                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
-                      selected
-                        ? "bg-slate-100 shadow"
-                        : "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
+                      "relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none",
+                        "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
                   }
                 >
-                  <span>
+                   {({selected}) => (
+                      <>
+                         <div className="flex items-center justify-center gap-3 z-20">
+                         <span>
                     <BarChartIcon className="h-6 sm:h-8 aspect-square" />
                   </span>
                   <span className="hidden sm:inline-block">Reports</span>
+                         </div>
+                      {selected && <motion.div layoutId="tab" className={"z-10 absolute bg-slate-100 border-2 border-cyan-600 shadow inset-0 w-full rounded-lg ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:ring-2"}></motion.div>}
+                      </>
+                    )}
+
                 </Tab>
               </Tab.List>
               <Tab.Panels className="mt-2">
                 <Tab.Panel
                   className={classNames(
                     "rounded-xl bg-slate-100",
-                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2"
+                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none"
                   )}
                 >
                   <section aria-labelledby="quick-links-title">
