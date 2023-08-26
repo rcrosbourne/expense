@@ -53,39 +53,52 @@ const Transactions = ({transactions, wallet, stats}: { transactions: FinancialTr
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "isolate relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
-                      selected
-                        ? "bg-slate-100 shadow"
-                        : "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
+                        "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
                   }
                 >
-                  <span>
-                    <CheckListIcon className="h-6 sm:h-8 aspect-square" />
-                  </span>
-                  <span className="hidden sm:inline-block">Details</span>
+                  {({selected}) => (
+                      <>
+                        <div className="flex items-center justify-center gap-3 z-20">
+                       <span>
+                         <CheckListIcon className="h-6 sm:h-8 aspect-square" />
+                       </span>
+                          <span className="hidden sm:inline-block">Details</span>
+
+                        </div>
+                        {selected && <motion.div layoutId="tab"  className={"z-10 absolute bg-slate-100 shadow inset-0 w-full rounded-lg ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:ring-2"}></motion.div>}
+                      </>
+                  )}
+
                 </Tab>
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "isolate relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
-                      selected
-                        ? "bg-slate-100 shadow"
-                        : "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
+                        "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
                   }
                 >
-                  <span>
-                    <CalendarIcon className="h-6 sm:h-8 aspect-square" />
-                  </span>
-                  <span className="hidden sm:inline-block">Calendar</span>
+                  {({selected}) => (
+                      <>
+                        <div className="flex items-center justify-center gap-3 z-20">
+                        <span>
+                          <CalendarIcon className="h-6 sm:h-8 aspect-square" />
+                        </span>
+                        <span className="hidden sm:inline-block">Calendar</span>
+                        </div>
+                        {selected && <motion.div layoutId="tab" className={"z-10 absolute bg-slate-100 shadow inset-0 w-full rounded-lg ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:ring-2"}></motion.div>}
+                      </>
+                    )}
+
                 </Tab>
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
                       selected
                         ? "bg-slate-100 shadow"
@@ -97,6 +110,7 @@ const Transactions = ({transactions, wallet, stats}: { transactions: FinancialTr
                     <BarChartIcon className="h-6 sm:h-8 aspect-square" />
                   </span>
                   <span className="hidden sm:inline-block">Reports</span>
+                     <motion.div className={"absolute border border-cyan-400 inset-0 w-full rounded-lg"}></motion.div>
                 </Tab>
               </Tab.List>
               <Tab.Panels className="mt-2">
