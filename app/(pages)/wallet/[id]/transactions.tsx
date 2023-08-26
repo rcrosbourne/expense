@@ -49,11 +49,11 @@ const Transactions = ({transactions, wallet, stats}: { transactions: FinancialTr
             <WalletOverview wallet={wallet} stats={stats}/>
             {/*Tabs go here */}
             <Tab.Group>
-              <Tab.List className="flex space-x-1 rounded-xl bg-slate-600/20 p-1">
+              <Tab.List className="isolate flex space-x-1 rounded-xl bg-slate-600/20 p-1">
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "isolate relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
                         "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
@@ -76,7 +76,7 @@ const Transactions = ({transactions, wallet, stats}: { transactions: FinancialTr
                 <Tab
                   className={({ selected }) =>
                     classNames(
-                      "isolate relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
+                      "relative flex items-center justify-center gap-3 w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-cyan-700",
                       "ring-white ring-opacity-60 ring-offset-2 ring-offset-cyan-600 focus:outline-none focus:ring-2",
                         "text-cyan-700 hover:bg-slate-50/[0.12] hover:text-slate-900"
                     )
