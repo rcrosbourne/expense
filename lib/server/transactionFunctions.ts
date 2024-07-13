@@ -11,11 +11,11 @@ export async function addTransaction(
 ) {
   //Wallet should already be validated
   const user = await currentUser();
-  return await prisma.financialTransaction.create({
+  return prisma.financialTransaction.create({
     data: {
       amount: financialTransaction.amount ?? 0,
       type: financialTransaction.type,
-      date: financialTransaction?.date?.startDate ?? new Date(),
+      date: financialTransaction?.date?.startDate?.toString()? new Date(financialTransaction?.date?.startDate?.toString()) : new Date(),
       notes: financialTransaction.notes,
       merchant: financialTransaction.merchant,
       periodicity: financialTransaction.periodicity,
@@ -37,7 +37,7 @@ export async function addTransaction(
 }
 export async function getTransactions(wallet: Wallet) {
   const user = await currentUser();
-  return await prisma.financialTransaction.findMany({
+  return prisma.financialTransaction.findMany({
     where: {
       walletId: wallet?.id,
     },
@@ -66,7 +66,7 @@ export async function deleteTransaction(
     return;
   }
   // delete wallet
-  return await prisma.financialTransaction.delete({
+  return prisma.financialTransaction.delete({
     where: {
       id: transactionId,
     },
@@ -88,7 +88,7 @@ export async function updateTransaction(
     return;
   }
   // update wallet
-  return await prisma.financialTransaction.update({
+  return prisma.financialTransaction.update({
     where: {
       id: transaction.id,
     },
